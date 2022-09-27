@@ -2,7 +2,7 @@ version: "3.9"
 services:
 
   crud_service:
-    build: ./CrudMovieService
+    build: ./microservices/CrudMovieService
     ports:
       - "3000:3000"
     networks:
