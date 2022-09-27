@@ -7,6 +7,14 @@ services:
       - "3000:3000"
     networks:
       - serviceNetwork
+      - baseNetwork
+
+  client:
+    build: ./frontend
+    ports:
+      - "4000:3000"
+    networks:
+      - baseNetwork
 
   # review_service:
   #   build: ./microservices/ReviewService
@@ -32,3 +40,4 @@ services:
 
 networks:
   serviceNetwork:
+  baseNetwork: 
