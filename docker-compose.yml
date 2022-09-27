@@ -8,6 +8,27 @@ services:
     networks:
       - serviceNetwork
 
+  # review_service:
+  #   build: ./microservices/ReviewService
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - serviceNetwork
+
+  # search_service:
+  #   build: ./microservices/SearchService
+  #   ports:
+  #     - "3002:3002"
+  #   networks:
+  #     - serviceNetwork
+
+  # auth_service:
+  #   build: ./microservices/AuthService
+  #   ports:
+  #     - "3003:3003"
+  #   networks:
+  #     - serviceNetwork
+
 
 networks:
   serviceNetwork:

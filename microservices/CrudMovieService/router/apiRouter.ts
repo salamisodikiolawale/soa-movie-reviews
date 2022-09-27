@@ -7,7 +7,7 @@ const apiRouter:express.Router = express.Router();
     Usage: Create a movie
     URL : http://crudMovieService:3000/api/v1/movies
     Method : POST
-    Fields: name, image, comment
+    Fields: title, date, country, type[string], review:number,  description:string, image
     Access: Public
  */
 apiRouter.post('/movies', createMovie);
