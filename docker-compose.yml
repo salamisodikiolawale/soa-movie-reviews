@@ -7,7 +7,16 @@ services:
       - "3000:3000"
     networks:
       - serviceNetwork
+      - baseNetwork
+
+  client:
+    build: ./frontend
+    ports:
+      - "4000:3000"
+    networks:
+      - baseNetwork
 
 
 networks:
   serviceNetwork:
+  baseNetwork: 
