@@ -1,5 +1,5 @@
 import express from 'express';
-import {createMovie, getMovies} from "../controller/movieController";
+import {createMovie, getMovie, getMovies, deleteMovie, updateMovie} from "../controller/movieController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -16,10 +16,10 @@ apiRouter.post('/movies', createMovie);
     Usage: Update a Movie
     URL : http://127.0.0.1:3000/api/v1/movies/:movieId
     Method : PUT
-    Fields: name, image, comment
+    Fields: title, date, country, type[string], review:number,  description:string, image
     Access: Public
  */
-//apiRouter.put('/movies/:movieId', updateMovie);
+apiRouter.put('/movies/:movieId', updateMovie);
 
 /*
     Usage: Delete a Movie
@@ -28,13 +28,13 @@ apiRouter.post('/movies', createMovie);
     Fields: name, image, comment
     Access: Public
  */
-//apiRouter.delete('/movies/:movieId', deleteMovie);
+apiRouter.delete('/movies/:movieId', deleteMovie);
 
 /*
     Usage: Get all the movies
     URL : http://127.0.0.1:3000/api/v1/movies
     Method : GET
-    Fields:  name, image, comment
+    Fields:  null
     Access: Public
  */
 apiRouter.get('/movies', getMovies);
@@ -47,6 +47,6 @@ apiRouter.get('/movies', getMovies);
     Access: Public
  */
 
-//apiRouter.get('/movies/:movieId', getMovie);
+apiRouter.get('/movies/:movieId', getMovie);
 
 export default apiRouter;

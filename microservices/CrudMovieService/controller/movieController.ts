@@ -2,32 +2,52 @@ import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
 
-//business logic
-
 export const createMovie = async (request:express.Request, response:express.Response) => {
 
-    //Exceptions
     try {
         //Recuperation des données dans la request
         let movie:Movie = {
             title : request.body.title,
-            comment : request.body.comment,
+            date : request.body.date,
+            ranting: request.body.ranting,
+            description: request.body.description,
             image : request.body.image,
+            types : request.body.types
         };
-        //Verify if data already exist in the database
-        let existingMovie:Movie|null = await MovieTable.findOne({ title: movie.title});
-        if(existingMovie){
-            return response.status(401).json({
-                msg: 'Movie is already exist'
-            });
-        }
+
+        //Decov
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1' },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+                }
+            },
+            {
+                rel: "movie",
+                method: "GET",
+                title: 'Get movie',
+                href: '/movies/:id',
+            }
+        ]
 
         //Create the movie into database
         let newMovie = new MovieTable(movie);
         movie = await newMovie.save();
         response.status(200).json({
             msg: 'Movie is created successfully',
-            product:movie
+            movie:movie,
+            _link
         });
 
     } catch (error){
@@ -45,24 +65,26 @@ export const getMovies = async (request:express.Request, response:express.Respon
 
         const _link = [
 
-            { rel: "self", href: 'http://127.0.0.1' },
+            { rel: "self", href: 'http://127.0.0.1/api/v1' },
             {
                 rel: "create",
                 method: "POST",
                 title: 'Create movie',
                 href: '/movies',
                 data: {
-                    "title": "text",
-                    "comment": "text",
-                    "image": "text",
-                    "date": "date"
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
                 }
             },
             {
-                rel: "lists",
+                rel: "movie",
                 method: "GET",
-                title: 'Get movies  ',
-                href: '/movies',
+                title: 'Get movie',
+                href: '/movies/:id',
             }
         ]
         response.status(200).json({
@@ -77,4 +99,191 @@ export const getMovies = async (request:express.Request, response:express.Respon
     }
 
 }
+
+export const getMovie = async (request:express.Request, response:express.Response) => {
+
+    try {
+
+        const movieId = request.params.movieId;
+
+        let movies:Movie[]|null = await MovieTable.findById(movieId);
+
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1/api/v1' },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+                }
+            },
+            {
+                rel: "movie",
+                method: "GET",
+                title: 'Get movie',
+                href: '/movies/:id',
+            }
+        ]
+        response.status(200).json({
+            movies,
+            _link
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            error : error
+        })
+    }
+
+}
+
+export const deleteMovie = async(request:express.Request, response:express.Response) => {
+
+    let {movieId} = request.params;
+    try {
+        let movie:Movie|null = await MovieTable.findById(movieId);
+        if(!movie){
+            return response.status(404).json({
+                msg : 'Movie is not found !'
+            });
+        }
+
+        movie= await MovieTable.findByIdAndRemove(movieId);
+
+        //Decov
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1' },
+            {
+                rel: "All movies",
+                method: "GET",
+                title: 'Get movies',
+                href: '/movies',
+            },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+
+                }
+            }
+        ]
+
+        response.status(200).json({
+            msg: `Movie ${movieId} is deleted`,
+            movie:movie,
+            _link
+        })
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            error: error
+        })
+    }
+}
+
+export const updateMovie = async(request:express.Request, response:express.Response) => {
+
+    //Get id into request params
+    let {movieId} = request.params
+
+    //Management Exception
+    try {
+        let updatedMovie:Movie = {
+            title : request.body.title,
+            image : request.body.image,
+            date : request.body.date,
+            ranting : request.body.ranting,
+            description : request.body.description,
+            types : request.body.types
+        };
+
+        //Check if movie is already exist into database
+        let existingMoviewillUpdated:Movie|null = await MovieTable.findById(movieId);
+        if(!existingMoviewillUpdated){
+            return response.status(404).json({
+                msg : 'Movie is not exists'
+            });
+        }
+
+        //update product
+        existingMoviewillUpdated = await MovieTable.findByIdAndUpdate(movieId, {
+            $set : {
+                title : updatedMovie.title ? updatedMovie.title : existingMoviewillUpdated.title,
+                image : updatedMovie.image ? updatedMovie.image : existingMoviewillUpdated.image,
+                date : updatedMovie.date ? updatedMovie.date : existingMoviewillUpdated.date,
+                ranting : updatedMovie.ranting ? updatedMovie.ranting : existingMoviewillUpdated.ranting,
+                description : updatedMovie.description ? updatedMovie.description : existingMoviewillUpdated.description,
+                types : updatedMovie.types ? updatedMovie.types : existingMoviewillUpdated.types,
+
+            }
+        }, { new : true });
+
+        //Decov
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1' },
+            {
+                rel: "All movies",
+                method: "GET",
+                title: 'Get movies',
+                href: '/movies',
+            },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+                }
+            },
+            {
+                rel: "movie",
+                method: "GET",
+                title: 'Get movie',
+                href: '/movies/:id',
+            }
+        ]
+        response.status(201).json({
+            msg: 'Movie is Updated',
+            movie: existingMoviewillUpdated,
+            _link
+        });
+
+    } catch (error) {
+        console.log(error);
+        // @ts-ignore
+        if(error.kind === 'ObjectId'){
+            return response.status(404).json({
+                msg : 'Movie is not exists'
+            });
+        }
+        response.status(500).json({
+            error : error
+        });
+    }
+}
+
 
