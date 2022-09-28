@@ -5,6 +5,11 @@ services:
     build: ./microservices/CrudMovieService
     ports:
       - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./microservices/CrudMovieService
+        target: /src/app
+
     networks:
       - serviceNetwork
       - baseNetwork
@@ -13,6 +18,9 @@ services:
     build: ./frontend
     ports:
       - "4000:3000"
+    volumes:
+      - './frontend:/src/app'
+      - '/src/app/node_modules'
     networks:
       - baseNetwork
 
