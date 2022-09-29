@@ -5,12 +5,12 @@ import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
 
 //Auto decouvrability
-//const hateoasLinker = require('express-hateoas-links');
+const hateoasLinker = require('express-hateoas-links');
 
 
 const app:express.Application = express();
 
-//app.use(hateoasLinker);
+app.use(hateoasLinker);
 
 // Configurations
 app.use(cors());
@@ -36,7 +36,7 @@ if(mongoDBUrl) {
 
 app.get("/", async (request:express.Request, response:express.Response) => {
     response.status(200).send({
-        "msg": "Welcome to CRUD movie Service"
+        "msg": "Welcome to Email send Service"
     })
 })
 
