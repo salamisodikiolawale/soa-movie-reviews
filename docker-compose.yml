@@ -24,6 +24,17 @@ services:
     networks:
       - baseNetwork
 
+  email_service:
+    build: ./microservices/EmailService
+    ports:
+      - "3004:3004"
+    volumes:
+      - type: bind
+        source: ./microservices/EmailService
+        target: /src/app
+    networks:
+      - serviceNetwork
+
   # review_service:
   #   build: ./microservices/ReviewService
   #   ports:

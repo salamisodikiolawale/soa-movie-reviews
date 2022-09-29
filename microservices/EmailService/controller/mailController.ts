@@ -56,7 +56,7 @@ export const sendMail = async (request:express.Request, response:express.Respons
             response.status(404).json({
                 "error" : "Your email has not send"
             })
-            console.log(err);
+            // console.log(err);
 
         } else {
             console.log("Your mail has send")
@@ -68,7 +68,7 @@ export const sendMail = async (request:express.Request, response:express.Respons
 
 
 
-    console.log(mailTransport);
+    // console.log(mailTransport);
 
 }
 
