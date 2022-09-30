@@ -1,4 +1,5 @@
 import express from "express";
+import { hash, compare } from 'bcrypt'
 import { User } from "../database/models/User";
 import UserTable from "../database/schemas/UserSchema";
 import mongoose, { MongooseError } from 'mongoose';
@@ -6,14 +7,15 @@ import mongoose, { MongooseError } from 'mongoose';
 // --------------- CREATE USER
 export const createUser = async (request:express.Request, response:express.Response) : Promise<express.Response> => {
     console.log("New user is "  + JSON.stringify(request.body));
+    
+    const hashedPassword = await hash(request.body.password, 10);
 
     // New user
     let newUser : User = {
         username : request.body.username,
         email : request.body.email,
-        // TODO : handle user hash password with bcrypt
-        hashed_password : 'test',
-        subscribed_newsletter: true
+        hashed_password : hashedPassword,
+        subscribed_newsletter: request.body.subscribed_newsletter
     };
 
     // Try inserting new user to database

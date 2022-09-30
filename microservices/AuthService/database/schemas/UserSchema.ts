@@ -10,6 +10,6 @@ const userSchema = new mongoose.Schema({
     
 }, {timestamps : true});
 
-const UserTable : mongoose.Model<any> = mongoose.model('user', userSchema);
+const UserTable : mongoose.Model<User> = mongoose.model('user', userSchema);
 
 export default UserTable;
