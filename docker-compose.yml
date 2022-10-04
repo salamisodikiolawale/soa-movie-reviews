@@ -24,12 +24,12 @@ services:
     networks:
       - baseNetwork
 
-  # review_service:
-  #   build: ./microservices/ReviewService
-  #   ports:
-  #     - "3001:3001"
-  #   networks:
-  #     - serviceNetwork
+  review_service:
+    build: ./microservices/ReviewService
+    ports:
+      - "3001:3001"
+    networks:
+      - serviceNetwork
 
   # search_service:
   #   build: ./microservices/SearchService

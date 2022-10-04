@@ -1,52 +1,52 @@
 import express from 'express';
-import {createMovie, getMovies} from "../controller/movieController";
+import {createReview, updateReview, deleteReview, getAllReviews} from "../controller/reviewController";
 
 const apiRouter:express.Router = express.Router();
 
 /*
-    Usage: Create a movie
-    URL : http://crudMovieService:3000/api/v1/movies
+    Usage: Create a review
+    URL : http://crudMovieService:3001/api/v1/review
     Method : POST
-    Fields: name, image, comment
+    Fields: movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.post('/movies', createMovie);
+apiRouter.post('/review', createReview);
 
 /*
-    Usage: Update a Movie
-    URL : http://127.0.0.1:3000/api/v1/movies/:movieId
+    Usage: Update a review
+    URL : http://127.0.0.1:3001/api/v1/review/:reviewId
     Method : PUT
     Fields: name, image, comment
     Access: Public
  */
-//apiRouter.put('/movies/:movieId', updateMovie);
+apiRouter.put('/review/:reviewId', updateReview);
 
 /*
-    Usage: Delete a Movie
-    URL : http://127.0.0.1:3000/api/v1/movies/:movieId
+    Usage: Delete a review
+    URL : http://127.0.0.1:3001/api/v1/review/:reviewId
     Method : DELETE
-    Fields: name, image, comment
+    Fields : movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-//apiRouter.delete('/movies/:movieId', deleteMovie);
+apiRouter.delete('/review/:reviewId', deleteReview);
 
 /*
-    Usage: Get all the movies
-    URL : http://127.0.0.1:3000/api/v1/movies
+    Usage: Get all the reviews
+    URL : http://127.0.0.1:3001/api/v1/review
     Method : GET
-    Fields:  name, image, comment
+    Fields:  movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.get('/movies', getMovies);
+apiRouter.get('/review/:MovieId', getAllReviews);
 
 /*
     Usage: Get a Single product
-    URL : http://127.0.0.1:3000/api/v1/movies/:movieId
+    URL : http://127.0.0.1:3000/api/v1/review/:reviewId
     Method : GET
     Fields: name, image, price, qty, info
     Access: Public
  */
 
-//apiRouter.get('/movies/:movieId', getMovie);
+//apiRouter.get('/review/:MovieId', getallReview);
 
 export default apiRouter;
