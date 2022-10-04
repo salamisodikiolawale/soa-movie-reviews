@@ -1,12 +1,12 @@
-import mongoose from 'mongoose';
-
 export interface Movie {
 
     _id? : string;
     title : string;
+    date : Date;
+    ranting:number;
+    description:string;
     image : string;
-    comment : string;
-    pubDate? : string;
+    types : String[]
     created_at? : string;
     updated_at? : string;
 }
