@@ -14,13 +14,11 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      #- ./traefik.toml:/traefik.toml
     networks:
       - serviceNetwork
 
   crud_service:
     build: ./microservices/CrudMovieService
-    # container_name: crud
     ports:
       - "3000:3000"
     volumes:
