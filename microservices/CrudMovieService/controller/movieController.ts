@@ -59,7 +59,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
 }
 
 export const getMovies = async (request:express.Request, response:express.Response) => {
-
+    console.log("getMovies")
     try {
         let movies:Movie[]|null = await MovieTable.find();
 
@@ -144,6 +144,55 @@ export const getMovie = async (request:express.Request, response:express.Respons
     }
 
 }
+
+export const getFiveLasteMovies = async (request:express.Request, response:express.Response) => {
+
+    
+    try {
+
+        
+
+        let numberOfMovie:number = Number(request.params.numberOfMovie);
+
+        let movies:Movie[]|null = await MovieTable.find().sort('-createdAt').limit(numberOfMovie);
+
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1/api/v1' },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+                }
+            },
+            {
+                rel: "movie",
+                method: "GET",
+                title: 'Get movie',
+                href: '/movies/:id',
+            }
+        ]
+        response.status(200).json({
+            movies,
+            _link
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            error : error
+        })
+    }
+
+}
+
 
 export const deleteMovie = async(request:express.Request, response:express.Response) => {
 

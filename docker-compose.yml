@@ -1,6 +1,22 @@
 version: "3.9"
 services:
 
+  reverse-proxy:
+    image: traefik:v2.8
+    command: 
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - serviceNetwork
+
   crud_service:
     build: ./microservices/CrudMovieService
     ports:
@@ -9,10 +25,12 @@ services:
       - type: bind
         source: ./microservices/CrudMovieService
         target: /src/app
-
+    labels:
+     - "traefik.http.routers.crud_service.entrypoints=web" 
+     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
+     - "traefik.http.services.crud_service.loadbalancer.server.port=3000"
     networks:
       - serviceNetwork
-      - baseNetwork
 
   client:
     build: ./frontend
@@ -22,7 +40,7 @@ services:
       - './frontend:/src/app'
       - '/src/app/node_modules'
     networks:
-      - baseNetwork
+      - serviceNetwork
 
   email_service:
     build: ./microservices/EmailService
@@ -32,6 +50,10 @@ services:
       - type: bind
         source: ./microservices/EmailService
         target: /src/app
+    labels:
+     - "traefik.http.routers.email_service.entrypoints=web" 
+     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
       - serviceNetwork
 
@@ -60,4 +82,10 @@ services:
 
 networks:
   serviceNetwork:
-  baseNetwork: 
+    driver: bridge
+
+
+# networks:
+#   serviceNetwork:
+#     driver: bridge
+#   baseNetwork: 

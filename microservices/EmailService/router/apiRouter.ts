@@ -1,5 +1,5 @@
 import express from 'express';
-import {sendMail} from "../controller/mailController";
+import {sendEMail} from "../controller/mailController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -10,6 +10,6 @@ const apiRouter:express.Router = express.Router();
     Fields: targetEmail, subject, message
     Access: Public
  */
-apiRouter.post('/emails', sendMail);
+apiRouter.post('/emails', sendEMail);
 
 export default apiRouter;

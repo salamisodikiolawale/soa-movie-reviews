@@ -1,5 +1,5 @@
 import express from 'express';
-import {createMovie, getMovie, getMovies, deleteMovie, updateMovie} from "../controller/movieController";
+import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies} from "../controller/movieController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -39,6 +39,15 @@ apiRouter.delete('/movies/:movieId', deleteMovie);
  */
 apiRouter.get('/movies', getMovies);
 
+/**
+ *  Usage : Get last five movies
+ *  URL : http://127.0.0.1:3000/api/v1/movies/:numberOfMovie
+ *  Method : GET
+ *  Params : numberOfMovie
+ *  Access : Public
+ */
+apiRouter.get('/movies/:numberOfMovie', getFiveLasteMovies)
+
 /*
     Usage: Get a Single product
     URL : http://127.0.0.1:3000/api/v1/movies/:movieId
@@ -47,6 +56,6 @@ apiRouter.get('/movies', getMovies);
     Access: Public
  */
 
-apiRouter.get('/movies/:movieId', getMovie);
+apiRouter.get('/movies/movie/:movieId', getMovie);
 
 export default apiRouter;
