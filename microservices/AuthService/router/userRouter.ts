@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, getUsers, login } from "../controller/userController";
+import { createUser, deleteUserById, getUserById, getUsers, login, updateUserEmail, updateUserPassword, updateUserUsername } from "../controller/userController";
 const { check, oneOf } = require('express-validator');
 const auth = require('../middlewares/auth');
 
@@ -7,9 +7,7 @@ const auth = require('../middlewares/auth');
 
 const userRouter:express.Router = express.Router();
 
-// Users
-
-const registerValidationRules = [
+const passwordValidator = [
     check('password')
         .notEmpty()
         .withMessage('Password not filled')
@@ -23,8 +21,14 @@ const registerValidationRules = [
         .withMessage('Must contain an uppercase letter')
         .matches(/[a-z]/)
         .withMessage('Must contain a lowercase letter'),
+]
+
+const emailValidator = [
     check('email').notEmpty()
-        .withMessage('Email not filled').isEmail().withMessage('Not an email'),
+        .withMessage('Email not filled').isEmail().withMessage('Not an email')
+]
+
+const usernameValidator = [
     check('username').notEmpty()
         .withMessage('Username not filled')
 ]
@@ -47,11 +51,23 @@ const loginValidationRules = [
 ]
 
 // Register user
-userRouter.post('/', registerValidationRules, createUser);
+userRouter.post('/', passwordValidator, emailValidator, usernameValidator, createUser);
 
 userRouter.get('/', auth, getUsers);
 
-userRouter.post('/login', oneOf(emailOrUsernameRules), loginValidationRules, login);
+userRouter.get('/:id', auth, getUserById);
 
+userRouter.delete('/:id', auth, deleteUserById);
+
+// Update user username
+userRouter.put('/updateUsername/:id', usernameValidator, auth, updateUserUsername);
+
+// Update user email
+userRouter.put('/updateEmail/:id', emailValidator, auth, updateUserEmail);
+
+// Update user password
+userRouter.put('/updatePassword/:id', passwordValidator, auth, updateUserPassword);
+
+userRouter.post('/login', oneOf(emailOrUsernameRules), loginValidationRules, login);
 
 export default userRouter;
