@@ -38,14 +38,15 @@ services:
   #   networks:
   #     - serviceNetwork
 
-  # auth_service:
-  #   build: ./microservices/AuthService
-  #   ports:
-  #     - "3003:3003"
-  #   networks:
-  #     - serviceNetwork
+  auth_service:
+    build: ./microservices/AuthService
+    ports:
+      - "3003:3003"
+    networks:
+      - authNetwork
 
 
 networks:
   serviceNetwork:
   baseNetwork: 
+  authNetwork:
