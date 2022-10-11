@@ -3,6 +3,11 @@ import { hash, compare } from 'bcrypt'
 import { User } from "../database/models/User";
 import UserTable from "../database/schemas/UserSchema";
 import mongoose from 'mongoose';
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config( {path : '../.env'});
+
+// import jwt from 'jsonwebtoken';
 const { validationResult } = require('express-validator');
 
 // --------------- CREATE USER
@@ -79,6 +84,12 @@ export const login = async (request:express.Request, response:express.Response) 
             
             if (!!isPasswordCorrect) {
                 return response.status(200).json({
+                    userId: userToAuthenticate._id,
+                    token: jwt.sign(
+                        { userId: userToAuthenticate._id },
+                        process.env.JWT_SECRET,
+                        { expiresIn: process.env.JWT_EXPIRATION }
+                    ),
                     msg: 'You are now logged in !'
                 });
             } else {
@@ -88,7 +99,7 @@ export const login = async (request:express.Request, response:express.Response) 
             }
             
         } else {
-            return response.status(200).json({
+            return response.status(401).json({
                 msg: 'Username, email or password incorrect.'
             });
         } 
@@ -100,6 +111,18 @@ export const login = async (request:express.Request, response:express.Response) 
 }
 
 // --------------- GET LIST OF USERS
-export const getUsers = () => {
+export const getUsers = async (request:express.Request, response:express.Response) => {
 
+    try {
+        const users = await UserTable.find();
+        return response.status(200).json({
+            users: users
+        });
+    } catch(e) {
+        return response.status(401).json({
+            msg: 'Unknown server error triggered. Please try again.'
+        });
+    }
+
+    
 }

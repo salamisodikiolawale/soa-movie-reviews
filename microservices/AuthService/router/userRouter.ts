@@ -1,6 +1,7 @@
 import express from 'express';
 import { createUser, getUsers, login } from "../controller/userController";
 const { check, oneOf } = require('express-validator');
+const auth = require('../middlewares/auth');
 
 // Express validators
 
@@ -48,7 +49,7 @@ const loginValidationRules = [
 // Register user
 userRouter.post('/', registerValidationRules, createUser);
 
-userRouter.get('/', getUsers);
+userRouter.get('/', auth, getUsers);
 
 userRouter.post('/login', oneOf(emailOrUsernameRules), loginValidationRules, login);
 
