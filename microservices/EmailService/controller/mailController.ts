@@ -1,74 +1,141 @@
 import express from "express";
 import nodemailer from "nodemailer";
-import { Detail } from "../database/models/Email";
+import { MailOptions } from "../database/models/Email";
+import cron  = require('node-cron');
+import dotenv = require('dotenv');
+import { User } from "../database/models/User";
+import UserTable from "../database/shemas/UserSchema";
+import * as EmailValidator from 'email-validator';
+import { compmletMessage, everyWeekTemplate, everySecondTemplate } from "../template/ScheduleMailTemplate";
+import axios from "axios";
+import { EmailMovie } from "../database/models/EmailMovie";
 
 
-export const sendMail = async (request:express.Request, response:express.Response) => {
+dotenv.config();
 
-    let {targetEmail, msgEmail, subjectEmail} = request.body;
 
-    let EMAIL:string|undefined = process.env.EMAIL;
-    let PASSWORD:string|undefined = process.env.PASSWORD;
-    let EMAIL_HOST:string|undefined = process.env.EMAIL_HOST;
+export const sendEMail = async (request:express.Request, response:express.Response) => {
 
-    let mailTransport:nodemailer.Transporter = nodemailer.createTransport({
-        host: EMAIL_HOST,
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth : {
-            user : EMAIL,
-            pass: PASSWORD,
+      let {targetEmail, msgEmail, subjectEmail} = request.body;
 
+      let mailOptions:MailOptions = {
+          from: `${process.env.EMAIL}`,
+          to: `${targetEmail}`,
+          subject: `${subjectEmail}`,
+          html: `${compmletMessage(msgEmail)}`
+        };
+
+      let transporter = nodemailer.createTransport({
+        service: `${process.env.SERVICE}`,
+        auth: {
+          user: `${process.env.EMAIL}`,
+          pass: `${process.env.PASSWORD}`,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        if(err){
+            return response.status(500).json({'msg':'Email not send'})
         }
-    });
-
-    let message1 = `
-    <!doctype html>
-    <html lang="fr">
-    <head>
-      <meta charset="utf-8">
-      <title>Titre de la page</title>
-      <link rel="stylesheet" href="style.css">
-      <script src="script.js"></script>
-    </head>
-    <body>
-      <h5 style="color:red">
-    `
-    let content = msgEmail
-    let message2 = `
-    </h5>
-    </body>
-    </html>
-    `
-    let compmletMessage = message1+content+message2
-
-
-    let details:Detail = {
-        from : process.env.EMAIL,
-        to : `${targetEmail}`,
-        subject : `${subjectEmail}`,
-        html : compmletMessage
-    }
-
-    mailTransport.sendMail(details, (err) => {
-        if(err) {
-            response.status(404).json({
-                "error" : "Your email has not send"
-            })
-            // console.log(err);
-
-        } else {
-            console.log("Your mail has send")
-            response.status(200).json({
-                "success":"Your mail has send"
-            })
-        }
-    })
-
-
-
-    // console.log(mailTransport);
-
+        return response.status(200).json({'msg':"success",'info':info})
+      })
+      
 }
 
+//SCHEDULE MAILER
+const scheduleSendEMail = async (user:User) => {
+
+    let fiveLastMovies:EmailMovie[] = []
+    const numberOfMovie = 5;
+
+    let axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+            "Host": "crud_service.localhost"
+        }
+    };
+    
+    try {
+
+        //Send request to crud movie service for get movies
+        await axios.get(`${process.env.CRUD_SERVICE}`+numberOfMovie, axiosConfig).then( (resp) => {
+
+                resp.data.movies.forEach( (movie:any) => {
+
+                    fiveLastMovies.push({title:movie.title, image:movie.title})
+                })
+        });
+            
+        
+        if(EmailValidator.validate(user.email)) {
+            
+            let mailOptions:MailOptions = {
+                from: `${process.env.EMAIL}`,
+                to: `${user.email}`,
+                subject: `${"[AOS MOVIE NEWS]"}`,
+                // html: everyWeekTemplate("https://static.lpnt.fr/images/2017/12/28/12664476lpw-12664541-article-jpg_4877921_1250x625.jpg")
+                html: everySecondTemplate("https://static.lpnt.fr/images/2017/12/28/12664476lpw-12664541-article-jpg_4877921_1250x625.jpg", fiveLastMovies, numberOfMovie)
+            };
+
+            // Mail transport configuration
+            let transporter = nodemailer.createTransport({
+            service: `${process.env.EMAIL}`,
+            auth: {
+                    user: `${process.env.EMAIL}`,
+                    pass: `${process.env.PASSWORD}`,
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                },
+            });
+
+            //Cron job
+            cron.schedule('* * * * *', function () {
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) console.log(error);
+                    else console.log('Email sent: ' + info.response);
+                    });
+            });
+
+
+        } else {
+
+            console.log("Bad email address")
+
+        }
+    } catch (error) {
+
+        console.log(error);
+
+    }
+}
+
+
+
+const sendEmailAuto = async () => {
+
+    try {
+
+        let users:User[]|null = await UserTable.find();
+
+        if(!users){
+
+            return;
+        }
+    
+        users.forEach(scheduleSendEMail);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+   
+}
+
+sendEmailAuto();

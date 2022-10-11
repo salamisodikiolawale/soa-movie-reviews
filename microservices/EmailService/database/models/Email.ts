@@ -1,4 +1,4 @@
-export interface Detail {
+export interface MailOptions {
 
     from:string|undefined;
     to:string;

@@ -10,6 +10,21 @@ const hateoasLinker = require('express-hateoas-links');
 
 const app:express.Application = express();
 
+app.use(express.urlencoded({
+    extended: true
+  }));
+  
+  app.get("/server1/:id", function(req, res) {
+    console.log("Service crud")
+    const data = {
+      "id": req.params.id,
+      "name":"SALAMI",
+      'Age': 12,
+      "Country":"France"
+    }
+    res.json({data:data});
+  });
+
 app.use(hateoasLinker);
 
 // Configurations
