@@ -99,7 +99,7 @@ export async function updateReview(request : express.Request , response : expres
 }
 
 //Function to get all the reviews for one movie
-export const getAllReviews = async (request:express.Request, response:express.Response) => {
+export const getAllReviewsOnMovie = async (request:express.Request, response:express.Response) => {
 
     try {
         let MovieId =request.params.MovieId

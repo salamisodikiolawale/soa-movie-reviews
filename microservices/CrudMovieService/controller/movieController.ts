@@ -1,3 +1,4 @@
+import axios from "axios";
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
@@ -59,7 +60,6 @@ export const createMovie = async (request:express.Request, response:express.Resp
 }
 
 export const getMovies = async (request:express.Request, response:express.Response) => {
-    console.log("getMovies")
     try {
         let movies:Movie[]|null = await MovieTable.find();
 
@@ -106,7 +106,25 @@ export const getMovie = async (request:express.Request, response:express.Respons
 
         const movieId = request.params.movieId;
 
-        let movies:Movie[]|null = await MovieTable.findById(movieId);
+        let movies:Movie|null|any = await MovieTable.findById(movieId);
+
+        // Send request -> review service
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+                "Host": "review_service.localhost"
+            }
+        };
+
+        let reviews = {}
+        
+    
+        //Send request to review  service for get reviews movie
+        reviews = await axios.get(`${process.env.REVIEW_SERVICE}`+movieId, axiosConfig).then( (resp) => {
+                
+                return resp.data.list_review;
+        });
 
         const _link = [
 
@@ -134,6 +152,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
         ]
         response.status(200).json({
             movies,
+            reviews,
             _link
         });
     } catch (error) {

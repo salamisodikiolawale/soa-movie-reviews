@@ -20,7 +20,7 @@ services:
   crud_service:
     build: ./microservices/CrudMovieService
     ports:
-      - "3000:3000"
+      - "3010:3010"
     volumes:
       - type: bind
         source: ./microservices/CrudMovieService
@@ -28,14 +28,14 @@ services:
     labels:
      - "traefik.http.routers.crud_service.entrypoints=web" 
      - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
-     - "traefik.http.services.crud_service.loadbalancer.server.port=3000"
+     - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
     networks:
       - serviceNetwork
 
   client:
     build: ./frontend
     ports:
-      - "4000:3000"
+      - "3000:3000"
     volumes:
       - './frontend:/src/app'
       - '/src/app/node_modules'
@@ -62,6 +62,10 @@ services:
     build: ./microservices/ReviewService
     ports:
       - "3001:3001"
+    labels:
+     - "traefik.http.routers.review_service.entrypoints=web" 
+     - "traefik.http.routers.review_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
       - serviceNetwork
 
