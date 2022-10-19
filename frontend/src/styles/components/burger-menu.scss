@@ -1,0 +1,14 @@
+@import "../helpers/medias.scss";
+.burger-menu {
+    display: none;
+    font-size: 24px;
+    width:fit-content;
+    height:fit-content;
+    color: var(--colorPurple);
+    background: none;
+    @include small{
+        display: block;
+        align-self: center;
+        justify-self: flex-end;
+    }
+}

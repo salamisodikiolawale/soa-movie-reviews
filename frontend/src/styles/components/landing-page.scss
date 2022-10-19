@@ -1,0 +1,19 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+
+    // background-color: lightblue;
+    height: auto;
+    // min-height: 100vh;
+    @media screen and (max-width: 768px) {
+        margin: 0 20px;
+    }
+    
+    @media screen and (max-width: 1240px) and (min-width: 769px) {
+        margin: 0 40px;
+    }
+    
+    @media screen and (min-width: 1300px) {
+        margin: 0 100px;
+    }
+}

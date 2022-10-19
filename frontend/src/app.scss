@@ -1,0 +1,15 @@
+@import "~bootstrap/scss/bootstrap";
+@import "./styles/custom.scss";
+
+.app {
+    font-family: 'Assistant';
+    display: flex;
+    // color: white;
+    flex-direction: column; 
+    min-height: 100vh;
+    background-color: rgb(248, 248, 248);
+
+    &-content {
+        padding: 0 40px;
+    }
+}
