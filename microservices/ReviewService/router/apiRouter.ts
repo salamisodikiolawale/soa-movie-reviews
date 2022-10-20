@@ -1,5 +1,5 @@
 import express from 'express';
-import {createReview, updateReview, deleteReview, getAllReviews} from "../controller/reviewController";
+import {createReview, updateReview, deleteReview, getAllReviewsOnMovie} from "../controller/reviewController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -10,7 +10,7 @@ const apiRouter:express.Router = express.Router();
     Fields: movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.post('/review', createReview);
+apiRouter.post('/reviews', createReview);
 
 /*
     Usage: Update a review
@@ -19,7 +19,7 @@ apiRouter.post('/review', createReview);
     Fields: name, image, comment
     Access: Public
  */
-apiRouter.put('/review/:reviewId', updateReview);
+apiRouter.put('/reviews/:reviewId', updateReview);
 
 /*
     Usage: Delete a review
@@ -28,7 +28,7 @@ apiRouter.put('/review/:reviewId', updateReview);
     Fields : movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.delete('/review/:reviewId', deleteReview);
+apiRouter.delete('/reviews/:reviewId', deleteReview);
 
 /*
     Usage: Get all the reviews
@@ -37,7 +37,7 @@ apiRouter.delete('/review/:reviewId', deleteReview);
     Fields:  movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.get('/review/:MovieId', getAllReviews);
+apiRouter.get('/reviews/:MovieId', getAllReviewsOnMovie);
 
 /*
     Usage: Get a Single product

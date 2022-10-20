@@ -1,3 +1,4 @@
+import axios from "axios";
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
@@ -59,7 +60,6 @@ export const createMovie = async (request:express.Request, response:express.Resp
 }
 
 export const getMovies = async (request:express.Request, response:express.Response) => {
-
     try {
         let movies:Movie[]|null = await MovieTable.find();
 
@@ -106,7 +106,74 @@ export const getMovie = async (request:express.Request, response:express.Respons
 
         const movieId = request.params.movieId;
 
-        let movies:Movie[]|null = await MovieTable.findById(movieId);
+        let movies:Movie|null|any = await MovieTable.findById(movieId);
+
+        // Send request -> review service
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+                "Host": "review_service.localhost"
+            }
+        };
+
+        let reviews = {}
+        
+    
+        //Send request to review  service for get reviews movie
+        reviews = await axios.get(`${process.env.REVIEW_SERVICE}`+movieId, axiosConfig).then( (resp) => {
+                
+                return resp.data.list_review;
+        });
+
+        const _link = [
+
+            { rel: "self", href: 'http://127.0.0.1/api/v1' },
+            {
+                rel: "create",
+                method: "POST",
+                title: 'Create movie',
+                href: '/movies',
+                data: {
+                    "title" : "text",
+                    "date" : "date",
+                    "ranting": "number",
+                    "description": "texte",
+                    "image" : "texte",
+                    "types" : "[]"
+                }
+            },
+            {
+                rel: "movie",
+                method: "GET",
+                title: 'Get movie',
+                href: '/movies/:id',
+            }
+        ]
+        response.status(200).json({
+            movies,
+            reviews,
+            _link
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            error : error
+        })
+    }
+
+}
+
+export const getFiveLasteMovies = async (request:express.Request, response:express.Response) => {
+
+    
+    try {
+
+        
+
+        let numberOfMovie:number = Number(request.params.numberOfMovie);
+
+        let movies:Movie[]|null = await MovieTable.find().sort('-createdAt').limit(numberOfMovie);
 
         const _link = [
 
@@ -144,6 +211,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
     }
 
 }
+
 
 export const deleteMovie = async(request:express.Request, response:express.Response) => {
 

@@ -1,33 +1,71 @@
 version: "3.9"
 services:
 
+  reverse-proxy:
+    image: traefik:v2.8
+    command: 
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - serviceNetwork
+
   crud_service:
     build: ./microservices/CrudMovieService
     ports:
-      - "3000:3000"
+      - "3010:3010"
     volumes:
       - type: bind
         source: ./microservices/CrudMovieService
         target: /src/app
-
+    labels:
+     - "traefik.http.routers.crud_service.entrypoints=web" 
+     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
+     - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
     networks:
       - serviceNetwork
-      - baseNetwork
 
   client:
     build: ./frontend
     ports:
-      - "4000:3000"
+      - "3000:3000"
     volumes:
       - './frontend:/src/app'
       - '/src/app/node_modules'
     networks:
-      - baseNetwork
+      - serviceNetwork
+
+  email_service:
+    build: ./microservices/EmailService
+    ports:
+      - "3004:3004"
+    volumes:
+      - type: bind
+        source: ./microservices/EmailService
+        target: /src/app
+    labels:
+     - "traefik.http.routers.email_service.entrypoints=web" 
+     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.services.email_service.loadbalancer.server.port=3004"
+    networks:
+      - serviceNetwork
+
 
   review_service:
     build: ./microservices/ReviewService
     ports:
       - "3001:3001"
+    labels:
+     - "traefik.http.routers.review_service.entrypoints=web" 
+     - "traefik.http.routers.review_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
       - serviceNetwork
 
@@ -43,10 +81,9 @@ services:
     ports:
       - "3003:3003"
     networks:
-      - authNetwork
+      - serviceNetwork
 
 
 networks:
   serviceNetwork:
-  baseNetwork: 
-  authNetwork:
+    driver: bridge

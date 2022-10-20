@@ -3,14 +3,45 @@ import cors from 'cors';
 import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
+import axios from 'axios';
+
+
+
 
 //Auto decouvrability
-//const hateoasLinker = require('express-hateoas-links');
+const hateoasLinker = require('express-hateoas-links');
 
 
 const app:express.Application = express();
 
-//app.use(hateoasLinker);
+app.use(express.urlencoded({
+    extended: true
+}));
+
+app.get("/server2/:id", function(req, res) {
+    console.log("Service email")
+    let axiosConfig = {
+    headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          "Access-Control-Allow-Origin": "*",
+          "Host": "server_1.localhost"
+      }
+    };
+  
+    axios.get("http://crud_service:3000/server1/"+req.params.id, axiosConfig).then( (resp) => {
+  
+      console.log("response server 2 : axios")
+      const data = resp.data.data;
+      res.json(data);
+
+    })
+    .catch(function (error) {
+      console.log("Server2 into " + error);
+    });
+  
+  });
+
+app.use(hateoasLinker);
 
 // Configurations
 app.use(cors());
@@ -36,7 +67,7 @@ if(mongoDBUrl) {
 
 app.get("/", async (request:express.Request, response:express.Response) => {
     response.status(200).send({
-        "msg": "Welcome to CRUD movie Service"
+        "msg": "Welcome to Email send Service"
     })
 })
 
