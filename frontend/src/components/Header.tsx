@@ -2,8 +2,9 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import '../styles/components/header.scss';
 import Button from 'react-bootstrap/Button';
-
 import BurgerMenu from "./BurgerMenu";
+import { NavLink } from "react-router-dom";
+import ButtonLink from './ButtonLink';
 
 const Header = () => {
 
@@ -29,6 +30,13 @@ const Header = () => {
     }
 
     const toConnect = () => {
+        axios.post(`http://127.0.0.1:3003/user/login`, 
+        {
+            "email": "margot@gmail.com",
+            "password": "hazavana2000M."
+        }).then(res => {
+            console.log(res.data)
+        })
     }
 
     useEffect(() => {
@@ -39,8 +47,15 @@ const Header = () => {
         <header className='header'>
             {/* <SimpleLink color="blue" wrapperClass="ethernel-font logo" toPath="/" text="Ethernel"/> */}
             <BurgerMenu onClickAction={ ()=> { setMenuState(!open) } } />
+            <div className='logo'>
+                <p>AOS Movie Reviews</p>
+            </div>
             <nav className={ !open ? 'closed' : '' }>
-                <Button variant="link">Login</Button>{' '}
+                <Button className='nav-item' variant="primary">Movies</Button>{' '}
+                {/* <NavLink to="/hello" className='nav-item'>
+                    <Button onClick={()=> toConnect()} variant="primary">Login</Button>{' '}
+                </NavLink> */}
+                <ButtonLink toPath="/login" variant="primary" text="Connect" wrapperClass="nav-item" /> 
                 {/* <ButtonLink wrapperClass="nav-item" color="blue" toPath="/market" text="Market"/> */}
                 {/* <ButtonLink wrapperClass="nav-item text-clip" color="blue" toPath="/NFT" text="NFT collection"/> */}
                 {/* <ButtonLink wrapperClass="nav-item text-clip" color="blue" toPath="/transactions" text="Transactions"/> */}

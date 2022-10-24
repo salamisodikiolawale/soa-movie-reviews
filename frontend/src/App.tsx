@@ -4,7 +4,7 @@ import axios from 'axios';
 function App() {
 
   const getMovieService = () => {
-    axios.get(`http://127.0.0.1:3000/api/v1/movies`).then(res => {
+    axios.get(`http://127.0.0.1:3010/api/v1/movies`).then(res => {
       console.log(res.data)
     })
   }
