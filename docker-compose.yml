@@ -15,7 +15,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - serviceNetwork
+      - proxyNetwork
 
   crud_service:
     build: ./microservices/CrudMovieService
@@ -30,7 +30,9 @@ services:
      - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
     networks:
+      - proxyNetwork
       - serviceNetwork
+      # - authService
 
   client:
     build: ./frontend
@@ -40,7 +42,7 @@ services:
       - './frontend:/src/app'
       - '/src/app/node_modules'
     networks:
-      - serviceNetwork
+      - proxyNetwork
 
   email_service:
     build: ./microservices/EmailService
@@ -55,7 +57,9 @@ services:
      - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
      - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
+      - proxyNetwork
       - serviceNetwork
+      # - authService
 
 
   review_service:
@@ -64,10 +68,12 @@ services:
       - "3001:3001"
     labels:
      - "traefik.http.routers.review_service.entrypoints=web" 
-     - "traefik.http.routers.review_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`)"
      - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
+      - proxyNetwork
       - serviceNetwork
+      # - authService
 
   # search_service:
   #   build: ./microservices/SearchService
@@ -81,9 +87,14 @@ services:
     ports:
       - "3003:3003"
     networks:
+      - proxyNetwork
       - serviceNetwork
+      # - authService
 
 
 networks:
+  # authService:
   serviceNetwork:
+    driver: bridge
+  proxyNetwork:
     driver: bridge
