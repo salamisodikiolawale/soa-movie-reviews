@@ -54,8 +54,6 @@ const RegisterPage = () => {
     
     const [formData, setFormData] = useState(initFormData())
 
-    
-
     const handleChange = (e: any) => {
         console.log(formData)
         setFormData((previousState: any) => ({
@@ -104,8 +102,8 @@ const RegisterPage = () => {
             name={currentInput.name}
             text={currentInput.text}
             placeholder={currentInput.placeholder}
-            valid={currentInput.valid}
-            invalid={currentInput.invalid} />
+            validText={currentInput.valid}
+            invalidText={currentInput.invalid} />
     );
 
     const errorMessagesToDisplay = errorMsgs.map((currentError, i) => {

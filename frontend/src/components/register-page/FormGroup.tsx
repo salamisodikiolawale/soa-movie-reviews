@@ -1,9 +1,13 @@
 import { Form } from 'react-bootstrap';
 
-const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, text, valid, invalid} : any) => {
+const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, text, validText, invalidText} : any) => {
 
     const controlIdLabel = () : string => {
         return "formBasic" + label.replace(" ", "");
+    }
+
+    const passwordRegex = (type : string) => {
+        return type === 'password' ? '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%.^&*_=+-]).{5,}$' : '*'
     }
 
     return (
@@ -14,17 +18,19 @@ const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, 
                 type={type}
                 name={name}
                 onChange={(e) => onChangeMethod(e)}
-                placeholder={placeholder} />
+                placeholder={placeholder}
+                pattern={passwordRegex(type)}
+            />
             { !!text && 
             <Form.Text className="text-muted">
                 {text}
             </Form.Text> }
             <Form.Control.Feedback type="valid">
-                {valid}
+                {validText}
             </Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
-                {invalid}
-            </Form.Control.Feedback>
+                {invalidText}
+            </Form.Control.Feedback>       
         </Form.Group>
     );
 }
