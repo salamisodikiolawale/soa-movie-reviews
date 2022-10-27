@@ -1,21 +1,13 @@
-import { check, body, query, param, validationResult } from 'express-validator/check';
+import { check } from 'express-validator';
 
 
 export const movieCreateValidation = [
     check('title')
         .notEmpty()
         .withMessage('title not filled'),
-    check('country')
+    check('ranting')
         .notEmpty()
-        .withMessage('Country not filled'),
-    check('country')
-        .notEmpty()
-        .withMessage('Country not filled')
-        .isArray()
-        .withMessage('Would be array of string'),
-    check('review')
-        .isNumeric()
-        .withMessage('review would be a number'),
+        .withMessage('ranting not filled'),
     check('description')
         .notEmpty()
         .withMessage('Not filled'),

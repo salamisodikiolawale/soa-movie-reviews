@@ -2,7 +2,7 @@ import axios from "axios";
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
-import {validationResult } from 'express-validator/check';
+import {validationResult } from 'express-validator';
 
 export const createMovie = async (request:express.Request, response:express.Response) => {
 
