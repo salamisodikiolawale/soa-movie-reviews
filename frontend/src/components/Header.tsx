@@ -48,15 +48,11 @@ const Header = () => {
             {/* <SimpleLink color="blue" wrapperClass="ethernel-font logo" toPath="/" text="Ethernel"/> */}
             <BurgerMenu onClickAction={ ()=> { setMenuState(!open) } } />
             <NavLink className='logo' to="/">
-         
                 <p>AOS Movie Reviews
                 </p>
                 </NavLink>
             <nav className={ !open ? 'closed' : '' }>
                 <Button className='nav-item' variant="primary">Movies</Button>{' '}
-                {/* <NavLink to="/hello" className='nav-item'>
-                    <Button onClick={()=> toConnect()} variant="primary">Login</Button>{' '}
-                </NavLink> */}
                 <ButtonLink toPath="/login" variant="primary" text="Register" wrapperClass="nav-item" />
                 <ButtonLink toPath="/" variant="primary" text="Connect" wrapperClass="nav-item" /> 
                 {/* <ButtonLink wrapperClass="nav-item" color="blue" toPath="/market" text="Market"/> */}

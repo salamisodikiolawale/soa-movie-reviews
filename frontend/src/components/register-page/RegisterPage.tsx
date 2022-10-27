@@ -38,16 +38,6 @@ const RegisterPage = () => {
             valid: "Valid password !",
             invalid: "Please enter a valid password",
             isRequired: true
-        },
-        {
-            label: "Name",
-            type: "name",
-            name: "name",
-            placeholder: "My Name",
-            text: "A valid name contains at least 3 letters",
-            valid: "Cool name !",
-            invalid: "Please fill name",
-            isRequired: true
         }
     ]
 
@@ -58,6 +48,7 @@ const RegisterPage = () => {
         }
         return data;
     }
+    
     const [formData, setFormData] = useState(initFormData())
 
     

@@ -1,10 +1,11 @@
 import Button from 'react-bootstrap/Button';
 import { NavLink } from "react-router-dom";
+import '../styles/components/button-link.scss';
 
 const ButtonLink = ({text, toPath, wrapperClass, variant} : any) => {
     return (
-        <NavLink to={toPath}>
-           <Button className={wrapperClass} variant={variant}>{ text }</Button>{' '}
+        <NavLink className={'button button-link ' + wrapperClass} to={toPath}>
+           <Button className="button-link--inner-btn" variant={variant}>{ text }</Button>{' '}
         </NavLink>
     )
 } 
