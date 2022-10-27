@@ -1,0 +1,31 @@
+:root {
+    @import "./medias.scss";
+    --marginsLayout: 2vw;
+    --gutterWidth: 24px;
+    --gridColumns: repeat(4, 1fr);
+    --gridGap : 15px;
+    --iconSize : 18px;
+    --spaceXS: 4px;
+    --spaceS: 8px;
+    --spaceM: 16px;
+    --spaceML: 24px;
+    --spaceL: 30px;
+    --spaceXL: 64px;
+
+    @include large {
+        --marginsLayout: 5vw;
+        --gridColumns: repeat(4, 1fr);
+        --gridGap : 20px;
+    }
+    @include small {
+        --marginsLayout: 5vw;
+        --gutterWidth: 10px;
+        --gridColumns: repeat(2, 1fr);
+        --gridGap : 10px;
+    }
+    @include mobile {
+        --gridColumns: repeat(1, 1fr);
+    }
+
+    
+}
