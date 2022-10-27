@@ -50,6 +50,10 @@ const loginValidationRules = [
         .withMessage('Password not filled')
 ]
 
+
+
+
+
 // Register user
 userRouter.post('/', passwordValidator, emailValidator, usernameValidator, createUser);
 

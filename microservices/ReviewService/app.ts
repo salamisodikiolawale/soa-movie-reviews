@@ -36,7 +36,7 @@ if(mongoDBUrl) {
 
 app.get("/", async (request:express.Request, response:express.Response) => {
     response.status(200).send({
-        "msg": "Welcome to CRUD movie Service"
+        "msg": "Welcome to Review movie Service"
     })
 })
 

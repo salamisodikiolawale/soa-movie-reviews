@@ -2,8 +2,15 @@ import axios from "axios";
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
+import {validationResult } from 'express-validator/check';
 
 export const createMovie = async (request:express.Request, response:express.Response) => {
+
+    // Error section validation
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(401).json({ errors: errors.array() });
+    }
 
     try {
         //Recuperation des données dans la request

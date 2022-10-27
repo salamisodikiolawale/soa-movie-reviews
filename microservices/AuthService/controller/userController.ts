@@ -9,6 +9,8 @@ dotenv.config( {path : '../.env'});
 
 const { validationResult } = require('express-validator');
 
+
+
 // --------------- CREATE USER
 export const createUser = async (request:express.Request, response:express.Response) : Promise<express.Response> => {
     // Finds the validation errors in this request and wraps them in an object with handy functions
