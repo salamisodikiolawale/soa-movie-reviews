@@ -28,8 +28,6 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
-    #  - "traefik.http.middlewares.validation-auth.forwardauth.trustForwardHeader=true"
-    #  - "traefik.http.middlewares.validation-auth.forwardauth.authRequestHeaders=Accept"
      - "traefik.http.routers.crud_service.middlewares=validation-auth"
      - "traefik.http.routers.crud_service.entrypoints=web" 
      - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
