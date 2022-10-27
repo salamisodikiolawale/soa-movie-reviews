@@ -25,20 +25,6 @@ const Header = () => {
         }
     };
 
-    const isConnected = () => {
-        return true
-    }
-
-    const toConnect = () => {
-        axios.post(`http://127.0.0.1:3003/user/login`, 
-        {
-            "email": "margot@gmail.com",
-            "password": "hazavana2000M."
-        }).then(res => {
-            console.log(res.data)
-        })
-    }
-
     useEffect(() => {
         window.addEventListener('resize', updateDimensions);
     })
