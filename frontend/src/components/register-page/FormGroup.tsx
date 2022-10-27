@@ -7,7 +7,12 @@ const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, 
     }
 
     const passwordRegex = (type : string) => {
-        return type === 'password' ? '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%.^&*_=+-]).{5,}$' : '*'
+        switch (type) {
+            case 'password':
+              return '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%.^&*_=+-]).{5,}$';
+            default:
+              return '(.*?)';
+        }
     }
 
     return (
@@ -25,6 +30,7 @@ const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, 
             <Form.Text className="text-muted">
                 {text}
             </Form.Text> }
+
             <Form.Control.Feedback type="valid">
                 {validText}
             </Form.Control.Feedback>
