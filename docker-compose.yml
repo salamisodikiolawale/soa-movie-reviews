@@ -15,7 +15,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - serviceNetwork
+      - proxyNetwork
+      - authService
 
   crud_service:
     build: ./microservices/CrudMovieService
@@ -26,10 +27,13 @@ services:
         source: ./microservices/CrudMovieService
         target: /src/app
     labels:
+     - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.crud_service.middlewares=validation-auth"
      - "traefik.http.routers.crud_service.entrypoints=web" 
      - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
     networks:
+      - proxyNetwork
       - serviceNetwork
 
   client:
@@ -40,7 +44,7 @@ services:
       - './frontend:/src/app'
       - '/src/app/node_modules'
     networks:
-      - serviceNetwork
+      - proxyNetwork
 
   email_service:
     build: ./microservices/EmailService
@@ -51,10 +55,13 @@ services:
         source: ./microservices/EmailService
         target: /src/app
     labels:
+     - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.email_service.middlewares=validation-auth"
      - "traefik.http.routers.email_service.entrypoints=web" 
      - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
      - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
+      - proxyNetwork
       - serviceNetwork
 
 
@@ -63,10 +70,13 @@ services:
     ports:
       - "3001:3001"
     labels:
+     - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.review_service.middlewares=validation-auth"
      - "traefik.http.routers.review_service.entrypoints=web" 
-     - "traefik.http.routers.review_service.rule=Host(`email_service.localhost`)"
+     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`)"
      - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
+      - proxyNetwork
       - serviceNetwork
 
   # search_service:
@@ -80,10 +90,19 @@ services:
     build: ./microservices/AuthService
     ports:
       - "3003:3003"
+    labels:
+     - "traefik.http.routers.auth_service.entrypoints=web" 
+     - "traefik.http.routers.auth_service.rule=Host(`auth_service.localhost`)"
+     - "traefik.http.services.auth_service.loadbalancer.server.port=3003"
     networks:
-      - serviceNetwork
+      - proxyNetwork
+      - authService
 
 
 networks:
+  authService:
+    driver: bridge
   serviceNetwork:
+    driver: bridge
+  proxyNetwork:
     driver: bridge

@@ -1,7 +1,9 @@
 import express from 'express';
 import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies} from "../controller/movieController";
+import { movieCreateValidation } from '../validations/movieValidations';
 
 const apiRouter:express.Router = express.Router();
+
 
 /*
     Usage: Create a movie
@@ -10,7 +12,7 @@ const apiRouter:express.Router = express.Router();
     Fields: title, date, country, type[string], review:number,  description:string, image
     Access: Public
  */
-apiRouter.post('/movies', createMovie);
+apiRouter.post('/movies',movieCreateValidation, createMovie);
 
 /*
     Usage: Update a Movie
