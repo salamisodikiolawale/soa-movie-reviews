@@ -5,7 +5,7 @@ name: CI-CD-AWS-EC2
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "23-prrd-cicd-start-cicd-with-github-runner-docker-and-aws-without" ]
   #pull_request:
   #  branches: [ "develop" ]
 
