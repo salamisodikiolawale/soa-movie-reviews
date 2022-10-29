@@ -22,6 +22,8 @@ services:
     build: ./microservices/CrudMovieService
     ports:
       - "3010:3010"
+    depends_on:
+      - reverse-proxy
     volumes:
       - type: bind
         source: ./microservices/CrudMovieService
@@ -36,20 +38,12 @@ services:
       - proxyNetwork
       - serviceNetwork
 
-  client:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - './frontend:/src/app'
-      - '/src/app/node_modules'
-    networks:
-      - proxyNetwork
-
   email_service:
     build: ./microservices/EmailService
     ports:
       - "3004:3004"
+    depends_on:
+      - reverse-proxy
     volumes:
       - type: bind
         source: ./microservices/EmailService
@@ -69,6 +63,12 @@ services:
     build: ./microservices/ReviewService
     ports:
       - "3001:3001"
+    depends_on:
+      - reverse-proxy
+    volumes:
+      - type: bind
+        source: ./microservices/ReviewService
+        target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
      - "traefik.http.routers.review_service.middlewares=validation-auth"
@@ -79,17 +79,16 @@ services:
       - proxyNetwork
       - serviceNetwork
 
-  # search_service:
-  #   build: ./microservices/SearchService
-  #   ports:
-  #     - "3002:3002"
-  #   networks:
-  #     - serviceNetwork
-
   auth_service:
     build: ./microservices/AuthService
     ports:
       - "3003:3003"
+    depends_on:
+      - reverse-proxy
+    volumes:
+      - type: bind
+        source: ./microservices/AuthService
+        target: /src/app
     labels:
      - "traefik.http.routers.auth_service.entrypoints=web" 
      - "traefik.http.routers.auth_service.rule=Host(`auth_service.localhost`)"
@@ -98,6 +97,12 @@ services:
       - proxyNetwork
       - authService
 
+  # search_service:
+  #   build: ./microservices/SearchService
+  #   ports:
+  #     - "3002:3002"
+  #   networks:
+  #     - serviceNetwork
 
 networks:
   authService:
