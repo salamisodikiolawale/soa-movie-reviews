@@ -1,0 +1,99 @@
+@import "../helpers/medias.scss";
+@import "../helpers/colors.scss";
+@import "../helpers/fonts.scss";
+@import "../helpers/medias.scss";
+@import "../helpers/misc.scss";
+@import "../helpers/spaces.scss";
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    background-color: rgb(22, 22, 22);
+    height: 60px;
+    padding: 10px;
+    .logo {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        & > * {
+            margin: auto;
+        }
+    }
+
+    nav {
+        border-radius: var(--borderRadiusSmall);
+        font-size: 20px;
+        display: flex;
+        justify-content: space-between;
+        
+        & > * {
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 6px 0 6px;
+            
+            @include small {
+                // margin: 8px 0;
+                text-align: left;
+                margin-bottom: var(--spaceS);
+            }
+        }
+
+        @include small {
+            padding: var(--spaceS) var(--spaceS) 0 var(--spaceS);
+            position: absolute;
+            z-index:1;
+            top: calc(60px + var(--spaceM));
+            left: var(--spaceM);
+            right:var(--marginsLayout);
+            width:50%;
+            flex-direction: column;
+            background-color:#c7c5cc60;
+            
+        }
+
+        @include mobile {
+            top: 60px;
+            left: 0;
+            right:var(--marginsLayout);
+            width:100%;
+        } 
+
+        @include regular {
+            .nav-item:last-child {
+                margin: 0 0px 0px 6px;
+            }
+            .nav-item:first-child {
+                margin: 0 6px 0px 0px;
+            }
+        }
+
+        @include large {
+            .nav-item:last-child {
+                margin: 0 0px 0px 6px;
+            }
+            .nav-item:first-child {
+                margin: 0 6px 0px 0px;
+            }
+        }
+        
+        &.closed {
+            @include small {
+                display: none;  
+            }  
+        }
+    }
+    .text-clip-size { 
+        max-width: 230px;
+        @include small {
+            max-width: 100%;
+        }
+    }
+}

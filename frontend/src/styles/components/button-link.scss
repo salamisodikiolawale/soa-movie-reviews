@@ -1,0 +1,9 @@
+.button-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    &--inner-btn {
+        width: 100%;
+    }
+}

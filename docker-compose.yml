@@ -38,6 +38,16 @@ services:
       - proxyNetwork
       - serviceNetwork
 
+  client:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - './frontend:/src/app'
+      # - '/src/app/node_modules'
+    networks:
+      - proxyNetwork
+
   email_service:
     build: ./microservices/EmailService
     ports:
@@ -78,6 +88,13 @@ services:
     networks:
       - proxyNetwork
       - serviceNetwork
+  
+  # search_service:
+  #   build: ./microservices/SearchService
+  #   ports:
+  #     - "3002:3002"
+  #   networks:
+  #     - serviceNetwork
 
   auth_service:
     build: ./microservices/AuthService
@@ -97,12 +114,6 @@ services:
       - proxyNetwork
       - authService
 
-  # search_service:
-  #   build: ./microservices/SearchService
-  #   ports:
-  #     - "3002:3002"
-  #   networks:
-  #     - serviceNetwork
 
 networks:
   authService:

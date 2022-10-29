@@ -1,0 +1,48 @@
+@import "./styles/custom.scss";
+@import "./styles/helpers/colors.scss";
+@import "./styles/helpers/medias.scss";
+@import "./styles/helpers/misc.scss";
+
+.app {
+    font-family: 'Assistant';
+    display: flex;
+    // color: white;
+    flex-direction: column; 
+    min-height: 100vh;
+    background-color: rgb(248, 248, 248);
+
+    &-content {
+        padding: 40px;
+        flex: 1;
+        display: flex;
+        flex-direction: column; 
+    }
+}
+
+.text-clip {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.word-break {
+    word-break: break-word;
+}
+
+button {
+    background: none;
+    text-decoration: none;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+html::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--colorPrimary100); 
+}
+
+html::-webkit-scrollbar-thumb {
+    background: var(--colorPrimary); 
+}
