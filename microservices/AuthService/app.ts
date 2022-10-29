@@ -34,6 +34,10 @@ if(mongoDBUrl) {
     });
 }
 
+app.get("/validationAuth", async (request:express.Request, response:express.Response) => {
+    response.status(200).send("auth OK!");
+})
+
 app.get("/", async (request:express.Request, response:express.Response) => {
     response.status(200).send("Welcome to AuthService !")
 })
