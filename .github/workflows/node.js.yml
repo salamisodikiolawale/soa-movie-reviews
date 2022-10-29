@@ -5,10 +5,9 @@ name: CI-CD-AWS-EC2
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop" ]+
   #pull_request:
   #  branches: [ "develop" ]
-
 
 jobs:
   build:
