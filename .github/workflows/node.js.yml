@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: CI-CD
 
 on:
   push:
@@ -10,23 +7,219 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  #  runs-on: ubuntu-latest
+  # Frontend:
+  #     runs-on: ubuntu-latest
+  #     defaults:
+  #       run:
+  #         working-directory: ./frontend
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: '**/package-lock.json'
-    - run: npm ci
-    - run: npm run build --if-present
-    #- run: npm test
+  #     strategy:
+  #       matrix:
+  #         node-version: [16.x]
+
+  #     steps:
+  #     - name: CHECK-OUT GIT REPOSITORY
+  #       uses: actions/checkout@v3
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+  #         cache: 'npm'
+  #         cache-dependency-path: '**/package-lock.json'
+  #     - name: INSTALL DEPENDENCIES
+  #       run: npm ci
+  #     - name: BUILDING APP
+  #       run: npm run build
+      #- name: TESTINT APP
+      #- run: npm test
+
+  AuthService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/AuthService
+
+      strategy:
+        matrix:
+          node-version: [16.x]
+
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          # directory: /microservices/AuthService
+          image: sodiki/aos_movie_auth_service      
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/AuthService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: build container
+      #   run: docker-compose up -d --build
+      
+  CrudMovieService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/CrudMovieService
+
+      strategy:
+        matrix:
+          node-version: [16.x]
+
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          
+          image: sodiki/aos_movie_crud_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/CrudMovieService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
+
+  EmailService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/EmailService
+
+      strategy:
+        matrix:
+          node-version: [16.x]
+
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_email_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/EmailService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
+
+  ReviewService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/ReviewService
+
+      strategy:
+        matrix:
+          node-version: [16.x]
+
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_review_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/ReviewService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
+
+  SearchService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/SearchService
+
+      strategy:
+        matrix:
+          node-version: [16.x]
+
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_search_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/SearchService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build

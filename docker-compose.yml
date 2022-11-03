@@ -92,7 +92,7 @@ services:
   # search_service:
   #   build: ./microservices/SearchService
   #   ports:
-  #     - "3002:3002"
+  #     - "3005:3005"
   #   networks:
   #     - serviceNetwork
 

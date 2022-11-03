@@ -1,8 +1,7 @@
 FROM node:latest
 RUN mkdir -p /src/app
 WORKDIR /src/app
-COPY package.json /src/app/package.json
+COPY microservices/SearchService .
 RUN npm install
-COPY . /src/app
-EXPOSE 3000
+EXPOSE 3005
 CMD [ "npm", "start" ]

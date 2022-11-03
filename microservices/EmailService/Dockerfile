@@ -1,8 +1,7 @@
 FROM node:latest
 RUN mkdir -p /src/app
 WORKDIR /src/app
-COPY package.json /src/app/package.json
+COPY microservices/EmailService .
 RUN npm install
-COPY . /src/app
 EXPOSE 3004
 CMD [ "npm", "start" ]
