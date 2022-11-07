@@ -6,17 +6,24 @@ import mongoose from 'mongoose';
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config( {path : '../.env'});
+import { ErrorModel } from "../database/models/ErrorModel"
 
 const { validationResult } = require('express-validator');
 
-
+// SERVER ERROR
+let serverError : ErrorModel = {
+    msg : "Unknown server error triggered. Please try again.",
+    param : "server",
+    location : "body",
+}
 
 // --------------- CREATE USER
 export const createUser = async (request:express.Request, response:express.Response) : Promise<express.Response> => {
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      return response.status(401).json({ errors: errors.array() });
+        let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
+        return response.status(401).json({ errors: validationErrors });
     }
 
     const hashedPassword = await hash(request.body.password, 10);
@@ -39,26 +46,15 @@ export const createUser = async (request:express.Request, response:express.Respo
             msg: 'Your account has been successfully created !'
         });
     } catch (e) {
-        // Catch validation errors for required fields and send appropriate error message
-        if (e instanceof mongoose.Error.ValidationError) {
-            let errorFields : string[] = Object.keys(e.errors);
-
-            for (let errField of errorFields) {
-                console.log(e.errors[errField].message ? e.errors[errField].message : `Field ${e.errors[errField]} triggers an error`);
+        let usedIdentifierErrors : ErrorModel[] = [{
+                msg : "Your email or username has already been used. Please retry with another one.",
+                param : "general",
+                location : "body",
             }
-
-            const errorMessage : string = errorFields.length > 1 ? `You have not filled these fields : ${errorFields}` : `You have not filled the field : ${errorFields[0]}`
-
-            return response.status(401).json({
-                msg: errorMessage
-            });
-        } 
-        // Unique fields errors
-        else {
-            return response.status(401).json({
-                msg: `Your email or username has already been used. Please retry with another one.`
-            });
-        }
+        ]
+        return response.status(401).json({
+            errors: usedIdentifierErrors
+        });
     }
 }
 
@@ -66,13 +62,8 @@ export const createUser = async (request:express.Request, response:express.Respo
 export const login = async (request:express.Request, response:express.Response) : Promise<express.Response> => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      return response.status(401).json({ errors: errors.array() });
-    }
-
-    if (!request.body.username && !request.body.email) {
-        return response.status(401).json({
-            msg: 'You did not fill your username or email'
-        });
+        let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
+        return response.status(401).json({ errors: validationErrors });
     }
 
     const userToAuthenticate = !!request.body.username ? await UserTable.findOne({ username: request.body.username }) : await UserTable.findOne({ email: request.body.email });
@@ -93,19 +84,32 @@ export const login = async (request:express.Request, response:express.Response) 
                     msg: 'You are now logged in !'
                 });
             } else {
+                let wrongPasswordError : ErrorModel = {
+                    msg : "Your password is incorrect.",
+                    param : "password",
+                    location : "body",
+                }
+                
                 return response.status(401).json({
-                    msg: 'Your password is incorrect'
+                    errors: [wrongPasswordError]
                 });
             }
             
         } else {
+            let wrongIdentifierErrors : ErrorModel[] = [{
+                    msg : "Your username or email is wrong or not registered yet.",
+                    param : "general",
+                    location : "body",
+                }
+            ]
+
             return response.status(401).json({
-                msg: 'Username, email or password incorrect.'
+                errors: wrongIdentifierErrors
             });
         } 
     } catch (e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
 }
@@ -120,7 +124,7 @@ export const getUsers = async (request:express.Request, response:express.Respons
         });
     } catch(e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
 }
@@ -133,7 +137,7 @@ export const getUserById = async (request:express.Request, response:express.Resp
         return response.status(200).json(userToFind);
     } catch(e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
     
@@ -150,7 +154,7 @@ export const deleteUserById = async (request:express.Request, response:express.R
         });
     } catch(e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
     
@@ -161,7 +165,8 @@ export const updateUserUsername = async (request:express.Request, response:expre
     // TODO : needs refactoring
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      return response.status(401).json({ errors: errors.array() });
+        let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
+        return response.status(401).json({ errors: validationErrors });
     }
 
     const newUsername = request.body.username;
@@ -169,8 +174,13 @@ export const updateUserUsername = async (request:express.Request, response:expre
     // TODO to refactor with mongoose unique validator
     const userAlreadyEx = await UserTable.findOne({ username: newUsername });
     if (!!userAlreadyEx) {
+        let noUniqueError : ErrorModel = {
+            msg : "Username already used. Please try with another one.",
+            param : "username",
+            location : "body",
+        }
         return response.status(401).json({
-            msg: 'User already exists. Please try again.'
+            errors: [noUniqueError]
         });
     }
 
@@ -184,7 +194,7 @@ export const updateUserUsername = async (request:express.Request, response:expre
         });
     } catch(e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
     
@@ -195,7 +205,8 @@ export const updateUserEmail = async (request:express.Request, response:express.
     // TODO : needs refactoring
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      return response.status(401).json({ errors: errors.array() });
+        let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
+        return response.status(401).json({ errors: validationErrors });
     }
 
     const newEmail = request.body.email;
@@ -203,8 +214,13 @@ export const updateUserEmail = async (request:express.Request, response:express.
     // TODO to refactor with mongoose unique validator
     const userAlreadyEx = await UserTable.findOne({ email: newEmail });
     if (!!userAlreadyEx) {
+        let noUniqueError : ErrorModel = {
+            msg : "Email already used. Please try with another one.",
+            param : "email",
+            location : "body",
+        }
         return response.status(401).json({
-            msg: 'User already exists. Please try again.'
+            errors: [noUniqueError]
         });
     }
     
@@ -217,8 +233,8 @@ export const updateUserEmail = async (request:express.Request, response:express.
             userUpdated: userUpdated
         });
     } catch(e) {
-        return response.status(401).json({
-            msg: 'Unknown server error triggered. Please try again.'
+        return response.status(500).json({
+            errors : [serverError]
         });
     }
     
@@ -229,7 +245,8 @@ export const updateUserPassword = async (request:express.Request, response:expre
     // TODO : needs refactoring
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      return response.status(401).json({ errors: errors.array() });
+        let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
+        return response.status(401).json({ errors: validationErrors });
     }
 
     const newHashedPassword = await hash(request.body.password, 10);
@@ -243,7 +260,7 @@ export const updateUserPassword = async (request:express.Request, response:expre
         });
     } catch(e) {
         return response.status(500).json({
-            msg: 'Unknown server error triggered. Please try again.'
+            errors : [serverError]
         });
     }
     
