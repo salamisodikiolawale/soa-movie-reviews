@@ -30,10 +30,12 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.crud_service.middlewares=validation-auth"
+     - "traefik.http.routers.crud_service_only_get.rule=Host(`crud_service.localhost`)"
      - "traefik.http.routers.crud_service.entrypoints=web" 
-     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
+
     networks:
       - proxyNetwork
       - serviceNetwork
@@ -44,7 +46,6 @@ services:
       - "3000:3000"
     volumes:
       - './frontend:/src/app'
-      # - '/src/app/node_modules'
     networks:
       - proxyNetwork
 
@@ -60,9 +61,10 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.email_service.middlewares=validation-auth"
+     - "traefik.http.routers.email_service_only_get.rule=Host(`email_service.localhost`)"
      - "traefik.http.routers.email_service.entrypoints=web" 
-     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
      - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
       - proxyNetwork
@@ -81,9 +83,10 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.review_service.middlewares=validation-auth"
+     - "traefik.http.routers.review_service_only_get.rule=Host(`review_service.localhost`)"
      - "traefik.http.routers.review_service.entrypoints=web" 
-     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`)"
      - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
       - proxyNetwork
@@ -92,7 +95,7 @@ services:
   # search_service:
   #   build: ./microservices/SearchService
   #   ports:
-  #     - "3005:3005"
+  #     - "3002:3002"
   #   networks:
   #     - serviceNetwork
 
