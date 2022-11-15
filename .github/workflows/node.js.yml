@@ -8,41 +8,41 @@ on:
 
 jobs:
 
-  # Frontend:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./frontend
+  Frontend:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./frontend
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
 
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     #- name: TESTINT APP
-  #     #- run: npm test
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
         
-  #         image: sodiki/aos_movie_frontend    
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: frontend/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
+          image: sodiki/aos_movie_frontend    
+          tags: latest
+          registry: docker.io
+          dockerfile: frontend/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       # - name: build container
       #   run: docker-compose up -d --build
