@@ -54,10 +54,8 @@ const RegisterPage = () => {
     
     const [formData, setFormData] = useState(initFormData())
 
-    
-
     const handleChange = (e: any) => {
-        console.log(formData)
+        setValidated(true)
         setFormData((previousState: any) => ({
           ...previousState, 
           [e.target.name]: e.target.value
@@ -74,7 +72,7 @@ const RegisterPage = () => {
     const registerUser = async (e: any) => {
         e.preventDefault();
         const form = e.currentTarget;
-        setValidated(true)
+        // setValidated(true)
         if (!form.checkValidity()) {
             e.stopPropagation();
         } else {
@@ -92,7 +90,7 @@ const RegisterPage = () => {
                 console.log(e.response.data.errors)
             }
         }
-        
+        setValidated(true)
     }
 
     const formItems = formRegisterData.map((currentInput) =>
@@ -104,8 +102,9 @@ const RegisterPage = () => {
             name={currentInput.name}
             text={currentInput.text}
             placeholder={currentInput.placeholder}
-            valid={currentInput.valid}
-            invalid={currentInput.invalid} />
+            validText={currentInput.valid}
+            invalidText={currentInput.invalid}
+        />
     );
 
     const errorMessagesToDisplay = errorMsgs.map((currentError, i) => {
