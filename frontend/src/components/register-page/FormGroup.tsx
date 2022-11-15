@@ -16,7 +16,7 @@ const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, 
     }
 
     return (
-        <Form.Group className="mb-3" controlId={controlIdLabel()}>
+        <Form.Group className="my-3" controlId={controlIdLabel()}>
             <Form.Label>{label}</Form.Label>
             <Form.Control 
                 required={isRequired}

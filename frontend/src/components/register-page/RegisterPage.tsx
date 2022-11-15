@@ -4,12 +4,17 @@ import Alert from 'react-bootstrap/Alert';
 import '../../styles/components/register-page.scss';
 import { useState } from 'react';
 import FormGroup from './FormGroup';
+import Spinner from 'react-bootstrap/Spinner';
 
 const RegisterPage = () => {
 
     const [validated, setValidated] = useState(false);
 
     const [errorMsgs, setErrorMsgs] = useState([]);
+
+    const [successMsg, setSuccessMsg] = useState(null);
+
+    const [isLoading, setLoading] = useState(false);
 
     const formRegisterData = [
         {
@@ -62,17 +67,17 @@ const RegisterPage = () => {
         }))
     }
 
-    // TODO use password check
-    // const isPasswordValid = (password: string) => {
-    //     var re = /^(?=.*\d)(?=.*[!@#$%.^&*])(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-    //     console.log(re.test(password))
-    //     return re.test(password);
-    // }
+    const initializeRequestMsgs = () => {
+        setSuccessMsg(null);
+        setErrorMsgs([]);
+    }
 
     const registerUser = async (e: any) => {
         e.preventDefault();
+        setLoading(true);
+        initializeRequestMsgs();
         const form = e.currentTarget;
-        // setValidated(true)
+
         if (!form.checkValidity()) {
             e.stopPropagation();
         } else {
@@ -83,14 +88,17 @@ const RegisterPage = () => {
                     "email": formData.email,
                     "password": formData.password
                 })
-                setErrorMsgs(res.data.errors)
-                console.log(res.data.errors);
+                if (res.status === 200) {
+                    setSuccessMsg(res.data.msg)
+                } else if (res.data.errors) {    
+                    setErrorMsgs(res.data.errors)
+                }
             } catch (e : any) {
                 setErrorMsgs(e.response.data.errors)
-                console.log(e.response.data.errors)
             }
         }
         setValidated(true)
+        setLoading(false);
     }
 
     const formItems = formRegisterData.map((currentInput) =>
@@ -114,12 +122,23 @@ const RegisterPage = () => {
     });
 
     return (
-        <div className="register-page">
-            <h2>Register</h2>
-            {
-            !!errorMsgs && errorMessagesToDisplay
-            }
+        <div className="register-page mx-auto">
+            <h1>Register</h1>
+
             <Form noValidate validated={validated} onSubmit={(e) => registerUser(e)}>
+                <div className="my-3">
+                    { isLoading && 
+                    <div className='loading-spinner'>
+                        <Spinner animation="border" role="status" />
+                    </div>
+                    }
+                    {
+                    !!successMsg ? 
+                    <Alert variant="success">
+                        {successMsg}
+                    </Alert> : errorMessagesToDisplay 
+                    }
+                </div>
                 {formItems}
                 {/* TODO to change later */}
                 <Button variant="primary" type="submit">
