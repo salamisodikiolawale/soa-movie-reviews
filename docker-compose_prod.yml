@@ -19,9 +19,7 @@ services:
       - authService
 
   crud_service:
-    build: 
-      context: ./microservices/CrudMovieService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/CrudMovieService
     ports:
       - "3010:3010"
     depends_on:
@@ -32,30 +30,27 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.crud_service.middlewares=validation-auth"
+     - "traefik.http.routers.crud_service_only_get.rule=Host(`crud_service.localhost`)"
      - "traefik.http.routers.crud_service.entrypoints=web" 
-     - "traefik.http.routers.crud_service.rule=Host(`crud_service.localhost`)"
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
+
     networks:
       - proxyNetwork
       - serviceNetwork
 
   client:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile_dev
+    build: ./frontend
     ports:
       - "3000:3000"
     volumes:
       - './frontend:/src/app'
-      # - '/src/app/node_modules'
     networks:
       - proxyNetwork
 
   email_service:
-    build: 
-      context: ./microservices/EmailService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/EmailService
     ports:
       - "3004:3004"
     depends_on:
@@ -66,9 +61,10 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.email_service.middlewares=validation-auth"
+     - "traefik.http.routers.email_service_only_get.rule=Host(`email_service.localhost`)"
      - "traefik.http.routers.email_service.entrypoints=web" 
-     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`)"
      - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
       - proxyNetwork
@@ -76,9 +72,7 @@ services:
 
 
   review_service:
-    build: 
-      context: ./microservices/ReviewService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/ReviewService
     ports:
       - "3001:3001"
     depends_on:
@@ -89,9 +83,10 @@ services:
         target: /src/app
     labels:
      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
      - "traefik.http.routers.review_service.middlewares=validation-auth"
+     - "traefik.http.routers.review_service_only_get.rule=Host(`review_service.localhost`)"
      - "traefik.http.routers.review_service.entrypoints=web" 
-     - "traefik.http.routers.review_service.rule=Host(`review_service.localhost`)"
      - "traefik.http.services.review_service.loadbalancer.server.port=3001"
     networks:
       - proxyNetwork
@@ -100,14 +95,12 @@ services:
   # search_service:
   #   build: ./microservices/SearchService
   #   ports:
-  #     - "3005:3005"
+  #     - "3002:3002"
   #   networks:
   #     - serviceNetwork
 
   auth_service:
-    build:
-      context: ./microservices/AuthService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/AuthService
     ports:
       - "3003:3003"
     depends_on:

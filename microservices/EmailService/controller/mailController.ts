@@ -75,8 +75,7 @@ const scheduleSendEMail = async (user:User) => {
             
             let mailOptions:MailOptions = {
                 from: `${process.env.EMAIL}`,
-                // to: `${user.email}`,
-                to: 'salamisodikiolawale@gmail.com',
+                to: `${user.email}`,
                 subject: `${"[AOS MOVIE NEWS]"}`,
                 // html: everyWeekTemplate("https://static.lpnt.fr/images/2017/12/28/12664476lpw-12664541-article-jpg_4877921_1250x625.jpg")
                 html: everySecondTemplate("https://static.lpnt.fr/images/2017/12/28/12664476lpw-12664541-article-jpg_4877921_1250x625.jpg", fiveLastMovies, numberOfMovie)
