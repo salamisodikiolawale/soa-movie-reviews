@@ -8,8 +8,6 @@ on:
 
 jobs:
 
-
-  runs-on: ubuntu-latest
   Frontend:
       runs-on: ubuntu-latest
       defaults:
