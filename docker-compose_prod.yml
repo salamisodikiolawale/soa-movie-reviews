@@ -19,9 +19,7 @@ services:
       - authService
 
   crud_service:
-    build: 
-      context: ./microservices/CrudMovieService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/CrudMovieService
     ports:
       - "3010:3010"
     depends_on:
@@ -43,9 +41,7 @@ services:
       - serviceNetwork
 
   client:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile_dev
+    build: ./frontend
     ports:
       - "3000:3000"
     volumes:
@@ -54,9 +50,7 @@ services:
       - proxyNetwork
 
   email_service:
-    build: 
-      context: ./microservices/EmailService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/EmailService
     ports:
       - "3004:3004"
     depends_on:
@@ -78,9 +72,7 @@ services:
 
 
   review_service:
-    build: 
-      context: ./microservices/ReviewService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/ReviewService
     ports:
       - "3001:3001"
     depends_on:
@@ -108,9 +100,7 @@ services:
   #     - serviceNetwork
 
   auth_service:
-    build:
-      context: ./microservices/AuthService
-      dockerfile: Dockerfile_dev
+    build: ./microservices/AuthService
     ports:
       - "3003:3003"
     depends_on:

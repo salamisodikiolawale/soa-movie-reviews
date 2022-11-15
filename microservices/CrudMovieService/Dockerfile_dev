@@ -1,7 +1,7 @@
 FROM node:latest
 RUN mkdir -p /src/app
 WORKDIR /src/app
-COPY frontend .
+COPY . .
 RUN npm install
-EXPOSE 3000
+EXPOSE 3010
 CMD [ "npm", "start" ]
