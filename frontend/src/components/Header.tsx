@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import '../styles/components/header.scss';
 import Button from 'react-bootstrap/Button';
@@ -9,7 +8,6 @@ import ButtonLink from './ButtonLink';
 const Header = () => {
 
     const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const [open, setOpen] = useState(false);
 
     const setMenuState = (menuState: any) => {
@@ -17,7 +15,6 @@ const Header = () => {
     }
 
     const updateDimensions = () => {
-        setHeight(window.innerHeight);
         setWidth(window.innerWidth);
    
         if (width >= 959) {

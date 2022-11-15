@@ -1,5 +1,6 @@
 import { Form, Button } from 'react-bootstrap';
 import axios from 'axios';
+import Alert from 'react-bootstrap/Alert';
 import '../../styles/components/register-page.scss';
 import { useState } from 'react';
 import FormGroup from './FormGroup';
@@ -7,6 +8,8 @@ import FormGroup from './FormGroup';
 const RegisterPage = () => {
 
     const [validated, setValidated] = useState(false);
+
+    const [errorMsgs, setErrorMsgs] = useState([]);
 
     const formRegisterData = [
         {
@@ -62,11 +65,11 @@ const RegisterPage = () => {
     }
 
     // TODO use password check
-    const isPasswordValid = (password: string) => {
-        var re = /^(?=.*\d)(?=.*[!@#$%.^&*])(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
-        console.log(re.test(password))
-        return re.test(password);
-    }
+    // const isPasswordValid = (password: string) => {
+    //     var re = /^(?=.*\d)(?=.*[!@#$%.^&*])(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+    //     console.log(re.test(password))
+    //     return re.test(password);
+    // }
 
     const registerUser = async (e: any) => {
         e.preventDefault();
@@ -75,13 +78,19 @@ const RegisterPage = () => {
         if (!form.checkValidity()) {
             e.stopPropagation();
         } else {
-            const res = await axios.post(`http://127.0.0.1:3003/user/`, 
-            {
-                "username": formData.username,
-                "email": formData.email,
-                "password": formData.password
-            })
-            console.log(res.data)
+            try {
+               const res = await axios.post(`http://127.0.0.1:3003/user/`, 
+                {
+                    "username": formData.username,
+                    "email": formData.email,
+                    "password": formData.password
+                })
+                setErrorMsgs(res.data.errors)
+                console.log(res.data.errors);
+            } catch (e : any) {
+                setErrorMsgs(e.response.data.errors)
+                console.log(e.response.data.errors)
+            }
         }
         
     }
@@ -99,10 +108,21 @@ const RegisterPage = () => {
             invalid={currentInput.invalid} />
     );
 
+    const errorMessagesToDisplay = errorMsgs.map((currentError, i) => {
+        return <Alert key={i} variant="danger">
+            {currentError["msg"]}
+        </Alert>
+    });
+
     return (
         <div className="register-page">
+            <h2>Register</h2>
+            {
+            !!errorMsgs && errorMessagesToDisplay
+            }
             <Form noValidate validated={validated} onSubmit={(e) => registerUser(e)}>
                 {formItems}
+                {/* TODO to change later */}
                 <Button variant="primary" type="submit">
                     Register
                 </Button>
