@@ -33,15 +33,10 @@ const usernameValidator = [
         .withMessage('Username not filled')
 ]
 
-const emailOrUsernameRules = [
-    check('email')
+const loginIdentifierRules = [
+    check('identifier')
         .notEmpty()
-        .withMessage('Email not filled')
-        .isEmail()
-        .withMessage('Not an email'),
-    check('username')
-        .notEmpty()
-        .withMessage('Username not filled')
+        .withMessage('Username or email not filled')
 ]
 
 const loginValidationRules = [
@@ -72,6 +67,6 @@ userRouter.put('/updateEmail/:id', emailValidator, auth, updateUserEmail);
 // Update user password
 userRouter.put('/updatePassword/:id', passwordValidator, auth, updateUserPassword);
 
-userRouter.post('/login', oneOf(emailOrUsernameRules), loginValidationRules, login);
+userRouter.post('/login', loginIdentifierRules, loginValidationRules, login);
 
 export default userRouter;

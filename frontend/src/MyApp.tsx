@@ -1,12 +1,48 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from './components/landing-page/LandingPage'
-import RegisterPage from './components/register-page/RegisterPage'
 import './app.scss';
 import Header from "./components/Header";
 import ErrorPage from "./components/ErrorPage";
+import AuthenticationPage from "./components/authentication-page/AuthenticationPage";
+import { useContext, useEffect } from "react";
+import { Context } from "./context/Context";
 
+import axios from 'axios';
 
 const MyApp = () => {
+
+  const { state, dispatch } = useContext(Context);
+
+  const getCurrentUser = async () => {
+    try {
+        const options = {
+          headers : {
+            Authorization: sessionStorage.getItem('JWT') ? `Bearer ${sessionStorage.getItem('JWT')}` : ''
+          }
+        }
+        const res = await axios.get(`http://127.0.0.1:3003/user/${state.userData.userInfos.userId}`, options);
+        dispatch({
+            type: "SET_USER_DATA",
+            payload: {
+              isConnected: !!sessionStorage.getItem('JWT'),
+              userInfos: res.data
+            }
+        });
+      } catch (e : any) {
+        console.log("Couldn't find the user. Maybe wrong user ID")
+      }
+  }
+
+  const authPageComponent = () => {
+    return state.userData.isConnected ? <Navigate to="/404" replace /> : <AuthenticationPage/>;
+  }
+
+  useEffect(() => {
+      if (state.userData.isConnected) {
+        getCurrentUser()
+      }
+  }, [state.userData.isConnected])
+
   return (
     <Router>
       <div className="app">
@@ -14,7 +50,7 @@ const MyApp = () => {
         <div className="app-content">
           <Routes>
               <Route path="/" element={<LandingPage/>} />
-              <Route path="/login" element={<RegisterPage/>} />
+              <Route path="/authenticate" element={authPageComponent()} />
               <Route path='/404' element={<ErrorPage/>} />
               <Route path="*" element={<Navigate to="/404" replace />}/> 
           </Routes>

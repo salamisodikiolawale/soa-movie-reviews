@@ -1,18 +1,9 @@
 import { Form } from 'react-bootstrap';
 
-const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, text, validText, invalidText} : any) => {
+const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, text, validText, invalidText, regexPattern, value} : any) => {
 
     const controlIdLabel = () : string => {
         return "formBasic" + label.replace(" ", "");
-    }
-
-    const passwordRegex = (type : string) => {
-        switch (type) {
-            case 'password':
-              return '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%.^&*_=+-]).{5,}$';
-            default:
-              return '(.*?)';
-        }
     }
 
     return (
@@ -24,7 +15,8 @@ const FormGroup = ({label, isRequired, name, type, onChangeMethod, placeholder, 
                 name={name}
                 onChange={(e) => onChangeMethod(e)}
                 placeholder={placeholder}
-                pattern={passwordRegex(type)}
+                pattern={regexPattern}
+                value={value}
             />
             { !!text && 
             <Form.Text className="text-muted">
