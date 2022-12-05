@@ -241,7 +241,7 @@ const AuthenticationPage = () => {
     }, [pageContent])
 
     return (
-        <div className="register-page mx-5">
+        <div className="authentication-page">
             <h1> { pageData.pageTitle } </h1>
 
             <Form noValidate validated={validated} onSubmit={(e) => submitMethod(e)}>
