@@ -66,7 +66,8 @@ export const login = async (request:express.Request, response:express.Response) 
         return response.status(401).json({ errors: validationErrors });
     }
 
-    const userToAuthenticate = !!request.body.username ? await UserTable.findOne({ username: request.body.username }) : await UserTable.findOne({ email: request.body.email });
+    // Check if the user exist based on identifier if it email or username
+    const userToAuthenticate = await UserTable.findOne({ username: request.body.identifier }) ?? await UserTable.findOne({ email: request.body.identifier });
 
     try {
         if (!!userToAuthenticate) {
@@ -75,7 +76,11 @@ export const login = async (request:express.Request, response:express.Response) 
             
             if (!!isPasswordCorrect) {
                 return response.status(200).json({
-                    userId: userToAuthenticate._id,
+                    user: {
+                        userId: userToAuthenticate._id,
+                        username: userToAuthenticate.username,
+                        email: userToAuthenticate.email
+                    },
                     token: jwt.sign(
                         { userId: userToAuthenticate._id },
                         process.env.JWT_SECRET,
@@ -133,8 +138,13 @@ export const getUsers = async (request:express.Request, response:express.Respons
 export const getUserById = async (request:express.Request, response:express.Response) => {
 
     try {
-        const userToFind = await UserTable.findById(request.params.id);
-        return response.status(200).json(userToFind);
+        const userToFind = await UserTable.findOne({ _id: request.params.id });
+        return response.status(200).json({
+            userId: userToFind?._id,
+            email: userToFind?.email,
+            username: userToFind?.username,
+            subscribed_newsletter: userToFind?.subscribed_newsletter
+        });
     } catch(e) {
         return response.status(500).json({
             errors : [serverError]
