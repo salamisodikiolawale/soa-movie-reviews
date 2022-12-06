@@ -13,21 +13,15 @@ const MyApp = () => {
 
   const { state, dispatch } = useContext(Context);
 
-  const getCurrentUser = async () => {
+  const getCurrentUser = async (userId: string) => {
     try {
         const options = {
           headers : {
             Authorization: sessionStorage.getItem('JWT') ? `Bearer ${sessionStorage.getItem('JWT')}` : ''
           }
         }
-        const res = await axios.get(`http://127.0.0.1:3003/user/${state.userData.userInfos.userId}`, options);
-        dispatch({
-            type: "SET_USER_DATA",
-            payload: {
-              isConnected: !!sessionStorage.getItem('JWT'),
-              userInfos: res.data
-            }
-        });
+        const res = await axios.get(`http://127.0.0.1:3003/user/${userId}`, options);
+        return res.data;
       } catch (e : any) {
         console.log("Couldn't find the user. Maybe wrong user ID")
       }
@@ -38,10 +32,17 @@ const MyApp = () => {
   }
 
   useEffect(() => {
-      if (state.userData.isConnected) {
-        getCurrentUser()
+      if (state.userData.isConnected && !!state.userData.userInfos.userId) {
+        const userData = getCurrentUser(state.userData.userInfos.userId);
+        dispatch({
+          type: "SET_USER_DATA",
+          payload: {
+            isConnected: !!sessionStorage.getItem('JWT'),
+            userInfos: userData
+          }
+        });
       }
-  }, [state.userData.isConnected])
+  }, [state.userData, dispatch])
 
   return (
     <Router>
