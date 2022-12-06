@@ -159,17 +159,17 @@ const AuthenticationPage = () => {
     const [successMsg, setSuccessMsg] = useState(null);
 
     const [isLoading, setLoading] = useState(false);
-
-    const [pageContent, setPageContent] = useState(PageContent.LOGIN);
-
-    const pageContentData = {
+ 
+    const pagesType = {
         login : {
+            pageContent: PageContent.LOGIN,
             pageTitle : 'Login',
             submitButton : 'Login',
             formGroupData : loginFormRegisterData,
             ctaButtonText : "Not registered yet ? Create a new account."
         },
         register : {
+            pageContent: PageContent.REGISTER,
             pageTitle : 'Register',
             submitButton : 'Register',
             formGroupData : registerFormRegisterData,
@@ -181,15 +181,21 @@ const AuthenticationPage = () => {
         return isLoginPage() ? loginUser(e) : registerUser(e);
     }
     
-    const [pageData, setPageData] = useState(pageContentData.login);
-    const initFormData = () => {
-        const data : { [key: string]: string; } = {};
-        for (let form of pageData.formGroupData) {
+    const [pageData, setPageData] = useState(pagesType.login);
+
+    const initFormData = (formGroupData : FormInputData[]) => {
+        const data : { [key: string]: string; } = {
+            identifier: '',
+            password: '',
+            email: '',
+            username: ''
+        };
+        for (let form of formGroupData) {
             data[form.name] = '';
         }
         return data;
     }
-    const [formData, setFormData] = useState(initFormData());
+    const [formData, setFormData] = useState(initFormData(pageData.formGroupData));
 
     const handleChange = (e: any) => {
         setValidated(true)
@@ -227,18 +233,18 @@ const AuthenticationPage = () => {
     });
     
     const isLoginPage = () => {
-        return pageContent === PageContent.LOGIN
+        return pageData.pageContent === PageContent.LOGIN
     }
+
     const changePageContent = () => {
-        isLoginPage() ? setPageContent(PageContent.REGISTER) : setPageContent(PageContent.LOGIN)
+        return isLoginPage() ? setPageData(pagesType.register) : setPageData(pagesType.login);
     }
 
     useEffect(() => {
-        initializeRequestMsgs();
-        isLoginPage() ? setPageData(pageContentData.login) : setPageData(pageContentData.register);
-        setFormData(initFormData());
         setValidated(false);
-    }, [pageContent])
+        initializeRequestMsgs();
+        setFormData(initFormData(pageData.formGroupData));
+    }, [pageData])
 
     return (
         <div className="authentication-page">
