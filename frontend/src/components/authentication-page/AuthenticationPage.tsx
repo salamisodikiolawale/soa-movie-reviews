@@ -111,7 +111,7 @@ const AuthenticationPage = () => {
                         }
                     });
                     setSuccessMsg(res.data.msg)
-                    navigateTo('/404');
+                    navigateTo('/');
                 } else if (res.data.errors) {    
                     setErrorMsgs(res.data.errors)
                 }
@@ -263,7 +263,7 @@ const AuthenticationPage = () => {
                 <Button variant="primary" type="submit">
                     { pageData.pageTitle }
                 </Button>
-                <ButtonAction text={ pageData.ctaButtonText } action={() => changePageContent()} variant=""></ButtonAction>
+                <ButtonAction text={ pageData.ctaButtonText } wrapperClass="link" action={() => changePageContent()} variant=""></ButtonAction>
             </Form>
         </div>
     );

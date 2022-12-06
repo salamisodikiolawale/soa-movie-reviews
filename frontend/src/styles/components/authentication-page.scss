@@ -1,4 +1,13 @@
+@import "../helpers/medias.scss";
 .authentication-page {
+    @include regular {
+        width: 55%;
+        margin: 0 auto;
+    }
+    @include large {
+        width: 45%;
+        margin: 0 auto;
+    }
     .loading-spinner {
         display: flex;
         align-items: center;

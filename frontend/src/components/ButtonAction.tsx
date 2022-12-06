@@ -4,7 +4,7 @@ import '../styles/components/button-action.scss';
 const ButtonAction = ({text, action, wrapperClass, variant} : any) => {
     return (
         <>
-        <Button className={'button-action ' + wrapperClass} onClick={ action } variant={variant}>{ text }</Button>{' '}
+        <Button className={'button button-action ' + wrapperClass} onClick={ action } variant={variant}>{ text }</Button>{' '}
         </>
     )
 } 
