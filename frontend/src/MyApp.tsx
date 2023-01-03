@@ -4,6 +4,7 @@ import RegisterPage from './components/register-page/RegisterPage'
 import './app.scss';
 import Header from "./components/Header";
 import ErrorPage from "./components/ErrorPage";
+import MovieForm from "./components/movie-page/MovieForm";
 
 
 const MyApp = () => {
@@ -14,6 +15,7 @@ const MyApp = () => {
         <div className="app-content">
           <Routes>
               <Route path="/" element={<LandingPage/>} />
+              <Route path="/create" element={<MovieForm/>} />
               <Route path="/login" element={<RegisterPage/>} />
               <Route path='/404' element={<ErrorPage/>} />
               <Route path="*" element={<Navigate to="/404" replace />}/> 
