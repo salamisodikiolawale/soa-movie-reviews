@@ -1,15 +1,16 @@
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import '../styles/components/header.scss';
 import Button from 'react-bootstrap/Button';
 import BurgerMenu from "./BurgerMenu";
 import { NavLink } from "react-router-dom";
 import ButtonLink from './ButtonLink';
+import ButtonAction from './ButtonAction';
+import { Context } from '../context/Context';
 
 const Header = () => {
+    const { state, dispatch } = useContext(Context);
 
     const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const [open, setOpen] = useState(false);
 
     const setMenuState = (menuState: any) => {
@@ -17,7 +18,6 @@ const Header = () => {
     }
 
     const updateDimensions = () => {
-        setHeight(window.innerHeight);
         setWidth(window.innerWidth);
    
         if (width >= 959) {
@@ -29,22 +29,41 @@ const Header = () => {
         window.addEventListener('resize', updateDimensions);
     })
 
+    const toDisconnect = () => {
+        sessionStorage.removeItem('JWT');
+        sessionStorage.removeItem('userId');
+        dispatch({
+            type: "SET_USER_DATA",
+            payload: {
+                isConnected: !!sessionStorage.getItem('JWT'),
+                userInfos: {
+                    userId: sessionStorage.getItem('userId'),
+                    email: null,
+                    username: null,
+                    subscribed_newsletter: false
+                }
+            }
+        });
+    }
+    
+
     return (
         <header className='header'>
             {/* <SimpleLink color="blue" wrapperClass="ethernel-font logo" toPath="/" text="Ethernel"/> */}
             <BurgerMenu onClickAction={ ()=> { setMenuState(!open) } } />
             <NavLink className='logo' to="/">
-                <p>AOS Movie Reviews
-                </p>
-                </NavLink>
+                <p>AOS Movie Reviews</p>
+            </NavLink>
             <nav className={ !open ? 'closed' : '' }>
-                <Button className='nav-item' variant="primary">Movies</Button>{' '}
-                <ButtonLink toPath="/login" variant="primary" text="Register" wrapperClass="nav-item" />
-                <ButtonLink toPath="/" variant="primary" text="Connect" wrapperClass="nav-item" /> 
-                {/* <ButtonLink wrapperClass="nav-item" color="blue" toPath="/market" text="Market"/> */}
-                {/* <ButtonLink wrapperClass="nav-item text-clip" color="blue" toPath="/NFT" text="NFT collection"/> */}
-                {/* <ButtonLink wrapperClass="nav-item text-clip" color="blue" toPath="/transactions" text="Transactions"/> */}
-                {/* <ButtonSimple onClickEvent={toConnect()} wrapperClass={"nav-item" + (isConnected() ? ' text-clip text-clip-size ' : '')} color="color"  text={isConnected() ? connectedAccounts[0] : 'Connect'} /> */}
+
+                <p className='username'>{state.userData.userInfos?.username}</p>
+                <Button className='nav-item' variant="primary">Movies</Button>{' '}                
+                
+                {
+                    state.userData.isConnected ? 
+                    <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" /> :
+                    <ButtonLink toPath="/authenticate" variant="primary" text="Connect" wrapperClass="nav-item" /> 
+                }
             </nav>
         </header> 
     );

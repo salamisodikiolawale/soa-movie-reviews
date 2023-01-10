@@ -1,4 +1,3 @@
-import axios from 'axios';
 import '../../styles/components/landing-page.scss';
 
 const LandingPage = () => {
