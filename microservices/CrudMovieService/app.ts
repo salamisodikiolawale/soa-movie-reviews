@@ -1,30 +1,22 @@
+
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
 
+
+const app:express.Application = express();
+
 //Auto decouvrability
 const hateoasLinker = require('express-hateoas-links');
 
 
-const app:express.Application = express();
 
 app.use(express.urlencoded({
     extended: true
   }));
   
-  app.get("/server1/:id", function(req, res) {
-    console.log("Service crud")
-    const data = {
-      "id": req.params.id,
-      "name":"SALAMI",
-      'Age': 12,
-      "Country":"France"
-    }
-    res.json({data:data});
-  });
-
 app.use(hateoasLinker);
 
 // Configurations
@@ -32,38 +24,52 @@ app.use(cors());
 dotenv.config( {path : './.env'}); // for env variable
 app.use(express.json()); // json form data
 
-let hostName:string|undefined = process.env.HOST_NAME;
-let port:number|undefined = Number(process.env.PORT);
+let node_env:string|undefined = process.env.NODE_ENV;
+
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 
 
+const connectToDBDev = async () => {
+    // MongoDB connection
+    if(mongoDBUrl) {
+        // mongoose.disconnect();
+        mongoose.connect(mongoDBUrl)
+        .then( () => {
+            console.log('Connecting to mongoDB Successfully ...');
+        }).catch( (error) => {
+            console.log(error);
+            process.exit(1); // Stop the node js process
+        });
+    }
+}
 
-// MongoDB connection
-
-if(mongoDBUrl) {
-    mongoose.connect(mongoDBUrl).then( () => {
-        console.log('Connecting to mongoDB Successfully ...');
-    }).catch( (error) => {
+const connectToDBTest = async () => {
+    mongoose.connect("mongodb://mongo-test-db:27017/movie")
+    .then( () => {
+        console.log('Connecting to mongoDB of test Successfully ...');
+    })
+    .catch( (error) => {
         console.log(error);
-        process.exit(1); // Stop the node js process
+        process.exit(1);
     });
 }
 
-app.get("/", async (request:express.Request, response:express.Response) => {
-    response.status(200).send({
-        "msg": "Welcome to CRUD movie Service"
-    })
+/**
+ * Connexion on database dev or test depending environnement
+ */
+// node_env=="dev" ? connectToDBDev() : connectToDBTest();
+connectToDBDev()
+
+
+
+app.get('/', async (request:express.Request, response:express.Response) => {
+    response.status(200).send("Hello World!");
 })
 
 // Route Configuration
 
 app.use('/api/v1/', apiRouter);
 
-if(port !== undefined && hostName !== undefined){
-    app.listen(port, hostName, () => {
-        console.log(`Express Server is running at ${hostName}:${port}`);
-    });
-}
-
+export default app;
 
 

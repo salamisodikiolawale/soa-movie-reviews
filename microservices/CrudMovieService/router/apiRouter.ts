@@ -1,10 +1,13 @@
 import express from 'express';
-import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies} from "../controller/movieController";
+import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies, testJest} from "../controller/movieController";
 import { movieCreateValidation } from '../validations/movieValidations';
 
 const apiRouter:express.Router = express.Router();
 
 
+apiRouter.post("/register", testJest);
+
+// apiRouter.post('/register', testJest)
 /*
     Usage: Create a movie
     URL : http://crudMovieService:3000/api/v1/movies

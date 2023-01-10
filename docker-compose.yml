@@ -37,10 +37,13 @@ services:
      - "traefik.http.routers.crud_service_only_get.rule=Host(`crud_service.localhost`)"
      - "traefik.http.routers.crud_service.entrypoints=web" 
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
-
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
     networks:
       - proxyNetwork
       - serviceNetwork
+      - testNetwork
 
   client:
     build: 
@@ -127,6 +130,23 @@ services:
       - proxyNetwork
       - authService
 
+  
+  mongo:
+    container_name: mongo-test-db
+    image: mongo
+    volumes:
+      - ./data-movie-test-db:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - testNetwork
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    networks:
+      - testNetwork
 
 networks:
   authService:
@@ -134,4 +154,6 @@ networks:
   serviceNetwork:
     driver: bridge
   proxyNetwork:
+    driver: bridge
+  testNetwork:
     driver: bridge

@@ -3,6 +3,8 @@ import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
 import {validationResult } from 'express-validator';
+import { Http_code } from "../config/http_code";
+
 
 export const createMovie = async (request:express.Request, response:express.Response) => {
 
@@ -13,15 +15,17 @@ export const createMovie = async (request:express.Request, response:express.Resp
     }
 
     try {
+        
         //Recuperation des données dans la request
         let movie:Movie = {
             title : request.body.title,
             date : request.body.date,
-            ranting: request.body.ranting,
+            rating: request.body.rating,
             description: request.body.description,
-            image : request.body.image,
-            types : request.body.types
+            image : request.body.image || "",
+            types : request.body.types || []
         };
+
 
         //Decov
         const _link = [
@@ -35,7 +39,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -52,7 +56,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
         //Create the movie into database
         let newMovie = new MovieTable(movie);
         movie = await newMovie.save();
-        response.status(200).json({
+        response.status(Http_code.CREATED).json({
             msg: 'Movie is created successfully',
             movie:movie,
             _link
@@ -60,7 +64,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
 
     } catch (error){
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         });
     };
@@ -81,7 +85,7 @@ export const getMovies = async (request:express.Request, response:express.Respon
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -94,13 +98,13 @@ export const getMovies = async (request:express.Request, response:express.Respon
                 href: '/movies/:id',
             }
         ]
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             movies,
             _link
         });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         })
     }
@@ -144,7 +148,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -164,7 +168,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
         });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(404).json({
             error : error
         })
     }
@@ -193,7 +197,7 @@ export const getFiveLasteMovies = async (request:express.Request, response:expre
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -251,7 +255,7 @@ export const deleteMovie = async(request:express.Request, response:express.Respo
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -284,7 +288,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
             title : request.body.title,
             image : request.body.image,
             date : request.body.date,
-            ranting : request.body.ranting,
+            rating : request.body.rating,
             description : request.body.description,
             types : request.body.types
         };
@@ -292,7 +296,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
         //Check if movie is already exist into database
         let existingMoviewillUpdated:Movie|null = await MovieTable.findById(movieId);
         if(!existingMoviewillUpdated){
-            return response.status(404).json({
+            return response.status(Http_code.NOTFOUND).json({
                 msg : 'Movie is not exists'
             });
         }
@@ -303,7 +307,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
                 title : updatedMovie.title ? updatedMovie.title : existingMoviewillUpdated.title,
                 image : updatedMovie.image ? updatedMovie.image : existingMoviewillUpdated.image,
                 date : updatedMovie.date ? updatedMovie.date : existingMoviewillUpdated.date,
-                ranting : updatedMovie.ranting ? updatedMovie.ranting : existingMoviewillUpdated.ranting,
+                rating : updatedMovie.rating ? updatedMovie.rating : existingMoviewillUpdated.rating,
                 description : updatedMovie.description ? updatedMovie.description : existingMoviewillUpdated.description,
                 types : updatedMovie.types ? updatedMovie.types : existingMoviewillUpdated.types,
 
@@ -328,7 +332,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
                 data: {
                     "title" : "text",
                     "date" : "date",
-                    "ranting": "number",
+                    "rating": "number",
                     "description": "texte",
                     "image" : "texte",
                     "types" : "[]"
@@ -341,7 +345,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
                 href: '/movies/:id',
             }
         ]
-        response.status(201).json({
+        response.status(Http_code.OK).json({
             msg: 'Movie is Updated',
             movie: existingMoviewillUpdated,
             _link
@@ -351,11 +355,11 @@ export const updateMovie = async(request:express.Request, response:express.Respo
         console.log(error);
         // @ts-ignore
         if(error.kind === 'ObjectId'){
-            return response.status(404).json({
+            return response.status(Http_code.NOTFOUND).json({
                 msg : 'Movie is not exists'
             });
         }
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         });
     }
