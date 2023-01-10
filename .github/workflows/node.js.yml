@@ -111,6 +111,8 @@ jobs:
         run: npm run build --if-present
       - name: TESTINT APP
       - run: npm run test
+
+      ##
       
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
