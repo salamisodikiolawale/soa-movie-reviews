@@ -9,9 +9,16 @@
   "main": "app.ts",
   
   "scripts": {
+  
+    
   "test": "NODE_ENV=test jest --coverage",
+  
+    
   "test:clearcache": "jest --clearCache",
+  
+    
   "start": "NODE_ENV=dev nodemon server.ts"
+  
   },
   
   "keywords": [],
@@ -91,6 +98,9 @@
   
     
   "@types/jest": "^29.2.5",
+  
+    
+  "@types/supertest": "^2.0.12",
   
     
   "babel-cli": "^6.26.0",
