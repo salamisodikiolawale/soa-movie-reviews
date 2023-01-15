@@ -18,7 +18,7 @@ dotenv.config( {path : './config/.env'});
 app.use(express.json());
 
 // Get variables env values
-let node_env:string|undefined = process.env.NODE_ENV;
+let node_env:string|undefined = process.env.NODE_ENV_CRUD_Serv_Var;
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 

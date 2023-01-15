@@ -11,13 +11,13 @@
   "scripts": {
   
     
-  "test": "NODE_ENV=test jest --coverage",
+  "test": "NODE_ENV_CRUD_Serv_Var=test jest --coverage",
   
     
   "test:clearcache": "jest --clearCache",
   
     
-  "start": "NODE_ENV=dev nodemon server.ts"
+  "start": "NODE_ENV_CRUD_Serv_Var=dev nodemon server.ts"
   
   },
   

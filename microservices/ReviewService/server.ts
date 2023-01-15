@@ -1,7 +1,7 @@
 import app from "./app";
 
-let hostName:string|undefined =  process.env.HOST_NAME;
-let port:number|undefined = Number(process.env.PORT);
+let hostName:string|undefined =  process.env.HOST_NAME_Rev_Serv_Var;
+let port:number|undefined = Number(process.env.PORT_Rev_Serv_Var);
 
 
 
