@@ -26,8 +26,9 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 * Mongo production database connection
 */
 const connectToDBDev = async () => {
-   if(mongoDBUrl) {
-       mongoose.connect("mongodb+srv://movie:movie2022@cluster0.cfcurjj.mongodb.net/?retryWrites=true&w=majority")
+    const mongoDBU = "mongodb+srv://movie:movie2022@cluster0.cfcurjj.mongodb.net/?retryWrites=true&w=majority";
+   if(mongoDBU) {
+       mongoose.connect(mongoDBU)
        .then( () => {
            console.log('Connecting to mongoDB Successfully ...');
        }).catch( (error) => {
