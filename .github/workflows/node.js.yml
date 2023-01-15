@@ -109,7 +109,7 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: clear cache
+      - name: CLEAR CACHE
         run: npm run "test:clearcache"
       - name: TESTINT APP
         run: npm run test
@@ -184,7 +184,7 @@ jobs:
         matrix:
           node-version: [16.x]
           
-      timeout-minutes: 5
+      timeout-minutes: 3
 
       steps:
       - name: CHECK-OUT GIT REPOSITORY
@@ -199,7 +199,7 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: clear cache
+      - name: CLEAR CACHE
         run: npm run "test:clearcache"
       - name: TESTINT APP
         run: npm run test

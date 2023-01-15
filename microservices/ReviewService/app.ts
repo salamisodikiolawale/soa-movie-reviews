@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Get variables env values
 let node_env:string|undefined = process.env.NODE_ENV_Rev_Serv_Var;
-let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
+let mongoDBUrl:string|undefined = process.env.MONGODB_URL_Serv_Var;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 
 
