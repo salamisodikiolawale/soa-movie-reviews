@@ -23,7 +23,7 @@ describe("GET reviews data", () => {
 
     it("Returns 404 if data dont exist inn database", async () => {
 
-        const movieId="63c1d3d71b7cc==08cb55145be";
+        const movieId= "wwwwwwwwwwww";
 
         const response = await request(app).delete(`${url}/${movieId}`);
 

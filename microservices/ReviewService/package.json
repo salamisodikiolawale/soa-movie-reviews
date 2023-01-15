@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "test": "NODE_ENV=test jest --coverage",
+    "test": "NODE_ENV=test jest --coverage --detectOpenHandles",
     "test:clearcache": "jest --clearCache",
     "start": "NODE_ENV=dev nodemon server.ts"
   },

@@ -21,7 +21,7 @@ describe("GET reviews data", () => {
         }
     })
 
-    it("Returns 200 if data exist inn database", async () => {
+    it("Returns 200 if reviews data of movie exist in database", async () => {
 
         const movieId="63c1d3d71b7cc02cb55145be";
 
@@ -33,7 +33,7 @@ describe("GET reviews data", () => {
 
     it("Returns 404 if data dont exist in database", async () => {
 
-        const movieId="63c1d3d71b7c2cb55145be";
+        const movieId="wwwwwwwwwwww";
 
         const response = await request(app).get(`${url}/${movieId}`);
 

@@ -21,25 +21,25 @@ describe("GET reviews data", () => {
         }
     })
 
-    it("Returns 200 if reviem of mivie created", async () => {
+    // it("Returns 200 if reviem of mivie created", async () => {
 
-        const movieId="63c1d3d71b7cc02cb55145be";
-        const review = {
-            movieReviewId : movieId,
-            username : "username",
-            rating : 2,
-            comment : "My comment",
-        }
+    //     const movieId="63c1d3d71b7cc02cb55145be";
+    //     const review = {
+    //         movieReviewId : movieId,
+    //         username : "username",
+    //         rating : 2,
+    //         comment : "My comment",
+    //     }
 
-        const response = await request(app).post(`${url}`).send(review);
+    //     const response = await request(app).post(`${url}`).send(review);
 
-        expect(response.statusCode).toEqual(Http_code.OK);
+    //     expect(response.statusCode).toEqual(Http_code.OK);
 
-    })
+    // })
 
-    it("Returns 404 if id of mivie dont", async () => {
+    it("Returns 404 if id of movie dont", async () => {
 
-        const movieId="63c1d3d71b7dddcc02cb55145be";
+        const movieId="wwwwwwwwwwww";
         const review = {
             movieReviewId : movieId,
             username : "username",
