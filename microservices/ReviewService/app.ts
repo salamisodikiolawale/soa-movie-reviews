@@ -37,7 +37,7 @@ const connectToDBDev = async () => {
        });
    } else {
 
-       throw new Error("Env variable it not define");
+       throw new Error("Env variable it not define[DEV]");
    }
 }
 
@@ -55,7 +55,7 @@ const connectToDBTest = async () => {
             process.exit(1);
         });
     } else {
-        throw new Error("Env variable it not define");
+        throw new Error("Env variable it not define [TEST]");
     }
 }
 
