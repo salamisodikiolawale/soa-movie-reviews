@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
-
+import { Db } from './config/db';
 //Initialisations
 const app:express.Application = express();
 const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Get variables env values
 let node_env:string|undefined = process.env.NODE_ENV_Rev_Serv_Var;
-let mongoDB:string = process.env.MONGODB || "";
+let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 
 
@@ -26,8 +26,8 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 * Mongo production database connection
 */
 const connectToDBDev = async () => {
-   if(mongoDB) {
-       mongoose.connect(mongoDB)
+   if(Db.URL) {
+       mongoose.connect(Db.URL)
        .then( () => {
            console.log('Connecting to mongoDB Successfully ...');
        }).catch( (error) => {
