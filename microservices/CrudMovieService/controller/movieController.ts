@@ -1,3 +1,4 @@
+// Modules importation
 import axios from "axios";
 import express from "express";
 import {Movie} from "../database/models/Movie";
@@ -5,10 +6,45 @@ import MovieTable from "../database/schemas/MovieSchema";
 import {validationResult } from 'express-validator';
 import { Http_code } from "../config/http_code";
 
+// values: {
+//     "_links": {
+//         "self": { "href": `http://crud_service.localhost/api/v1/movies/${currentIdMovie}` },
+//         "item": [
+//             { "href": "http://example.com/people/1", "title": "John Smith" },
+//             { "href": "http://example.com/people/2", "title": "Jane Smith" }
+//         ]
+//     },
+//     "_embedded": {
+//         "http://example.com/rels#person": [
+//             {
+//                 "first_name": "John",
+//                 "last_name": "Smith",
+//                 "_links": {
+//                     "self": { "href": "http://example.com/people/1" },
+//                     "http://example.com/rels#spouse": { "href": "http://example.com/people/2" }
+//                 }
+//             },
+//             {
+//                 "first_name": "Jane",
+//                 "last_name": "Smith",
+//                 "_links": {
+//                     "self": { "href": "http://example.com/people/2" },
+//                     "http://example.com/rels#spouse": { "href": "http://example.com/people/1" }
+//                 }
+//             }
+//         ]
+//     }
+// }
 
+/**
+ * Create one movie with this middleware
+ * @param request movie data
+ * @param response 
+ * @returns code http and movie created
+ */
 export const createMovie = async (request:express.Request, response:express.Response) => {
 
-    // Error section validation
+    // Manage Error section validation
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
       return response.status(401).json({ errors: errors.array() });
@@ -16,7 +52,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
 
     try {
         
-        //Recuperation des données dans la request
+        // Get data into request enter
         let movie:Movie = {
             title : request.body.title,
             date : request.body.date,
@@ -27,7 +63,9 @@ export const createMovie = async (request:express.Request, response:express.Resp
         };
 
 
-        //Decov
+        // Define decouvrability table
+        let currentIdMovie:string|null|undefined=null;
+    
         const _link = [
 
             { rel: "self", href: 'http://127.0.0.1' },
@@ -55,13 +93,24 @@ export const createMovie = async (request:express.Request, response:express.Resp
 
         //Create the movie into database
         let newMovie = new MovieTable(movie);
+
         movie = await newMovie.save();
+
+        currentIdMovie=movie._id;
+
         response.status(Http_code.CREATED).json({
             msg: 'Movie is created successfully',
             movie:movie,
-            _link
+            datas: {
+                "_links": {
+                    "mivies": { "href": `http://crud_service.localhost/api/v1/movies` },
+                    "reviews": {"href": `http://review_service.localhost/api/v1/reviews/${currentIdMovie}`},
+                    "item": []
+                },
+                "_embedded": {}
+            }
         });
-
+        
     } catch (error){
         console.log(error);
         response.status(Http_code.INTERNALSERVERERROR).json({
@@ -100,7 +149,8 @@ export const getMovies = async (request:express.Request, response:express.Respon
         ]
         response.status(Http_code.OK).json({
             movies,
-            _link
+            _link,
+            
         });
     } catch (error) {
         console.log(error);

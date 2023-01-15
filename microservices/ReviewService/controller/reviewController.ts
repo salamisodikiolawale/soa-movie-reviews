@@ -3,6 +3,7 @@ import {Review} from "../database/models/Review";
 import {Movie} from "../database/models/Movie";
 import ReviewTable from "../database/schemas/ReviewSchema";
 import MovieTable from "../database/schemas/MovieSchema";
+import { Http_code } from "../config/http_code";
 
 
 //Fonction qui permet de créer une review et de l'ajouter à la base de données.
@@ -19,7 +20,7 @@ export async function createReview(request:express.Request, response:express.Res
         //Verify if data already exist in the database
         let existingMovie:Movie |null = await MovieTable.findById(review.movieReviewId).exec();
         if(existingMovie == null){
-            return response.status(401).json({
+            return response.status(Http_code.NOTFOUND).json({
                 msg: 'Movie does not exist'
             });
         }
@@ -27,14 +28,14 @@ export async function createReview(request:express.Request, response:express.Res
         //Create the review into database
         let newReview= new ReviewTable(review);
         review = await newReview.save();
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             msg: 'Review is created successfully',
             product:review
         });
 
     } catch (error){
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.NOTFOUND).json({
             error : error
         });
     };
@@ -47,12 +48,12 @@ export async function deleteReview(request : express.Request , response : expres
 
         // Delete the review in the database
         const review = await ReviewTable.deleteOne({_id : reviewId}).exec()
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             msg: 'Review is delete successfully',
         });
     } catch(error){
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.NOTFOUND).json({
             error : error
         });
     }
@@ -157,13 +158,13 @@ export const getAllReviewsOnMovie = async (request:express.Request, response:exp
                 }
             }
         ]
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             list_review,
             _link
         });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.NOTFOUND).json({
             error : error
         })
     }

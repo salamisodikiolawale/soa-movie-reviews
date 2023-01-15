@@ -9,7 +9,7 @@ export interface Review {
     username : string;
     rating : number;
     comment : string;
-    publicationDate : Date;
+    publicationDate? : Date;
 
     //Créé automatiquement par la BDD
     created_at? : string;

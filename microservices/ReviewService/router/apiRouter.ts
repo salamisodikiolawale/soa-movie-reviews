@@ -31,8 +31,8 @@ apiRouter.put('/reviews/:reviewId', updateReview);
 apiRouter.delete('/reviews/:reviewId', deleteReview);
 
 /*
-    Usage: Get all the reviews
-    URL : http://127.0.0.1:3001/api/v1/review
+    Usage: Get reviews of movies
+    URL : http://review_service.localhost/api/v1/reviews/:MovieId
     Method : GET
     Fields:  movieReviewId, username, rating, comment, publicationDate
     Access: Public
