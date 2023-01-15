@@ -7,7 +7,7 @@ const ReviewSchema = new mongoose.Schema({
     username : { type : String, required : true },
     rating : { type : Number, required : true},
     comment : { type : String, required: true },
-    publicationDate : { type : Date, required : true }
+    publicationDate : { type : Date, required : false }
 }, {timestamps : true}); /*>This last line create automatilly : created_at, updated_at*/
 
 
