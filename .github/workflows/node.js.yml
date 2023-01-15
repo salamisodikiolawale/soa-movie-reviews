@@ -184,7 +184,7 @@ jobs:
         matrix:
           node-version: [16.x]
           
-      timeout-minutes: 2
+      timeout-minutes: 5
 
       steps:
       - name: CHECK-OUT GIT REPOSITORY
