@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Get variables env values
 let node_env:string|undefined = process.env.NODE_ENV_Rev_Serv_Var;
-let mongoDBUrl:string = process.env.MONGODB_URL || "";
+let mongoDB:string = process.env.MONGODB || "";
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 
 
@@ -26,10 +26,8 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 * Mongo production database connection
 */
 const connectToDBDev = async () => {
-    const mongoDBU = "mongodb+srv://movie:movie2022@cluster0.cfcurjj.mongodb.net/?retryWrites=true&w=majority";
-   if(mongoDBU) {
-    console.log("process.env.MONGODB_URL",mongoDBUrl);
-       mongoose.connect(mongoDBUrl)
+   if(mongoDB) {
+       mongoose.connect(mongoDB)
        .then( () => {
            console.log('Connecting to mongoDB Successfully ...');
        }).catch( (error) => {
