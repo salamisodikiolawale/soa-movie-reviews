@@ -196,15 +196,15 @@ jobs:
       - name: BUILDING APP
         run: npm run build --if-present
       - name: TESTINT APP
-        run: npm run test
-      - name: Upload coverage reports to Codecov
-        run: |
-          # Options are `alpine`, `linux`, `macos`, `windows`
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov -t ${CODECOV_TOKEN}
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        run: npm run "test:clearcache" && npm run test
+      # - name: Upload coverage reports to Codecov
+      #   run: |
+      #     # Options are `alpine`, `linux`, `macos`, `windows`
+      #     curl -Os https://uploader.codecov.io/latest/linux/codecov
+      #     chmod +x codecov
+      #     ./codecov -t ${CODECOV_TOKEN}
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
    
 
       #  
