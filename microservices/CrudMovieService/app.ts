@@ -1,81 +1,69 @@
-// Modules impotation
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
 
+//Auto decouvrability
+const hateoasLinker = require('express-hateoas-links');
 
-// Initialisation
+
 const app:express.Application = express();
-const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
+
+app.use(express.urlencoded({
+    extended: true
+  }));
+  
+  app.get("/server1/:id", function(req, res) {
+    console.log("Service crud")
+    const data = {
+      "id": req.params.id,
+      "name":"SALAMI",
+      'Age': 12,
+      "Country":"France"
+    }
+    res.json({data:data});
+  });
+
+app.use(hateoasLinker);
 
 // Configurations
-app.use(express.urlencoded({ extended: true }));  
-app.use(hateoasLinker);
 app.use(cors());
-dotenv.config( {path : './config/.env'});
-app.use(express.json());
+dotenv.config( {path : './.env'}); // for env variable
+app.use(express.json()); // json form data
 
-// Get variables env values
-let node_env:string|undefined = process.env.NODE_ENV_CRUD_Serv_Var;
+let hostName:string|undefined = process.env.HOST_NAME;
+let port:number|undefined = Number(process.env.PORT);
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
-let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 
 
-/**
- * Mongo production database connection
- */
-const connectToDBDev = async () => {
-    if(mongoDBUrl) {
-        mongoose.connect(mongoDBUrl)
-        .then( () => {
-            console.log('Connecting to mongoDB Successfully ...');
-        }).catch( (error) => {
-            console.log(error);
-            // Stop the node js process
-            process.exit(1); 
-        });
-    } else {
 
-        throw new Error("Env variable it not define");
-    }
+// MongoDB connection
+
+if(mongoDBUrl) {
+    mongoose.connect(mongoDBUrl).then( () => {
+        console.log('Connecting to mongoDB Successfully ...');
+    }).catch( (error) => {
+        console.log(error);
+        process.exit(1); // Stop the node js process
+    });
 }
 
-/**
- * Mongo test database connection
- */
-const connectToDBTest = async () => {
-    if(mongoDBUrlTest) {
-        mongoose.connect(mongoDBUrlTest)
-        .then( () => {
-            console.log('Connecting to mongoDB of test Successfully ...');
-        })
-        .catch( (error) => {
-            console.log(error);
-            process.exit(1);
-        });
-    } else {
-        throw new Error("Env variable it not define");
-    }
-}
-
-// Connexion on database dev or test depending environnement
-// node_env=="dev" ? connectToDBDev() : connectToDBTest();
-connectToDBDev();
-
-
-
-app.get('/', async (request:express.Request, response:express.Response) => {
-    response.status(200).send("Welcome to out microservice!");
+app.get("/", async (request:express.Request, response:express.Response) => {
+    response.status(200).send({
+        "msg": "Welcome to CRUD movie Service"
+    })
 })
 
-// Configuration routes api
+// Route Configuration
+
 app.use('/api/v1/', apiRouter);
 
-
-export default app;
-
+if(port !== undefined && hostName !== undefined){
+    app.listen(port, hostName, () => {
+        console.log(`Express Server is running at ${hostName}:${port}`);
+    });
+}
 
 
 

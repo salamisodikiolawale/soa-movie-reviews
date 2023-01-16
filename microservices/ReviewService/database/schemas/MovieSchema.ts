@@ -7,7 +7,7 @@ const movieSchema = new mongoose.Schema<Movie>({
 
     title : {type : String, required: true, unique:false },
     date : {type : Date, required: true },
-    rating : {type : Number, required: true},
+    ranting : {type : Number, required: true},
     description : {type : String, required: true},
     image : {type : String, required: true},
     types : {type : [String], enum: TypeOfMovies, required: true},
