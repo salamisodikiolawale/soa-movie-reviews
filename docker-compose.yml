@@ -2,24 +2,20 @@ version: "3.9"
 services:
 
   ###################################
-  ####  SERVICE REVERSE PROXY    ####
-  ###################################                                                     
-  reverse-proxy:
-    image: traefik:v2.8
-    command: 
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=true"
-      - "--entrypoints.web.address=:80"
+  ####  SERVICE CLIENT           ####
+  ###################################
+  client:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile_dev
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "3000:3000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - type: bind
+        source: ./frontend
+        target: /src/app
     networks:
       - proxyNetwork
-      - authService
 
   ###################################
   ####        SERVICE CRUD       ####
@@ -52,20 +48,24 @@ services:
       - testNetwork
 
   ###################################
-  ####  SERVICE CLIENT           ####
-  ###################################
-  client:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile_dev
+  ####  SERVICE REVERSE PROXY    ####
+  ###################################                                                     
+  reverse-proxy:
+    image: traefik:v2.8
+    command: 
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--entrypoints.web.address=:80"
     ports:
-      - "3000:3000"
+      - "80:80"
+      - "8080:8080"
     volumes:
-      - type: bind
-        source: ./frontend
-        target: /src/app
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - proxyNetwork
+      - authService
 
   ###################################
   ####  SERVICE EMAIL            ####
