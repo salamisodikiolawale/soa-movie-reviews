@@ -1,0 +1,9 @@
+export enum Http_code {
+    OK = 200,
+    CREATED = 201,
+    FORBIDDEN = 403,
+    NOTFOUND = 404,
+    BADREQUEST = 400,
+    UNAUTHORIZED = 401,
+    INTERNALSERVERERROR = 500,
+}
