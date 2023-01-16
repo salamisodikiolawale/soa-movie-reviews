@@ -3,16 +3,9 @@
 
 
 # tip of default branch
-GET /gh/:owner/:repo/graphs/sunburst.svg?token=:9NXOAG7FZJ
+https://codecov.io/gh/salamisodikiolawale/soa-movie-reviews/branch/develop/graphs/sunburst.svg?token=9NXOAG7FZJ
 
-# tip of branch
-GET /gh/:owner/:repo/branch/:branch/graphs/sunburst.svg?token=:9NXOAG7FZJ
 
-# tip of pull
-GET /gh/:owner/:repo/pull/:id/graphs/sunburst.svg?token=:9NXOAG7FZJ
-
-# specific commit
-GET /gh/:owner/:repo/commit/:sha/graphs/sunburst.svg?token=:9NXOAG7FZJ
 
 ## Initialisation du projet
 
