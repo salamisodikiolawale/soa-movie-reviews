@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
+import { Db } from './config/db';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
 
@@ -14,7 +15,7 @@ const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
 app.use(express.urlencoded({ extended: true }));  
 app.use(hateoasLinker);
 app.use(cors());
-// dotenv.config( {path : './.env'});
+dotenv.config( {path : './.env'});
 app.use(express.json());
 
 
@@ -27,8 +28,8 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
  * Mongo production database connection
  */
 const connectToDBDev = async () => {
-    if(process.env.MONGODB_URL) {
-        mongoose.connect(process.env.MONGODB_URL)
+    if(Db.URL) {
+        mongoose.connect(Db.URL)
         .then( () => {
             console.log('Connecting to mongoDB Successfully ...');
         }).catch( (error) => {
