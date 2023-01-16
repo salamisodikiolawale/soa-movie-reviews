@@ -12,7 +12,6 @@ app.use(express.urlencoded({ extended: true }));
 // Configurations
 app.use(hateoasLinker);
 app.use(cors());
-dotenv.config( {path : './config/.env'});
 app.use(express.json());
 
 

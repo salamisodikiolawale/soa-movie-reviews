@@ -11,7 +11,6 @@ const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
 
 // Configurations
 app.use(cors());
-dotenv.config( {path : './config/.env'});
 app.use(hateoasLinker);
 app.use(express.json());
 

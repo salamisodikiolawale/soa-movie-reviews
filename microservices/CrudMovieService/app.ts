@@ -14,14 +14,14 @@ const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
 app.use(express.urlencoded({ extended: true }));  
 app.use(hateoasLinker);
 app.use(cors());
-dotenv.config( {path : './config/.env'});
+// dotenv.config( {path : './.env'});
 app.use(express.json());
+
 
 // Get variables env values
 let node_env:string|undefined = process.env.NODE_ENV_CRUD_Serv_Var;
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
-
 
 /**
  * Mongo production database connection
