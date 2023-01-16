@@ -122,6 +122,10 @@ services:
       - proxyNetwork
       - serviceNetwork
   
+  ###################################
+  ####  SERVICE Search           ####
+  ###################################
+
   # search_service:
   #   build: ./microservices/SearchService
   #   ports:
