@@ -27,8 +27,8 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
  * Mongo production database connection
  */
 const connectToDBDev = async () => {
-    if(mongoDBUrl) {
-        mongoose.connect(mongoDBUrl)
+    if(process.env.MONGODB_URL) {
+        mongoose.connect(process.env.MONGODB_URL)
         .then( () => {
             console.log('Connecting to mongoDB Successfully ...');
         }).catch( (error) => {
