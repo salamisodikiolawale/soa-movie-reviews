@@ -3,7 +3,7 @@ export interface Movie {
     _id? : string;
     title : string;
     date : Date;
-    rating:number;
+    ranting:number;
     description:string;
     image : string;
     types : String[]

@@ -5,9 +5,9 @@ export const movieCreateValidation = [
     check('title')
         .notEmpty()
         .withMessage('title not filled'),
-    check('rating')
+    check('ranting')
         .notEmpty()
-        .withMessage('rating not filled'),
+        .withMessage('ranting not filled'),
     check('description')
         .notEmpty()
         .withMessage('Not filled'),
