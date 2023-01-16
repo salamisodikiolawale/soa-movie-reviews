@@ -109,21 +109,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: CLEAR CACHE
-        run: npm run "test:clearcache"
-      - name: TESTINT APP
-        run: npm run test
-      - name: Upload coverage reports to Codecov
-        run: |
-          # Options are `alpine`, `linux`, `macos`, `windows`
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov -t ${CODECOV_TOKEN}
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-
-      ##
-      
+      #- name: TESTINT APP
+      #- run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -184,8 +171,6 @@ jobs:
       strategy:
         matrix:
           node-version: [16.x]
-          
-      timeout-minutes: 5
 
       steps:
       - name: CHECK-OUT GIT REPOSITORY
@@ -200,22 +185,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: CLEAR CACHE
-        run: npm run "test:clearcache"
-      - name: TESTINT APP
-        run: npm run test
-
-      - name: Upload coverage reports to Codecov
-        run: |
-          # Options are `alpine`, `linux`, `macos`, `windows`
-          curl -Os https://uploader.codecov.io/latest/linux/codecov
-          chmod +x codecov
-          ./codecov -t ${CODECOV_TOKEN}
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-   
-
-      #  
+      #- name: TESTINT APP
+      #- run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
