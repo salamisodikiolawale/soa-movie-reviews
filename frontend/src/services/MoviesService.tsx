@@ -3,7 +3,7 @@ import Movie from "../models/movie.interface";
 
 
 class Moviesservice {
-
+    
     createMovie(formData:Movie) {
         
         const url:string="http://crud_service.localhost/api/v1/movies";
