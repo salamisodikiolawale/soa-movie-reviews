@@ -23,6 +23,7 @@ const CardMoviePage = () => {
                 movies.map( movie => (
                     <CardMovie 
                     dataParentToChildMovie ={movie}
+                    key={movie._id}
                     />
                 ))
             )}

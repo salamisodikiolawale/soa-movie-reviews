@@ -6,6 +6,7 @@ const TypeOfMovies = ['SF','POLICIER','DRAMA','AVENTURE','THRILLER','HORREUR','A
 const movieSchema = new mongoose.Schema<Movie>({
 
     title : {type : String, required: true, unique:false },
+    userId: {type: String, required:true},
     date : {type : String, required: true },
     rating : {type : Number, required: true},
     description : {type : String, required: true},

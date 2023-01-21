@@ -1,6 +1,7 @@
 export interface Movie {
 
     _id? : string;
+    userId : string;
     title : string;
     date : string;
     rating:number;

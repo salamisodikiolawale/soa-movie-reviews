@@ -1,40 +1,18 @@
 import axios from "axios";
 import Movie from "../models/movie.interface";
 
-const movies:Movie[] = [{
-    "types": [],
-    "_id": "63349c891bbab58f0e24321a",
-    "title": "War movie 2024",
-    "ranting": 2,
-    "description": "The war is very complecated",
-    "image": "http://google/movies/1",
-    },
-    {
-        "types": [],
-        "_id": "63349c891bbab58f0e24321a",
-        "title": "War movie 2024",
-        "ranting": 2,
-        "description": "The war is very complecated",
-        "image": "http://google/movies/1",
-    },
-    {
-        "types": [],
-        "_id": "63349c891bbab58f0e24321a",
-        "title": "War movie 2024",
-        "ranting": 2,
-        "description": "The war is very complecated",
-        "image": "http://google/movies/1",
-    },
-    {
-        "types": [],
-        "_id": "63349c891bbab58f0e24321a",
-        "title": "War movie 2024",
-        "ranting": 2,
-        "description": "The war is very complecated",
-        "image": "http://google/movies/1",
-    },
-]
+
 class Moviesservice {
+
+    createMovie(formData:Movie) {
+        
+        const url:string="http://crud_service.localhost/api/v1/movies";
+
+        //Not finish : get valide value into localstorage
+        formData.userId='63cbf7b45ca403af0e641598';
+
+        return axios.post(url, formData);
+    }
 
     getMovies = async():Promise<Movie[]> => {
         const url:string="http://crud_service.localhost/api/v1/movies";

@@ -44,6 +44,8 @@ import { Http_code } from "../config/http_code";
  */
 export const createMovie = async (request:express.Request, response:express.Response) => {
     
+    console.log(request.body);
+    
     // Manage Error section validation
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -54,6 +56,7 @@ export const createMovie = async (request:express.Request, response:express.Resp
         
         // Get data into request enter
         let movie:Movie = {
+            userId: request.body.userId,
             title : request.body.title,
             date : request.body.date,
             rating: request.body.rating,
@@ -96,7 +99,6 @@ export const createMovie = async (request:express.Request, response:express.Resp
         movie = await newMovie.save();
         
         currentIdMovie=movie._id;
-
         response.status(Http_code.CREATED).json({
             msg: 'Movie is created successfully',
             movie:movie,
@@ -334,6 +336,7 @@ export const updateMovie = async(request:express.Request, response:express.Respo
     //Management Exception
     try {
         let updatedMovie:Movie = {
+            userId: request.body.userId,
             title : request.body.title,
             image : request.body.image,
             date : request.body.date,

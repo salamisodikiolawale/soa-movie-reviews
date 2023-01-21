@@ -2,6 +2,10 @@ import { check } from 'express-validator';
 
 
 export const movieCreateValidation = [
+
+    check('userId')
+        .notEmpty()
+        .withMessage('userId not filled'),
     check('title')
         .notEmpty()
         .withMessage('title not filled'),
