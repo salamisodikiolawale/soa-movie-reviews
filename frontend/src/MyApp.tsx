@@ -8,6 +8,7 @@ import { useContext, useEffect } from "react";
 import { Context } from "./context/Context";
 
 import axios from 'axios';
+import CreateMoviepage from "./components/movies/CreateMoviePage";
 
 const MyApp = () => {
 
@@ -52,6 +53,7 @@ const MyApp = () => {
           <Routes>
               <Route path="/" element={<LandingPage/>} />
               <Route path="/authenticate" element={authPageComponent()} />
+              <Route path="/create-movies" element={<CreateMoviepage/>} />
               <Route path='/404' element={<ErrorPage/>} />
               <Route path="*" element={<Navigate to="/404" replace />}/> 
           </Routes>

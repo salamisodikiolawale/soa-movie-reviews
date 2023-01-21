@@ -5,18 +5,19 @@ export const movieCreateValidation = [
     check('title')
         .notEmpty()
         .withMessage('title not filled'),
+    check('date')
+        .notEmpty()
+        .withMessage('date not filled'),
     check('rating')
         .notEmpty()
         .withMessage('rating not filled'),
     check('description')
         .notEmpty()
         .withMessage('Not filled'),
-    // check('image')
-    //     .notEmpty()
-    //     .withMessage('Not filled')
-    //     .isBase64()
-    //     .withMessage("image would be Base64")
-        
+    check('image')
+        .notEmpty()
+        .withMessage('image not filled')
+
 ]
 
 export const movieUpdateValidation = [

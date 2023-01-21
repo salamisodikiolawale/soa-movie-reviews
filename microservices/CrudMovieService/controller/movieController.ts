@@ -43,7 +43,7 @@ import { Http_code } from "../config/http_code";
  * @returns code http and movie created
  */
 export const createMovie = async (request:express.Request, response:express.Response) => {
-
+    
     // Manage Error section validation
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -91,11 +91,10 @@ export const createMovie = async (request:express.Request, response:express.Resp
             }
         ]
 
-        //Create the movie into database
+        //Save the movie into database
         let newMovie = new MovieTable(movie);
-
         movie = await newMovie.save();
-
+        
         currentIdMovie=movie._id;
 
         response.status(Http_code.CREATED).json({
@@ -103,8 +102,8 @@ export const createMovie = async (request:express.Request, response:express.Resp
             movie:movie,
             datas: {
                 "_links": {
-                    "mivies": { "href": `http://crud_service.localhost/api/v1/movies` },
-                    "reviews": {"href": `http://review_service.localhost/api/v1/reviews/${currentIdMovie}`},
+                    "movies": { "href": `http://crud_service.localhost/api/v1/movies` },
+                    "reviews": {},
                     "item": []
                 },
                 "_embedded": {}
@@ -211,7 +210,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
                 href: '/movies/:id',
             }
         ]
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             movies,
             reviews,
             _link

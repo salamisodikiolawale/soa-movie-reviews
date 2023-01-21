@@ -9,9 +9,16 @@ const apiRouter:express.Router = express.Router();
 // apiRouter.post('/register', testJest)
 /*
     Usage: Create a movie
-    URL : http://crudMovieService:3000/api/v1/movies
+    URL : http://crudMovieService:3000/api/v1/movies/create
     Method : POST
-    Fields: title, date, country, type[string], review:number,  description:string, image
+    Fields: {
+        title: string, require, 
+        date:  string, not require, 
+        rating: number, not require,
+        type:  [string], not require
+        description:string, require 
+        image: require, string
+    }
     Access: Public
  */
 apiRouter.post('/movies',movieCreateValidation, createMovie);

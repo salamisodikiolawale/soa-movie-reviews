@@ -96,7 +96,7 @@ const AuthenticationPage = () => {
                const res = await axios.post(`http://127.0.0.1:3003/user/login`, 
                 {
                     "identifier": formData.identifier,
-                    "password": formData.password
+                    "password": formData.password   
                 })
                 if (res.status === 200) {
                     sessionStorage.setItem('JWT', res.data.token);

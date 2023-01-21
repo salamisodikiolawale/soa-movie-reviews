@@ -1,0 +1,23 @@
+.banner-card{
+    display: flex;
+    flex-direction: row;
+    padding: 25px;
+    margin-bottom: 15px;
+    background-color: #eaebf0;
+
+    .banner-card-img, .banner-card-content{
+        padding: 10px;
+    }
+    .banner-card-img{
+        img{
+            width: 50em;
+            border-radius: 4px;
+        }
+    }
+}
+
+.banner-card:hover{
+    background-color: #eaebf0;
+    border-radius: 4px;
+    transition: background-color 3s
+}

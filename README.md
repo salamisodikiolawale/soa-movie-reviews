@@ -20,6 +20,10 @@ https://codecov.io/gh/salamisodikiolawale/soa-movie-reviews/branch/develop/graph
 
 ###
 
+error
+[nodemon] Internal watch failed: ENOSPC: System limit for number of file watchers reached, watch '/src/app'
+solution : sudo sysctl fs.inotify.max_user_watches=582222 && sudo sysctl -p (https://stackoverflow.com/questions/34662574/node-js-getting-error-nodemon-internal-watch-failed-watch-enospc)
+
 ## Lancement 
 
 Se positionner dans le dossier principal du projet et lancer la commande : docker-compose up --build
