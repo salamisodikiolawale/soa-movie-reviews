@@ -1,5 +1,5 @@
 import express from 'express';
-import {createMovie, getMovies} from "../controller/movieController";
+import {createMovie, getMovies} from "../controller/searchController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -28,6 +28,9 @@ apiRouter.post('/movies', createMovie);
     Fields: name, image, comment
     Access: Public
  */
+//apiRouter.delete('/search/title/:movieTitle', deleteMovie);
+//apiRouter.delete('/search/type/movieType', deleteMovie);
+
 //apiRouter.delete('/movies/:movieId', deleteMovie);
 
 /*
