@@ -7,9 +7,12 @@ Movie review est un projet qui est concu en architecture microservice.
 Il est composéde d'un frontend développé en REACT et de 5 microservices développés en Nodejs. L'architecture de l'application intègre Docker avec Reverse proxy TRAEFIK. Le projet dispose d'un systeème d'automatisation d'intégration continue et de déploiement continue.
 Les images Docker des microservices sont déployées sur DockerHub après l'intégration continue et l'application est déployée dans le cloud AWS plus précisement EC2 à travers le CD.
 
+## HOME
+
+![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/interface.png?raw=true)
+
+
 ## Pour commencer
-
-
 
 
 ### Pré-requis
@@ -51,8 +54,7 @@ Option 1 :
 Option 2 :
 > docker-compose up --build 
 
-##Interface
-![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/interface.png?raw=true)
+
 ## Contributing
 
 Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.com/salamisodikiolawale/soa-movie-reviews#contributing.md) pour savoir comment le faire.
