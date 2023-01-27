@@ -51,6 +51,8 @@ Option 1 :
 Option 2 :
 > docker-compose up --build 
 
+##Interface
+![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/interface.png?raw=true)
 ## Contributing
 
 Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.com/salamisodikiolawale/soa-movie-reviews#contributing.md) pour savoir comment le faire.
