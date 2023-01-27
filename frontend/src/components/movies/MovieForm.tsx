@@ -2,14 +2,12 @@ import { useState } from 'react';
 import Movie from '../../models/movie.interface';
 import moviesService from '../../services/MoviesService';
 import '../../styles/components/movie/create-movie-page.scss';
-import BannerCardPage from '../card /BannerCardPage';
 
 const MovieForm = () => { 
 
     const [title, setTitle] = useState('');
     const [date, setDate] = useState('');
     const [rating, setRating] = useState('');
-    const [type, setType] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
 
