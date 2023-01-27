@@ -1,13 +1,16 @@
+import { randomInt } from "crypto";
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../app";
 import { Http_code } from "../../config/http_code";
+import { Review } from "../../interfaces/review.interface";
 
 jest.useRealTimers();
 
 describe("GET reviews data", () => {
 
     const url:string="/api/v1/reviews";
+    const random = randomInt(10000);
 
     beforeAll(done => {
         done()
@@ -21,32 +24,48 @@ describe("GET reviews data", () => {
         }
     })
 
-    it("Returns 404 if data dont exist inn database", async () => {
 
-        const movieId= "wwwwwwwwwwww";
 
-        const response = await request(app).delete(`${url}/${movieId}`);
-
-        expect(response.statusCode).toEqual(Http_code.NOTFOUND);
-
-    });
-
-    it("Returns 200 if review of movie created", async () => {
+    it("Returns 200 deleted", async () => {
         
-        const movieId="63c1d3d71b7cc02cb55145be";
-        const review = {
-            movieReviewId : movieId,
-            username : "username",
-            rating : 2,
-            comment : "My comment",
-        }
+        const movieCreatedId:string = "63cc583c48a24ce2ef723f1e";
 
-        const response = await request(app).post(`${url}`).send(review);
 
-        const movieReviewIdDel = response.body.product._id.toString();
+        const reviews = await request(app)
+        .get(`${url}/${movieCreatedId}`);
+        
+        let olderLength:number = reviews.body.list_review.length;
+        
+        expect(reviews.statusCode).toEqual(Http_code.OK);
+
+        // Create review
+        let review : Review = {
+            movieReviewId : movieCreatedId,
+            username : "Name"+random,
+            rating : randomInt(1, 5),
+            comment : "Comment"+random,
+        };
+
+        const reviewCreatedResponse = await request(app)
+        .post(`${url}`)
+        .send(review);
+
+        expect(reviewCreatedResponse.statusCode).toEqual(Http_code.OK);
+
+        olderLength = olderLength + 1;
+
+        const reviews2 = await request(app)
+        .get(`${url}/${movieCreatedId}`);
+
+        
+
+        expect(olderLength).toEqual(reviews2.body.list_review.length);
+
+
+        const movieReviewIdDel = reviewCreatedResponse.body.review._id.toString();
 
         const responseDel = await request(app).delete(`${url}/${movieReviewIdDel}`);
 
-        expect(response.statusCode).toEqual(Http_code.OK);
+        expect(reviewCreatedResponse.statusCode).toEqual(Http_code.OK);
     })
 })

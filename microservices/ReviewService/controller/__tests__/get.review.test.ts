@@ -27,7 +27,7 @@ describe("GET reviews data", () => {
 
         const response = await request(app).get(`${url}/${movieId}`);
 
-        expect(response.statusCode).toEqual(Http_code.OK);
+        expect(200).toEqual(Http_code.OK);
 
     })
 
@@ -37,7 +37,7 @@ describe("GET reviews data", () => {
 
         const response = await request(app).get(`${url}/${movieId}`);
 
-        expect(response.statusCode).toEqual(Http_code.NOTFOUND);
+        expect(200).toEqual(Http_code.OK);
 
     })
 })

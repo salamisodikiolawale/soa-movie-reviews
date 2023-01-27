@@ -30,7 +30,7 @@ export async function createReview(request:express.Request, response:express.Res
         review = await newReview.save();
         response.status(Http_code.OK).json({
             msg: 'Review is created successfully',
-            product:review
+            review:review
         });
 
     } catch (error){

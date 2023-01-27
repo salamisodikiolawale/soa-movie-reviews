@@ -44,8 +44,6 @@ import { Http_code } from "../config/http_code";
  */
 export const createMovie = async (request:express.Request, response:express.Response) => {
     
-    console.log(request.body);
-    
     // Manage Error section validation
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -186,7 +184,8 @@ export const getMovie = async (request:express.Request, response:express.Respons
         reviews = await axios.get(`${process.env.REVIEW_SERVICE}`+movieId, axiosConfig).then( (resp) => {
                 
                 return resp.data.list_review;
-        });
+        })
+        .catch(error => console.log(`reviews of movie ${movieId} dont exist`));
 
         const _link = [
 
@@ -219,7 +218,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
         });
     } catch (error) {
         console.log(error);
-        response.status(404).json({
+        response.status(Http_code.NOTFOUND).json({
             error : error
         })
     }

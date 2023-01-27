@@ -1,13 +1,17 @@
+import { randomInt } from "crypto";
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../app";
 import { Http_code } from "../../config/http_code";
+import { Review } from "../../interfaces/review.interface";
 
 jest.useRealTimers();
 
-describe("GET reviews data", () => {
+describe("Create reviews data", () => {
 
-    const url:string="/api/v1/reviews";
+    const urlReview:string="/api/v1/reviews";
+    
+    const random = randomInt(10000);
 
     beforeAll(done => {
         done()
@@ -21,21 +25,26 @@ describe("GET reviews data", () => {
         }
     })
 
-    // it("Returns 200 if reviem of mivie created", async () => {
+    it("Returns 200 if review of movie created", async () => {
+        
+            
+        const movieCreatedId:string = "63cc583c48a24ce2ef723f1e";
 
-    //     const movieId="63c1d3d71b7cc02cb55145be";
-    //     const review = {
-    //         movieReviewId : movieId,
-    //         username : "username",
-    //         rating : 2,
-    //         comment : "My comment",
-    //     }
+        // Create review
+        let review : Review = {
+            movieReviewId : movieCreatedId,
+            username : "Name"+random,
+            rating : randomInt(1, 5),
+            comment : "Comment"+random,
+        };
 
-    //     const response = await request(app).post(`${url}`).send(review);
+        const reviewCreatedResponse = await request(app)
+        .post(`${urlReview}`)
+        .send(review);
 
-    //     expect(response.statusCode).toEqual(Http_code.OK);
+        expect(reviewCreatedResponse.statusCode).toEqual(Http_code.OK);
 
-    // })
+    })
 
     it("Returns 404 if id of movie dont", async () => {
 
@@ -47,7 +56,7 @@ describe("GET reviews data", () => {
             comment : "My comment",
         }
 
-        const response = await request(app).post(`${url}`).send(review);
+        const response = await request(app).post(`${urlReview}`).send(review);
 
         
         expect(response.statusCode).toEqual(Http_code.NOTFOUND);
