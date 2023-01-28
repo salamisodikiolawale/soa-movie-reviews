@@ -52,12 +52,14 @@ describe("GET reviews data", () => {
 
         expect(reviewCreatedResponse.statusCode).toEqual(Http_code.OK);
 
-        olderLength = olderLength + 1;
+
 
         const reviews2 = await request(app)
         .get(`${url}/${movieCreatedId}`);
 
-        console.log(reviewCreatedResponse.body);
+        olderLength = olderLength + 1;
+        const newlength = reviews2.body.list_review.length;
+        expect(olderLength).toEqual(newlength);
         
         const movieReviewIdDel = reviewCreatedResponse.body.review._id.toString();
 
