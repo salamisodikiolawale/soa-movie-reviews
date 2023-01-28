@@ -47,7 +47,7 @@ describe("POST | create movie", () => {
       userId : "63cf007b1c92ca13f90ee6fe",
       title : "Infinity Pool"+random,
       date : "2023-01-21",
-      rating: 12,
+      rating: 15,
       description: "It almost feels like ticket buyers should have to prove that they’ve seen Brandon Cronenberg’s “Possessor” before being allowed admittance to his newest film, “Infinity Pool.” That way they know what they’re in for. Once again, the increasingly impressive son of David Cronenberg has made a wildly surreal, unapologetic, violent, pornographic movies about privilege, morality, and things I couldn’t possibly begin to explain in a review. Cronenberg takes unbelievably big swings here—maybe even more than his last movie—and he does not bother to hold your hand along the way. He is a fascinating filmmaker, one who I think has not quite yet made his masterpiece, but I’m becoming increasingly convinced he will soon.  ",
       image : "https://s3.amazonaws.com/static.rogerebert.com/uploads/review/primary_image/reviews/infinity-pool-movie-review-2023/infinity-pool-movie-review-2023.jpeg",
     }
