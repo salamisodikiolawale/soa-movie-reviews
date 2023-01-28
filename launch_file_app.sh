@@ -1,5 +1,5 @@
 if sudo lsof -Pi :80 -sTCP:LISTEN -t >/dev/null ; then
-    echo "Le PORT:80 est occupé => veillez libérer le port 80 avec [sudo netstat -anp | grep 80] et relancer l'a commande [bash launch_file_app.sh] x)"
+    echo "Le PORT:80 est occupé => veillez libérer le port 80 avec [sudo netstat -anp | grep 80], ensuite tuez le proccessus avec la commande [sudo kill id_du_proccessus] et relancer l'a commande [bash launch_file_app.sh] x)"
     
 else
     echo""

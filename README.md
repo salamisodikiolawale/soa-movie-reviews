@@ -12,6 +12,10 @@ Les images Docker des microservices sont déployées sur DockerHub après l'int�
 ![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/interface.png?raw=true)
 
 
+## COMPOSANTS APPLICATIFS
+
+![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/Architecture_composants.png?raw=true)
+
 ## Pour commencer
 
 
