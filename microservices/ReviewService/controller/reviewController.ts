@@ -6,7 +6,12 @@ import MovieTable from "../database/schemas/MovieSchema";
 import { Http_code } from "../config/http_code";
 
 
-//Fonction qui permet de créer une review et de l'ajouter à la base de données.
+/**
+ * CREATE REVIEW
+ * @param request
+ * @param response 
+ * @returns response 200 if succefully 404 else
+ */
 export async function createReview(request:express.Request, response:express.Response){
     try {
         // Data recuperation from the request
@@ -30,7 +35,15 @@ export async function createReview(request:express.Request, response:express.Res
         review = await newReview.save();
         response.status(Http_code.OK).json({
             msg: 'Review is created successfully',
-            review:review
+            datas: {
+                "_links": {
+                    "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/review/${review._id}` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "item": []
+                },
+                "_embedded": {}
+            }
         });
 
     } catch (error){
@@ -41,7 +54,11 @@ export async function createReview(request:express.Request, response:express.Res
     };
 }
 
-//Function to delete a review in the database
+/**
+ * DELETE REVIEW
+ * @param request 
+ * @param response 
+ */
 export async function deleteReview(request : express.Request , response : express.Response){
 
         let reviewId = request.params.reviewId
@@ -53,7 +70,17 @@ export async function deleteReview(request : express.Request , response : expres
             // Delete the review in the database
             const review = await ReviewTable.deleteOne({_id : reviewId}).exec().then( (m) => {
                 
-                response.status(Http_code.OK).json({ msg: 'Review is delete successfully'});
+                response.status(Http_code.OK).json({ 
+                    msg: `Review ${reviewId} is deleted successfully`,
+                    datas: {
+                        "_links": {
+                            "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
+                            "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                            "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
+                        },
+                        "_embedded": {},
+                    },
+                });
                 
             }).catch( (error) => {
 
@@ -71,9 +98,16 @@ export async function deleteReview(request : express.Request , response : expres
 }
 
 
-//Function to update a review in the database
+/**
+ * UPDATE REVIEW
+ * @param request 
+ * @param response 
+ * @returns 
+ */
 export async function updateReview(request : express.Request , response : express.Response){
+
     try {
+
          // Data recuperation from the request
          let reviewId =request.params.reviewId
          let review : Review = {
@@ -83,10 +117,11 @@ export async function updateReview(request : express.Request , response : expres
             comment : request.body.comment,
             publicationDate : request.body.publicationDate
         };
+
         //Verify if the review already exist in the database
         let existingMovie:Review|null = await ReviewTable.findOne({ movieReviewId : review.movieReviewId});
         if(existingMovie == null){
-            return response.status(401).json({
+            return response.status(Http_code.UNAUTHORIZED).json({
                 msg: 'Review does not exist'
             });
         }
@@ -98,21 +133,34 @@ export async function updateReview(request : express.Request , response : expres
                 console.log("Updated User : ", docs);
             }
         })
-        response.status(200).json({
+        response.status(Http_code.OK).json({
             msg: 'Review is updated successfully',
-            product:review
+            datas: {
+                "_links": {
+                    "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review._id}` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
+                },
+                "_embedded": {},
+            },
+
         });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         });  
     }
 }
 
-//Function to get all the reviews for one movie
+/**
+ * Function to get all the reviews for one movie
+ * @param request 
+ * @param response 
+ */
 export const getAllReviewsOnMovie = async (request:express.Request, response:express.Response) => {
-
+    
     try {
         let MovieId =request.params.MovieId
         let list_review = null;
@@ -120,57 +168,17 @@ export const getAllReviewsOnMovie = async (request:express.Request, response:exp
         if(movieExist){
             list_review = await ReviewTable.find({movieReviewId : MovieId},{}).exec()//Get all reviews for the movie
 
-            const _link = [
-
-                { rel: "self", href: 'http://127.0.0.1' },
-                {
-                    rel: "create",
-                    method: "POST",
-                    title: 'Create Review',
-                    href: '/review',
-                    data: {
-                        "movieReviewId" : "text",
-                        "username" : "text",
-                        "rating" : "number",
-                        "comment" : "date",
-                        "publicationDate" : "date"
-                    }
-                },
-                {
-                    rel: "delete",
-                    method: "DELETE",
-                    title: 'Delete Review ',
-                    href: '/review',
-                    param:{
-                        "reviewId" : "text"
-                    }
-                },
-                {
-                    rel: "update",
-                    method: "POST",
-                    title: 'Update Review ',
-                    href: '/review',
-                    data : {
-                        "movieReviewId" : "text",
-                        "username" : "text",
-                        "rating" : "number",
-                        "comment" : "date",
-                        "publicationDate" : "date"
-                    }
-                },
-                {
-                    rel: "get",
-                    method: "get",
-                    title: 'Get All Review ',
-                    href: '/review',
-                    param:{
-                        "movieId" : "text"
-                    }
-                }
-            ];
             response.status(Http_code.OK).json({
                 list_review,
-                _link
+                datas: {
+                    "_links": {
+                        "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:reviewId` },
+                        "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${MovieId}` },
+                        "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                        "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${MovieId}` },
+                    },
+                    "_embedded": {},
+                },
             });
         } else {
             response.status(Http_code.NOTFOUND).json({error: 'movie not existe'});
@@ -186,3 +194,39 @@ export const getAllReviewsOnMovie = async (request:express.Request, response:exp
 
 }
 
+//Function to get all the reviews for one movie
+export const getReview = async (request:express.Request, response:express.Response) => {
+    
+    try {
+        let reviewId =request.params.reviewId;
+        let review:any="";
+
+        let reviewExist:Review|null = await ReviewTable.findById(reviewId);
+        if(reviewExist){
+            review = await ReviewTable.find({_id : reviewId},{}).exec()
+
+            response.status(Http_code.OK).json({
+                review,
+                datas: {
+                    "_links": {
+                        "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review._id}` },
+                        "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                        "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                        "item": []
+                    },
+                    "_embedded": {}
+                }
+            });
+        } else {
+            response.status(Http_code.NOTFOUND).json({error: 'review not exist'});
+        }
+
+        
+    } catch (error) {
+        console.log(error);
+        response.status(Http_code.INTERNALSERVERERROR).json({
+            error : error
+        })
+    }
+
+}

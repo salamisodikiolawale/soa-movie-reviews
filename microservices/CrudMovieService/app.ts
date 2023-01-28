@@ -1,10 +1,10 @@
-// Modules impotation
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
 import { Db } from './config/db';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
+import { Http_code } from './config/http_code';
 
 
 // Initialisation
@@ -27,11 +27,9 @@ const corsOptions ={
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));  
 app.use(hateoasLinker);
-
 app.use(express.json());
 
  
-
 
 
 /**
@@ -78,10 +76,9 @@ connectToDBDev();
 
 
 app.get('/', async (request:express.Request, response:express.Response) => {
-    response.status(200).send("Welcome to out microservice!");
+    response.status(Http_code.OK).send("Welcome to CRUD SERVICE!");
 })
 
-// Configuration routes api
 app.use('/api/v1/', apiRouter);
 
 

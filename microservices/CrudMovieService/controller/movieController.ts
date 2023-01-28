@@ -6,38 +6,9 @@ import MovieTable from "../database/schemas/MovieSchema";
 import {validationResult } from 'express-validator';
 import { Http_code } from "../config/http_code";
 
-// values: {
-//     "_links": {
-//         "self": { "href": `http://crud_service.localhost/api/v1/movies/${currentIdMovie}` },
-//         "item": [
-//             { "href": "http://example.com/people/1", "title": "John Smith" },
-//             { "href": "http://example.com/people/2", "title": "Jane Smith" }
-//         ]
-//     },
-//     "_embedded": {
-//         "http://example.com/rels#person": [
-//             {
-//                 "first_name": "John",
-//                 "last_name": "Smith",
-//                 "_links": {
-//                     "self": { "href": "http://example.com/people/1" },
-//                     "http://example.com/rels#spouse": { "href": "http://example.com/people/2" }
-//                 }
-//             },
-//             {
-//                 "first_name": "Jane",
-//                 "last_name": "Smith",
-//                 "_links": {
-//                     "self": { "href": "http://example.com/people/2" },
-//                     "http://example.com/rels#spouse": { "href": "http://example.com/people/1" }
-//                 }
-//             }
-//         ]
-//     }
-// }
 
 /**
- * Create one movie with this middleware
+ * CREATE MOVIE
  * @param request movie data
  * @param response 
  * @returns code http and movie created
@@ -64,46 +35,21 @@ export const createMovie = async (request:express.Request, response:express.Resp
         };
 
 
-        // Define decouvrability table
-        let currentIdMovie:string|null|undefined=null;
-    
-        const _link = [
+        let createdIdMovie:string|null|undefined=null;
 
-            { rel: "self", href: 'http://127.0.0.1' },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-                }
-            },
-            {
-                rel: "movie",
-                method: "GET",
-                title: 'Get movie',
-                href: '/movies/:id',
-            }
-        ]
-
-        //Save the movie into database
         let newMovie = new MovieTable(movie);
         movie = await newMovie.save();
-        
-        currentIdMovie=movie._id;
+
+        createdIdMovie=movie._id;
+
         response.status(Http_code.CREATED).json({
             msg: 'Movie is created successfully',
             movie:movie,
             datas: {
                 "_links": {
-                    "movies": { "href": `http://crud_service.localhost/api/v1/movies` },
-                    "reviews": {},
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${createdIdMovie}` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${createdIdMovie}` },
                     "item": []
                 },
                 "_embedded": {}
@@ -122,34 +68,17 @@ export const getMovies = async (request:express.Request, response:express.Respon
     try {
         let movies:Movie[]|null = await MovieTable.find();
 
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1/api/v1' },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-                }
-            },
-            {
-                rel: "movie",
-                method: "GET",
-                title: 'Get movie',
-                href: '/movies/:id',
-            }
-        ]
         response.status(Http_code.OK).json({
             movies,
-            _link,
-            
+            datas: {
+                "_links": {
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
+                    "item": []
+                },
+                "_embedded": {}
+            }
         });
     } catch (error) {
         console.log(error);
@@ -166,7 +95,7 @@ export const getMovie = async (request:express.Request, response:express.Respons
 
         const movieId = request.params.movieId;
 
-        let movies:Movie|null|any = await MovieTable.findById(movieId);
+        let movie:Movie|null|any = await MovieTable.findById(movieId);
 
         // Send request -> review service
         let axiosConfig = {
@@ -181,40 +110,25 @@ export const getMovie = async (request:express.Request, response:express.Respons
         
     
         //Send request to review  service for get reviews movie
-        reviews = await axios.get(`${process.env.REVIEW_SERVICE}`+movieId, axiosConfig).then( (resp) => {
+        reviews = await axios.get(`${process.env.REVIEW_SERVICE_CRUD_Serv_Var}`+movieId, axiosConfig).then( (resp) => {
                 
                 return resp.data.list_review;
         })
         .catch(error => console.log(`reviews of movie ${movieId} dont exist`));
 
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1/api/v1' },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-                }
-            },
-            {
-                rel: "movie",
-                method: "GET",
-                title: 'Get movie',
-                href: '/movies/:id',
-            }
-        ]
+        
         response.status(Http_code.OK).json({
-            movies,
-            reviews,
-            _link
+            movie,
+            datas: {
+                "_links": {
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${movie._id}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${movie._id}` },
+                },
+                "_embedded": {
+                    reviews
+                }
+            }
         });
     } catch (error) {
         console.log(error);
@@ -227,46 +141,26 @@ export const getMovie = async (request:express.Request, response:express.Respons
 
 export const getFiveLasteMovies = async (request:express.Request, response:express.Response) => {
 
-    
     try {
-
-        
 
         let numberOfMovie:number = Number(request.params.numberOfMovie);
 
         let movies:Movie[]|null = await MovieTable.find().sort('-createdAt').limit(numberOfMovie);
-
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1/api/v1' },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-                }
-            },
-            {
-                rel: "movie",
-                method: "GET",
-                title: 'Get movie',
-                href: '/movies/:id',
-            }
-        ]
-        response.status(200).json({
+         
+        response.status(Http_code.OK).json({
             movies,
-            _link
+            datas: {
+                "_links": {
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
+                },
+                "_embedded": {},
+            },
         });
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         })
     }
@@ -280,48 +174,27 @@ export const deleteMovie = async(request:express.Request, response:express.Respo
     try {
         let movie:Movie|null = await MovieTable.findById(movieId);
         if(!movie){
-            return response.status(404).json({
+            return response.status(Http_code.NOTFOUND).json({
                 msg : 'Movie is not found !'
             });
         }
 
         movie= await MovieTable.findByIdAndRemove(movieId);
 
-        //Decov
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1' },
-            {
-                rel: "All movies",
-                method: "GET",
-                title: 'Get movies',
-                href: '/movies',
+        response.status(Http_code.OK).json({
+            msg: `Movie ${movieId} is deleted successfully`,
+            datas: {
+                "_links": {
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
+                },
+                "_embedded": {},
             },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-
-                }
-            }
-        ]
-
-        response.status(200).json({
-            msg: `Movie ${movieId} is deleted`,
-            movie:movie,
-            _link
         })
     } catch (error) {
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error: error
         })
     }
@@ -365,41 +238,18 @@ export const updateMovie = async(request:express.Request, response:express.Respo
             }
         }, { new : true });
 
-        //Decov
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1' },
-            {
-                rel: "All movies",
-                method: "GET",
-                title: 'Get movies',
-                href: '/movies',
-            },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title" : "text",
-                    "date" : "date",
-                    "rating": "number",
-                    "description": "texte",
-                    "image" : "texte",
-                    "types" : "[]"
-                }
-            },
-            {
-                rel: "movie",
-                method: "GET",
-                title: 'Get movie',
-                href: '/movies/:id',
-            }
-        ]
+        
         response.status(Http_code.OK).json({
             msg: 'Movie is Updated',
             movie: existingMoviewillUpdated,
-            _link
+            datas: {
+                "_links": {
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${existingMoviewillUpdated?._id}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${existingMoviewillUpdated?._id}` },
+                },
+                "_embedded": {},
+            },
         });
 
     } catch (error) {

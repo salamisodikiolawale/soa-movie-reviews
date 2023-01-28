@@ -1,23 +1,33 @@
-// Modules importation
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
+import { Db } from './config/db';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
-import { Db } from './config/db';
+import { Http_code } from './config/http_code';
+
 //Initialisations
 const app:express.Application = express();
 const hateoasLinker = require('express-hateoas-links');//Auto decouvrability
 
-// Configurations
-app.use(cors());
-app.use(hateoasLinker);
-app.use(express.json());
-
 // Get variables env values
+dotenv.config( {path : './.env'});
+let frontUrl:string|undefined = process.env.FRONTEND;
 let node_env:string|undefined = process.env.NODE_ENV_Rev_Serv_Var;
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
+
+// Configurations
+const corsOptions ={
+    origin:`${frontUrl}`, 
+    credentials:true,//access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));  
+app.use(hateoasLinker);
+app.use(express.json());
+
 
 
 
@@ -63,12 +73,11 @@ const connectToDBTest = async () => {
 connectToDBDev();
 
 app.get("/", async (request:express.Request, response:express.Response) => {
-    response.status(200).send({
-        "msg": "Welcome to Review movie Service"
+    response.status(Http_code.OK).send({
+        "msg": "Welcome to REVIEW SERVICE"
     })
 })
 
-// Route Configuration
 app.use('/api/v1/', apiRouter);
 
 export default app;
