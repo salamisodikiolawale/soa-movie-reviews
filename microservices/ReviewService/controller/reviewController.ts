@@ -35,6 +35,7 @@ export async function createReview(request:express.Request, response:express.Res
         review = await newReview.save();
         response.status(Http_code.OK).json({
             msg: 'Review is created successfully',
+            review,
             datas: {
                 "_links": {
                     "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/review/${review._id}` },
@@ -61,17 +62,20 @@ export async function createReview(request:express.Request, response:express.Res
  */
 export async function deleteReview(request : express.Request , response : express.Response){
 
-        let reviewId = request.params.reviewId
+        let {reviewId} = request.params
 
-        //Verify if review exist
-        const review = await ReviewTable.findById(reviewId);
-        if(review){
+        try{
+            let review:Review|null = await ReviewTable.findById(reviewId);
+            if(!review){
+                return response.status(Http_code.NOTFOUND).json({
+                    msg : 'Review is not found !'
+                });
+            }
+            review = await ReviewTable.findByIdAndDelete(reviewId);
 
-            // Delete the review in the database
-            const review = await ReviewTable.deleteOne({_id : reviewId}).exec().then( (m) => {
-                
-                response.status(Http_code.OK).json({ 
-                    msg: `Review ${reviewId} is deleted successfully`,
+            response.status(Http_code.OK).json({
+                msg: `Review ${reviewId} is deleted successfully`,
+                    review,
                     datas: {
                         "_links": {
                             "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
@@ -80,21 +84,14 @@ export async function deleteReview(request : express.Request , response : expres
                         },
                         "_embedded": {},
                     },
-                });
-                
-            }).catch( (error) => {
-
-                console.log(error);
-                response.status(Http_code.INTERNALSERVERERROR).json({
-                    error : error
-                });
-            });
-
-        } else {
-            response.status(Http_code.NOTFOUND).json({error : 'Not Found' });
+            })
         }
-        
-        
+        catch (error) {
+        console.log(error);
+        response.status(Http_code.INTERNALSERVERERROR).json({
+            error: error
+        })
+    }
 }
 
 
@@ -135,6 +132,7 @@ export async function updateReview(request : express.Request , response : expres
         })
         response.status(Http_code.OK).json({
             msg: 'Review is updated successfully',
+            review,
             datas: {
                 "_links": {
                     "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review._id}` },

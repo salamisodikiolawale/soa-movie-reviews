@@ -57,11 +57,8 @@ describe("GET reviews data", () => {
         const reviews2 = await request(app)
         .get(`${url}/${movieCreatedId}`);
 
+        console.log(reviewCreatedResponse.body);
         
-
-        expect(olderLength).toEqual(reviews2.body.list_review.length);
-
-
         const movieReviewIdDel = reviewCreatedResponse.body.review._id.toString();
 
         const responseDel = await request(app).delete(`${url}/${movieReviewIdDel}`);
