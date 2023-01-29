@@ -1,9 +1,9 @@
 import { randomInt } from "crypto";
 import mongoose from "mongoose";
 import request from "supertest";
-import app from "../app";
-import { Http_code } from "../config/http_code";
-import Movie from "../interfaces/movie.interface";
+import app from "../../app";
+import { Http_code } from "../../config/http_code";
+import Movie from "../../interfaces/movie.interface";
 
 jest.useRealTimers();
 

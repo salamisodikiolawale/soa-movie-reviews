@@ -1,8 +1,8 @@
-import app from "../app";
+import app from "../../app";
 import request from "supertest";
 import mongoose from "mongoose";
-import { Http_code } from "../config/http_code";
-import Movie from "../interfaces/movie.interface";
+import { Http_code } from "../../config/http_code";
+import Movie from "../../interfaces/movie.interface";
 import { randomInt } from "crypto";
 
 describe("PUT movie", () => {
