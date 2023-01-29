@@ -70,8 +70,7 @@ const connectToDBTest = async () => {
 }
 
 // Connexion on database dev or test depending environnement
-// node_env=="dev" ? connectToDBDev() : connectToDBTest();
-connectToDBDev();
+node_env=="dev" ? connectToDBDev() : connectToDBDev();
 
 
 
