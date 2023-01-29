@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 dotenv.config( {path : '../.env'});
 import { ErrorModel } from "../database/models/ErrorModel"
+import { Http_code } from "../config/http_code";
 
 const { validationResult } = require('express-validator');
 
@@ -23,7 +24,7 @@ export const createUser = async (request:express.Request, response:express.Respo
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
         let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
-        return response.status(401).json({ errors: validationErrors });
+        return response.status(Http_code.UNAUTHORIZED).json({ errors: validationErrors });
     }
 
     const hashedPassword = await hash(request.body.password, 10);
@@ -42,7 +43,7 @@ export const createUser = async (request:express.Request, response:express.Respo
 
         await userAdding.save();
 
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             msg: 'Your account has been successfully created !'
         });
     } catch (e) {
@@ -52,7 +53,7 @@ export const createUser = async (request:express.Request, response:express.Respo
                 location : "body",
             }
         ]
-        return response.status(401).json({
+        return response.status(Http_code.UNAUTHORIZED).json({
             errors: usedIdentifierErrors
         });
     }
@@ -60,10 +61,12 @@ export const createUser = async (request:express.Request, response:express.Respo
 
 // --------------- LOGIN METHOD
 export const login = async (request:express.Request, response:express.Response) : Promise<express.Response> => {
+    
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
+        
         let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
-        return response.status(401).json({ errors: validationErrors });
+        return response.status(Http_code.UNAUTHORIZED).json({ errors: validationErrors });
     }
 
     // Check if the user exist based on identifier if it email or username
@@ -75,7 +78,7 @@ export const login = async (request:express.Request, response:express.Response) 
             const isPasswordCorrect = await compare(request.body.password, userToAuthenticate.hashed_password);
             
             if (!!isPasswordCorrect) {
-                return response.status(200).json({
+                return response.status(Http_code.OK).json({
                     user: {
                         userId: userToAuthenticate._id,
                         username: userToAuthenticate.username,
@@ -95,7 +98,7 @@ export const login = async (request:express.Request, response:express.Response) 
                     location : "body",
                 }
                 
-                return response.status(401).json({
+                return response.status(Http_code.UNAUTHORIZED).json({
                     errors: [wrongPasswordError]
                 });
             }
@@ -108,12 +111,12 @@ export const login = async (request:express.Request, response:express.Response) 
                 }
             ]
 
-            return response.status(401).json({
+            return response.status(Http_code.UNAUTHORIZED).json({
                 errors: wrongIdentifierErrors
             });
         } 
     } catch (e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
@@ -124,11 +127,11 @@ export const getUsers = async (request:express.Request, response:express.Respons
 
     try {
         const users = await UserTable.find();
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             users: users
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
@@ -139,14 +142,14 @@ export const getUserById = async (request:express.Request, response:express.Resp
 
     try {
         const userToFind = await UserTable.findOne({ _id: request.params.id });
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             userId: userToFind?._id,
             email: userToFind?.email,
             username: userToFind?.username,
             subscribed_newsletter: userToFind?.subscribed_newsletter
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
@@ -158,12 +161,12 @@ export const deleteUserById = async (request:express.Request, response:express.R
 
     try {
         await UserTable.deleteOne({ id: request.params.id });
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             msg: "Deleted user successfully !",
             userDeleted: request.params.id
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
@@ -176,7 +179,7 @@ export const updateUserUsername = async (request:express.Request, response:expre
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
         let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
-        return response.status(401).json({ errors: validationErrors });
+        return response.status(Http_code.UNAUTHORIZED).json({ errors: validationErrors });
     }
 
     const newUsername = request.body.username;
@@ -189,7 +192,7 @@ export const updateUserUsername = async (request:express.Request, response:expre
             param : "username",
             location : "body",
         }
-        return response.status(401).json({
+        return response.status(Http_code.UNAUTHORIZED).json({
             errors: [noUniqueError]
         });
     }
@@ -198,12 +201,12 @@ export const updateUserUsername = async (request:express.Request, response:expre
         await UserTable.findByIdAndUpdate(request.params.id, { username: newUsername });
         const userUpdated = await UserTable.findById(request.params.id);
 
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             msg: "User successfully updated !",
             userUpdated: userUpdated
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
@@ -216,7 +219,7 @@ export const updateUserEmail = async (request:express.Request, response:express.
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
         let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
-        return response.status(401).json({ errors: validationErrors });
+        return response.status(Http_code.UNAUTHORIZED).json({ errors: validationErrors });
     }
 
     const newEmail = request.body.email;
@@ -229,7 +232,7 @@ export const updateUserEmail = async (request:express.Request, response:express.
             param : "email",
             location : "body",
         }
-        return response.status(401).json({
+        return response.status(Http_code.UNAUTHORIZED).json({
             errors: [noUniqueError]
         });
     }
@@ -238,12 +241,12 @@ export const updateUserEmail = async (request:express.Request, response:express.
         await UserTable.findByIdAndUpdate(request.params.id, { email: newEmail });
         const userUpdated = await UserTable.findById(request.params.id);
 
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             msg: "User successfully updated !",
             userUpdated: userUpdated
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.UNAUTHORIZED).json({
             errors : [serverError]
         });
     }
@@ -256,7 +259,7 @@ export const updateUserPassword = async (request:express.Request, response:expre
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
         let validationErrors : ErrorModel[] = errors.array()[0]["nestedErrors"] ?? errors.array();
-        return response.status(401).json({ errors: validationErrors });
+        return response.status(Http_code.UNAUTHORIZED).json({ errors: validationErrors });
     }
 
     const newHashedPassword = await hash(request.body.password, 10);
@@ -264,12 +267,12 @@ export const updateUserPassword = async (request:express.Request, response:expre
         await UserTable.findByIdAndUpdate(request.params.id, { hashed_password: newHashedPassword });
         const userUpdated = await UserTable.findById(request.params.id);
 
-        return response.status(200).json({
+        return response.status(Http_code.OK).json({
             msg: "User password successfully updated !",
             userUpdated: userUpdated
         });
     } catch(e) {
-        return response.status(500).json({
+        return response.status(Http_code.INTERNALSERVERERROR).json({
             errors : [serverError]
         });
     }
