@@ -5,6 +5,7 @@ import * as mongoose from "mongoose";
 import userRouter from "./router/userRouter";
 import { Db } from './config/db';
 import { Http_code } from './config/http_code';
+const authMiddleware = require('./middlewares/auth');
 
 //Auto decouvrability
 const hateoasLinker = require('express-hateoas-links');
@@ -73,8 +74,11 @@ const connectToDBTest = async () => {
 // Connexion on database dev or test depending environnement
 node_env=="dev" ? connectToDBDev() : connectToDBDev();
 
-app.get("/validationAuth", async (request:express.Request, response:express.Response) => {
-    response.status(Http_code.OK).send("auth OK!");
+app.get("/validationAuth", authMiddleware, async (request:express.Request, response:express.Response) => {
+    // If the user passed the authMiddleware, they are authorized to continue
+    return response.status(Http_code.OK).json({
+        msg: "Authorized user !",
+    });
 })
 
 app.get("/", async (request:express.Request, response:express.Response) => {
