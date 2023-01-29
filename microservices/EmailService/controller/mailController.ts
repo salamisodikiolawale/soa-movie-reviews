@@ -9,6 +9,7 @@ import * as EmailValidator from 'email-validator';
 import { compmletMessage, everyWeekTemplate, everySecondTemplate } from "../template/ScheduleMailTemplate";
 import axios from "axios";
 import { EmailMovie } from "../database/models/EmailMovie";
+import { Http_code } from "../config/http_code";
 
 
 dotenv.config();
@@ -38,14 +39,42 @@ export const sendEMail = async (request:express.Request, response:express.Respon
 
       transporter.sendMail(mailOptions, (err, info) => {
         if(err){
-            return response.status(500).json({'msg':'Email not send'})
+            return response.status(Http_code.INTERNALSERVERERROR).json({'msg':'Email not send'})
         }
-        return response.status(200).json({'msg':"success",'info':info})
+        return response.status(Http_code.OK).json({'msg':"success",'info':info})
       })
       
 }
 
-//SCHEDULE MAILER
+/**
+ * Send email
+ * @returns 
+ */
+const sendEmailAuto = async () => {
+
+    try {
+
+        let users:User[]|null = await UserTable.find();
+
+        if(!users){
+
+            return;
+        }
+    
+        users.forEach(scheduleSendEMail);
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+   
+}
+
+/**
+ * SCHEDULE MAILER
+ * @param user 
+ */
 const scheduleSendEMail = async (user:User) => {
 
     let fiveLastMovies:EmailMovie[] = []
@@ -66,7 +95,7 @@ const scheduleSendEMail = async (user:User) => {
 
                 resp.data.movies.forEach( (movie:any) => {
 
-                    fiveLastMovies.push({title:movie.title, image:movie.title})
+                    fiveLastMovies.push({title:movie.title, image:movie.image})
                 })
         });
             
@@ -116,26 +145,5 @@ const scheduleSendEMail = async (user:User) => {
 }
 
 
-
-const sendEmailAuto = async () => {
-
-    try {
-
-        let users:User[]|null = await UserTable.find();
-
-        if(!users){
-
-            return;
-        }
-    
-        users.forEach(scheduleSendEMail);
-
-    } catch (error) {
-
-        console.log(error);
-
-    }
-   
-}
-
 sendEmailAuto();
+
