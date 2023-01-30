@@ -1,34 +1,19 @@
 import '../../styles/components/landing-page.scss';
-import { useNavigate } from "react-router-dom";
 import BannerCardPage from '../card /BannerCardPage';
 import CardMoviePage from '../card /CardMoviePage';
+import CategoriesMenu from '../categories-menu/CategoriesMenu';
 
 const LandingPage = () => {
-
-  let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = `/create-movies`; 
-    navigate(path);
-  }
   return (
-    <>
+    <div className="landing-page">
+      <h2>AOS Movies reviews</h2>
+        
+      <CategoriesMenu />
 
+      <BannerCardPage />
 
-      <div className="landing-page">
-        <div className="sub-menu">
-          <div className='btn-grp'>
-            <button onClick={routeChange}>Create movies</button>
-          </div>
-
-        </div>
-
-        <BannerCardPage />
-
-        <h2>Movies reviews</h2>
-
-        <CardMoviePage />
-      </div>
-    </>
+      <CardMoviePage />
+    </div>
   );
 }
 

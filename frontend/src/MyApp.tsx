@@ -9,6 +9,7 @@ import { Context } from "./context/Context";
 
 import axios from 'axios';
 import CreateMoviepage from "./components/movies/CreateMoviePage";
+import SingleMoviePage from "./components/single-movie-page/SingleMoviePage";
 
 const MyApp = () => {
 
@@ -56,6 +57,7 @@ const MyApp = () => {
               <Route path="/create-movies" element={<CreateMoviepage/>} />
               <Route path='/404' element={<ErrorPage/>} />
               <Route path="*" element={<Navigate to="/404" replace />}/> 
+              <Route path="/single-movie-page" element={<SingleMoviePage/>} />
           </Routes>
         </div>
       </div>

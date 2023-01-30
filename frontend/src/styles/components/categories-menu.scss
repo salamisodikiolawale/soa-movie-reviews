@@ -1,0 +1,26 @@
+@import '../helpers/medias.scss';
+
+.categories-menu {
+    padding: 15px 0;
+    
+    .title {
+        margin: 0 0.5rem; 
+    }
+
+    .categories-input-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include small {
+    
+        }
+    }
+
+    .item {
+        @include small {
+            border-radius: 0px;
+        }
+
+    }
+
+}
