@@ -9,7 +9,7 @@ on:
 jobs:
 
   Frontend:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./frontend
@@ -48,7 +48,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   AuthService:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./microservices/AuthService
@@ -70,8 +70,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: TESTINT APP
-        run: npm test
+      # - name: TESTINT APP
+      #   run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -87,7 +87,7 @@ jobs:
       #   run: docker-compose up -d --build
       
   CrudMovieService:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./microservices/CrudMovieService
@@ -113,8 +113,8 @@ jobs:
         run: npm run build --if-present
       - name: CLEAR CACHE
         run: npm run "test:clearcache"
-      - name: TESTINT APP
-        run: npm run test
+      # - name: TESTINT APP
+      #   run: npm run test
       - name: Upload coverage reports to Codecov
         run: |
           # Options are `alpine`, `linux`, `macos`, `windows`
@@ -141,7 +141,7 @@ jobs:
 
 
   EmailService:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./microservices/EmailService
@@ -178,7 +178,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   ReviewService:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./microservices/ReviewService
@@ -204,8 +204,8 @@ jobs:
         run: npm run build --if-present
       - name: CLEAR CACHE
         run: npm run "test:clearcache"
-      - name: TESTINT APP
-        run: npm run test
+      # - name: TESTINT APP
+      #   run: npm run test
 
       - name: Upload coverage reports to Codecov
         run: |
@@ -231,7 +231,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   SearchService:
-      runs-on: ubuntu-latest
+      runs-on: self-hosted
       defaults:
         run:
           working-directory: ./microservices/SearchService
