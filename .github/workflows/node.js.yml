@@ -7,9 +7,10 @@ on:
     branches: [ "develop" ]
 
 jobs:
-
-  Frontend:
-      runs-on: self-hosted
+  
+  Run-npm-on-Ubuntu:
+      name: RUN FRONTEND
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./frontend
@@ -19,12 +20,6 @@ jobs:
           node-version: [16.x]
 
       steps:
-      - name: INSTALL DOCKER
-        run: |
-          sudo apt-get update 
-          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-          sudo docker run hello-world
-          
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -54,7 +49,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   AuthService:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./microservices/AuthService
@@ -76,8 +71,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      # - name: TESTINT APP
-      #   run: npm test
+      - name: TESTINT APP
+        run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -93,7 +88,7 @@ jobs:
       #   run: docker-compose up -d --build
       
   CrudMovieService:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./microservices/CrudMovieService
@@ -119,8 +114,8 @@ jobs:
         run: npm run build --if-present
       - name: CLEAR CACHE
         run: npm run "test:clearcache"
-      # - name: TESTINT APP
-      #   run: npm run test
+      - name: TESTINT APP
+        run: npm run test
       - name: Upload coverage reports to Codecov
         run: |
           # Options are `alpine`, `linux`, `macos`, `windows`
@@ -147,7 +142,7 @@ jobs:
 
 
   EmailService:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./microservices/EmailService
@@ -184,7 +179,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   ReviewService:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./microservices/ReviewService
@@ -210,8 +205,8 @@ jobs:
         run: npm run build --if-present
       - name: CLEAR CACHE
         run: npm run "test:clearcache"
-      # - name: TESTINT APP
-      #   run: npm run test
+      - name: TESTINT APP
+        run: npm run test
 
       - name: Upload coverage reports to Codecov
         run: |
@@ -237,7 +232,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   SearchService:
-      runs-on: self-hosted
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./microservices/SearchService
