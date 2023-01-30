@@ -7,8 +7,9 @@ on:
     branches: [ "develop" ]
 
 jobs:
-
-  Frontend:
+  
+  Run-npm-on-Ubuntu:
+      name: RUN FRONTEND
       runs-on: ubuntu-latest
       defaults:
         run:
