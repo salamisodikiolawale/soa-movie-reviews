@@ -9,7 +9,7 @@ on:
 jobs:
 
   Frontend:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./frontend
@@ -48,7 +48,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   AuthService:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./microservices/AuthService
@@ -87,7 +87,7 @@ jobs:
       #   run: docker-compose up -d --build
       
   CrudMovieService:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./microservices/CrudMovieService
@@ -141,7 +141,7 @@ jobs:
 
 
   EmailService:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./microservices/EmailService
@@ -178,7 +178,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   ReviewService:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./microservices/ReviewService
@@ -231,7 +231,7 @@ jobs:
       #   run: docker-compose up -d --build
 
   SearchService:
-      runs-on: ubuntu-latest
+      runs-on: [ubuntu-latest, self-hosted]
       defaults:
         run:
           working-directory: ./microservices/SearchService
