@@ -19,6 +19,12 @@ jobs:
           node-version: [16.x]
 
       steps:
+      - name: INSTALL DOCKER
+        run: |
+          sudo apt-get update 
+          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+          sudo docker run hello-world
+          
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
