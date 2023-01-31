@@ -1,6 +1,7 @@
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
+import { FilterForm } from "../database/models/FilterForm";
 import { Http_code } from "../config/http_code";
 
 
@@ -9,26 +10,49 @@ import { Http_code } from "../config/http_code";
 /**
  * GET FILTERED LIST OF MOVIES
  * @param request filter form
- * @param response 
+ * @param response json of movies
  * @returns 
  */
 export const getFilteredListOfMovies = async (request:express.Request, response:express.Response) => {
 
     //Exceptions
     try {
-        //Recuperation des données dans la request
-        let requested_movie:Movie = {
+        //Get the form from the request
+        let request_form : FilterForm = {
             title : request.body.title,
-            comment : request.body.comment,
-            image : request.body.image,
+            type : request.body.type,
+            ranking : request.body.ranking,
+            publicationDate : request.body.publicationDate
         };
-        //find in database the list of movies
-        let list_movies : Movie[] | null = await MovieTable.find({title : requested_movie.title, comment : requested_movie.comment, image : requested_movie.image}).exec();
+
+        let list_movies = null;
+
+        //for each line of the form, we get the movies from the database
+        if(request_form.title != null){
+            list_movies = await MovieTable.find({title : request_form.title}).exec();
+        }
+        if(request_form.type != null){
+            list_movies = await MovieTable.find({type : request_form.type}).exec();
+        }
+        if(request_form.ranking != null){
+            list_movies = await MovieTable.find({ranking : request_form.ranking}).exec();
+        }
+        if(request_form.publicationDate != null){
+            list_movies = await MovieTable.find({publicationDate : request_form.publicationDate}).exec();
+        }
+
+        //check if the list is null
         if(list_movies == null){
             return response.status(Http_code.NOTFOUND).json({
                 msg: 'There are no movies which match the filter',
             });
         }
+        //remove the duplicate thanks to their id in the list
+            list_movies = list_movies.filter((movie, index, self) =>
+            index === self.findIndex((m) => (
+                m._id === movie._id
+            ))
+        )
 
         //build the response
         response.status(Http_code.OK).json({
