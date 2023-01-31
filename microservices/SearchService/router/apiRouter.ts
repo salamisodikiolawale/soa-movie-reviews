@@ -1,5 +1,5 @@
 import express from 'express';
-import {createMovie, getMovies} from "../controller/searchController";
+import {getFilteredListOfMovies, getMovies} from "../controller/searchController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -10,7 +10,7 @@ const apiRouter:express.Router = express.Router();
     Fields: name, image, comment
     Access: Public
  */
-apiRouter.post('/movies', createMovie);
+apiRouter.post('/movies', getFilteredListOfMovies);
 
 /*
     Usage: Update a Movie
@@ -40,7 +40,7 @@ apiRouter.post('/movies', createMovie);
     Fields:  name, image, comment
     Access: Public
  */
-apiRouter.get('/movies', getMovies);
+//apiRouter.get('/movies', getMovies);
 
 /*
     Usage: Get a Single product

@@ -1,38 +1,53 @@
 import express from "express";
 import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
+import { Http_code } from "../config/http_code";
+
 
 //business logic
 
-export const createMovie = async (request:express.Request, response:express.Response) => {
+/**
+ * GET FILTERED LIST OF MOVIES
+ * @param request filter form
+ * @param response 
+ * @returns 
+ */
+export const getFilteredListOfMovies = async (request:express.Request, response:express.Response) => {
 
     //Exceptions
     try {
         //Recuperation des données dans la request
-        let movie:Movie = {
+        let requested_movie:Movie = {
             title : request.body.title,
             comment : request.body.comment,
             image : request.body.image,
         };
-        //Verify if data already exist in the database
-        let existingMovie:Movie|null = await MovieTable.findOne({ title: movie.title});
-        if(existingMovie){
-            return response.status(401).json({
-                msg: 'Movie is already exist'
+        //find in database the list of movies
+        let list_movies : Movie[] | null = await MovieTable.find({title : requested_movie.title, comment : requested_movie.comment, image : requested_movie.image}).exec();
+        if(list_movies == null){
+            return response.status(Http_code.NOTFOUND).json({
+                msg: 'There are no movies which match the filter',
             });
         }
 
-        //Create the movie into database
-        let newMovie = new MovieTable(movie);
-        movie = await newMovie.save();
-        response.status(200).json({
-            msg: 'Movie is created successfully',
-            product:movie
-        });
+        //build the response
+        response.status(Http_code.OK).json({
+            msg: 'List of movies which match the filter',
+            list_movies,
+            datas: {
+                "_links": {
+                    "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review._id}` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
+                },
+                "_embedded": {},
+            },
 
+        });
     } catch (error){
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         });
     };
