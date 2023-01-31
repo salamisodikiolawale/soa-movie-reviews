@@ -7,8 +7,9 @@ on:
     branches: [ "develop" ]
 
 jobs:
-  runs-on: self-hosted
+
   Frontend:
+      runs-on: ubuntu-latest
       defaults:
         run:
           working-directory: ./frontend
@@ -46,222 +47,222 @@ jobs:
       # - name: build container
       #   run: docker-compose up -d --build
 
-  # AuthService:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./microservices/AuthService
+  AuthService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/AuthService
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
 
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     - name: TESTINT APP
-  #       run: npm test
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      - name: TESTINT APP
+        run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
           
-  #         image: sodiki/aos_movie_auth_service      
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: microservices/AuthService/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
+          image: sodiki/aos_movie_auth_service      
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/AuthService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-  #     # - name: build container
-  #     #   run: docker-compose up -d --build
+      # - name: build container
+      #   run: docker-compose up -d --build
       
-  # CrudMovieService:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./microservices/CrudMovieService
+  CrudMovieService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/CrudMovieService
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
 
-  #     timeout-minutes: 4
+      timeout-minutes: 4
       
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     - name: CLEAR CACHE
-  #       run: npm run "test:clearcache"
-  #     - name: TESTINT APP
-  #       run: npm run test
-  #     - name: Upload coverage reports to Codecov
-  #       run: |
-  #         # Options are `alpine`, `linux`, `macos`, `windows`
-  #         curl -Os https://uploader.codecov.io/latest/linux/codecov
-  #         chmod +x codecov
-  #         ./codecov -t ${CODECOV_TOKEN}
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      - name: CLEAR CACHE
+        run: npm run "test:clearcache"
+      - name: TESTINT APP
+        run: npm run test
+      - name: Upload coverage reports to Codecov
+        run: |
+          # Options are `alpine`, `linux`, `macos`, `windows`
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t ${CODECOV_TOKEN}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 
-  #     ##
+      ##
       
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
           
-  #         image: sodiki/aos_movie_crud_service
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: microservices/CrudMovieService/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #     # - name: build container
-  #     #   run: docker-compose up -d --build
+          image: sodiki/aos_movie_crud_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/CrudMovieService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
 
 
-  # EmailService:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./microservices/EmailService
+  EmailService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/EmailService
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
 
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     #- name: TESTINT APP
-  #     #- run: npm test
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
-  #         image: sodiki/aos_movie_email_service
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: microservices/EmailService/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #     # - name: build container
-  #     #   run: docker-compose up -d --build
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_email_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/EmailService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
 
-  # ReviewService:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./microservices/ReviewService
+  ReviewService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/ReviewService
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
           
-  #     timeout-minutes: 5
+      timeout-minutes: 5
 
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     - name: CLEAR CACHE
-  #       run: npm run "test:clearcache"
-  #     - name: TESTINT APP
-  #       run: npm run test
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      - name: CLEAR CACHE
+        run: npm run "test:clearcache"
+      - name: TESTINT APP
+        run: npm run test
 
-  #     - name: Upload coverage reports to Codecov
-  #       run: |
-  #         # Options are `alpine`, `linux`, `macos`, `windows`
-  #         curl -Os https://uploader.codecov.io/latest/linux/codecov
-  #         chmod +x codecov
-  #         ./codecov -t ${CODECOV_TOKEN}
-  #     - name: Upload coverage to Codecov
-  #       uses: codecov/codecov-action@v3
+      - name: Upload coverage reports to Codecov
+        run: |
+          # Options are `alpine`, `linux`, `macos`, `windows`
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./codecov -t ${CODECOV_TOKEN}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
    
 
-  #     #  
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
-  #         image: sodiki/aos_movie_review_service
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: microservices/ReviewService/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #     # - name: build container
-  #     #   run: docker-compose up -d --build
+      #  
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_review_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/ReviewService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
 
-  # SearchService:
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: ./microservices/SearchService
+  SearchService:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: ./microservices/SearchService
 
-  #     strategy:
-  #       matrix:
-  #         node-version: [16.x]
+      strategy:
+        matrix:
+          node-version: [16.x]
 
-  #     steps:
-  #     - name: CHECK-OUT GIT REPOSITORY
-  #       uses: actions/checkout@v3
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: 'npm'
-  #         cache-dependency-path: '**/package-lock.json'
-  #     - name: INSTALL DEPENDENCIES
-  #       run: npm ci
-  #     - name: BUILDING APP
-  #       run: npm run build --if-present
-  #     #- name: TESTINT APP
-  #     #- run: npm test
-  #     - name: Build & push Docker image
-  #       uses: mr-smithers-excellent/docker-build-push@v5
-  #       with:
-  #         image: sodiki/aos_movie_search_service
-  #         tags: latest
-  #         registry: docker.io
-  #         dockerfile: microservices/SearchService/Dockerfile
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #     # - name: build container
-  #     #   run: docker-compose up -d --build
+      steps:
+      - name: CHECK-OUT GIT REPOSITORY
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
+      - name: INSTALL DEPENDENCIES
+        run: npm ci
+      - name: BUILDING APP
+        run: npm run build --if-present
+      #- name: TESTINT APP
+      #- run: npm test
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: sodiki/aos_movie_search_service
+          tags: latest
+          registry: docker.io
+          dockerfile: microservices/SearchService/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      # - name: build container
+      #   run: docker-compose up -d --build
