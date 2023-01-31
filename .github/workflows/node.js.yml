@@ -9,16 +9,16 @@ on:
 jobs:
 
   Frontend:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./frontend
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./frontend
 
-      strategy:
-        matrix:
-          node-version: [16.x]
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-      steps:
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -36,7 +36,6 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-        
           image: sodiki/aos_movie_frontend    
           tags: latest
           registry: docker.io
@@ -48,16 +47,14 @@ jobs:
       #   run: docker-compose up -d --build
 
   AuthService:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./microservices/AuthService
-
-      strategy:
-        matrix:
-          node-version: [16.x]
-
-      steps:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./microservices/AuthService
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -75,30 +72,26 @@ jobs:
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          
           image: sodiki/aos_movie_auth_service      
           tags: latest
           registry: docker.io
           dockerfile: microservices/AuthService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # - name: build container
-      #   run: docker-compose up -d --build
+    # - name: build container
+    #   run: docker-compose up -d --build
       
   CrudMovieService:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./microservices/CrudMovieService
-
-      strategy:
-        matrix:
-          node-version: [16.x]
-
-      timeout-minutes: 4
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./microservices/CrudMovieService
+    strategy:
+      matrix:
+        node-version: [16.x]
+    timeout-minutes: 4
       
-      steps:
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -124,12 +117,9 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
 
-      ##
-      
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          
           image: sodiki/aos_movie_crud_service
           tags: latest
           registry: docker.io
@@ -139,18 +129,16 @@ jobs:
       # - name: build container
       #   run: docker-compose up -d --build
 
-
   EmailService:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./microservices/EmailService
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./microservices/EmailService
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-      strategy:
-        matrix:
-          node-version: [16.x]
-
-      steps:
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -178,18 +166,16 @@ jobs:
       #   run: docker-compose up -d --build
 
   ReviewService:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./microservices/ReviewService
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./microservices/ReviewService
+    strategy:
+      matrix:
+        node-version: [16.x]  
+    timeout-minutes: 5
 
-      strategy:
-        matrix:
-          node-version: [16.x]
-          
-      timeout-minutes: 5
-
-      steps:
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -216,8 +202,6 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
    
-
-      #  
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -231,16 +215,15 @@ jobs:
       #   run: docker-compose up -d --build
 
   SearchService:
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./microservices/SearchService
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./microservices/SearchService
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-      strategy:
-        matrix:
-          node-version: [16.x]
-
-      steps:
+    steps:
       - name: CHECK-OUT GIT REPOSITORY
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
