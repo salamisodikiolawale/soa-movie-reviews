@@ -49,7 +49,6 @@ services:
     networks:
       - proxyNetwork
       - serviceNetwork
-      - testNetwork
 
   ###################################
   ####  SERVICE CLIENT           ####
@@ -172,23 +171,7 @@ services:
       - proxyNetwork
       - authService
 
-  
-  mongo:
-    container_name: mongo-test-db
-    image: mongo
-    volumes:
-      - ./data-movie-test-db:/data/db
-    ports:
-      - '27017:27017'
-    networks:
-      - testNetwork
 
-  mongo-express:
-    image: mongo-express
-    ports:
-      - 8081:8081
-    networks:
-      - testNetwork
 
 networks:
   authService:
@@ -196,6 +179,4 @@ networks:
   serviceNetwork:
     driver: bridge
   proxyNetwork:
-    driver: bridge
-  testNetwork:
     driver: bridge
