@@ -1,8 +1,8 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import { MailOptions } from "../database/models/Email";
-import cron  = require('node-cron');
-import dotenv = require('dotenv');
+const cron  = require('node-cron');
+const dotenv = require('dotenv');
 import { User } from "../database/models/User";
 import UserTable from "../database/shemas/UserSchema";
 import * as EmailValidator from 'email-validator';
