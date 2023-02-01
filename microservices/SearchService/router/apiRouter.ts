@@ -1,16 +1,16 @@
 import express from 'express';
-import {getFilteredListOfMovies, getMovies} from "../controller/searchController";
+import {getFilteredListOfMovies} from "../controller/searchController";
 
 const apiRouter:express.Router = express.Router();
 
 /*
-    Usage: Create a movie
-    URL : http://crudMovieService:3000/api/v1/movies
-    Method : POST
-    Fields: name, image, comment
+    Usage: Return the list of movies which match the filter
+    URL : http://searchService:3005/api/v1/search
+    Method : GET
+    Fields: title, type, ranking , publicationDate
     Access: Public
  */
-apiRouter.post('/movies', getFilteredListOfMovies);
+apiRouter.get('/search',getFilteredListOfMovies);
 
 /*
     Usage: Update a Movie
