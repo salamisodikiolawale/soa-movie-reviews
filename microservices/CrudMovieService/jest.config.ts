@@ -3,7 +3,7 @@ export default {
   coverageProvider: "v8",
   moduleFileExtensions: ["js", "jsx", "ts", "tsx", "json", "node"],
 
-  "preset": "@shelf/jest-mongodb",
+  // "preset": "@shelf/jest-mongodb",
   
   roots: ["<rootDir>/"],
   

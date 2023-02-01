@@ -30,9 +30,6 @@
   "dependencies": {
   
     
-  "@shelf/jest-mongodb": "^4.1.4",
-  
-    
   "@types/axios": "^0.14.0",
   
     
