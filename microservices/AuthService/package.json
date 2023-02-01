@@ -47,5 +47,12 @@
     "superagent": "^8.0.6",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.5"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "arch": "arm64",
+      "archive_name": "http://downloads.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-latest.tgzhttp://downloads.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2004-v4.4-latest.tgz",
+      "debug": "1"
+    }
   }
 }
