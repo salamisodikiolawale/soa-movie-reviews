@@ -93,28 +93,28 @@ services:
   ####  SERVICE Search           ####
   ###################################
 
-  # search_service:
-  #   build: 
-  #     context: ./microservices/SearchService
-  #     dockerfile: Dockerfile_dev
-  #   ports:
-  #     - "3005:3005"
-  #   depends_on:
-  #     - reverse-proxy
-  #   volumes:
-  #     - type: bind
-  #       source: ./microservices/SearchService
-  #       target: /src/app
-  #   labels:
-  #    - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
-  #    - "traefik.http.routers.search_service.rule=Host(`search_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
-  #    - "traefik.http.routers.search_service.middlewares=validation-auth"
-  #    - "traefik.http.routers.search_service.rule=Host(`search_service.localhost`)"
-  #    - "traefik.http.routers.search_service.entrypoints=web" 
-  #    - "traefik.http.services.search_service.loadbalancer.server.port=3005"
-  #   networks:
-  #     - proxyNetwork
-  #     - serviceNetwork
+  search_service:
+    build: 
+      context: ./microservices/SearchService
+      dockerfile: Dockerfile_dev
+    ports:
+      - "3005:3005"
+    depends_on:
+      - reverse-proxy
+    volumes:
+      - type: bind
+        source: ./microservices/SearchService
+        target: /src/app
+    labels:
+      - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+      - "traefik.http.routers.search_service.rule=Host(`search_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
+      - "traefik.http.routers.search_service.middlewares=validation-auth"
+      - "traefik.http.routers.search_service.rule=Host(`search_service.localhost`)"
+      - "traefik.http.routers.search_service.entrypoints=web" 
+      - "traefik.http.services.search_service.loadbalancer.server.port=3005"
+    networks:
+      - proxyNetwork
+      - serviceNetwork
 
   ###################################
   ####  SERVICE AUTHENTIFICATION ####
