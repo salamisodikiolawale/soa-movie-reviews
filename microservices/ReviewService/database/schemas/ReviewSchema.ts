@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
-import {Review} from "../models/Review";
+import { Review } from '../models/Review';
 
 //Crée le schéma d'une Review dans la base de données.
-const ReviewSchema = new mongoose.Schema({
+const ReviewSchema = new mongoose.Schema<Review>({
     movieReviewId : { type : String, required: true, unique : false},
     username : { type : String, required : true },
     rating : { type : Number, required : true},
