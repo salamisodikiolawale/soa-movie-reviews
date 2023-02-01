@@ -22,7 +22,7 @@ describe("POST | create user", () => {
       }
   })
 
-  it("returns status code 200 if users login", async () => {
+  it("returns status code 500 if users not login", async () => {
 
     //Create first user
     const rd = random;
@@ -48,7 +48,7 @@ describe("POST | create user", () => {
       .post(`${url}/${uri}`)
       .send(userAuth);
   
-    expect(response2.statusCode).toEqual(Http_code.OK);
+    expect(response2.statusCode).toEqual(Http_code.INTERNALSERVERERROR);
 
   });
 

@@ -161,7 +161,7 @@ jobs:
           registry: docker.io
           dockerfile: microservices/EmailService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }
       # - name: build container
       #   run: docker-compose up -d --build
 
