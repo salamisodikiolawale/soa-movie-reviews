@@ -25,11 +25,14 @@ describe("POST | create user", () => {
   it("returns status code 500 if users not login", async () => {
 
     //Create first user
-    const rd = random;
+    const pwd:string = `iAm${random}@gmail1`;
+    const usn:string = `iAm${random}`;
+    const em:string = `iAm${random}@gmail.com`;
+
     const user = {
-      password : `iAm${rd}@gmail1`,
-      username:`iAm${rd}`,
-      email:`iAm${rd}@gmail.com`
+      password : pwd,
+      username: usn,
+      email: em
     }
 
     const response = await request(app)
@@ -41,14 +44,15 @@ describe("POST | create user", () => {
     //Login user recently created to get auth credentials
     const uri:string="login";
     const userAuth = {
-      identifier : user.username,
-      password : user.password
+      identifier : em,
+      password : pwd
     }
+
     const response2 = await request(app)
       .post(`${url}/${uri}`)
       .send(userAuth);
   
-    expect(response2.statusCode).toEqual(Http_code.INTERNALSERVERERROR);
+    expect(response2.statusCode).toEqual(Http_code.OK);
 
   });
 

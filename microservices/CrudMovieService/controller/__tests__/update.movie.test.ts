@@ -8,18 +8,18 @@ import { randomInt } from "crypto";
 describe("PUT movie", () => {
 
     const url:string="/api/v1/movies";
-    const random = randomInt(10000);
-
-    beforeAll(done => {
-        done()
+    const random = randomInt(50000);
+  
+    beforeAll( done => {
+        done();
     })
-
+  
     afterAll(async() => {
-        try {
-        await mongoose.connection.close();
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        await mongoose.disconnect();
+      } catch (error) {
+        console.log(error);
+      }
     })
 
     it("Returns 404 if movie don't exist in database", async () => {

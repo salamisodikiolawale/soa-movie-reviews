@@ -11,25 +11,25 @@ describe("Create reviews data", () => {
 
     const urlReview:string="/api/v1/reviews";
     
-    const random = randomInt(10000);
-
-    beforeAll(done => {
-        done()
+    const random = randomInt(50000);
+  
+    beforeAll( done => {
+        done();
     })
 
     afterAll(async() => {
-        try {
-        await mongoose.connection.close();
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        await mongoose.disconnect();
+      } catch (error) {
+        console.log(error);
+      }
     })
 
     it("Returns 200 if review of movie created", async () => {
         
             
-        const movieCreatedId:string = "63cc583c48a24ce2ef723f1e";
-
+        const movieCreatedId:string = "63daa344057da7ec38d93d4d";
+        
         // Create review
         let review : Review = {
             movieReviewId : movieCreatedId,

@@ -16,6 +16,7 @@ app.use(express.json());
 
 
 // Env variables
+let node_env:string|undefined = process.env.NODE_ENV_Email_Serv_Var;
 let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
 
@@ -57,8 +58,7 @@ const connectToDBTest = async () => {
 }
 
 // Connexion on database dev or test depending environnement
-// node_env=="dev" ? connectToDBDev() : connectToDBTest();
-connectToDBDev();
+node_env=="dev" ? connectToDBDev() : connectToDBTest();
 
 
 app.get("/", async (request:express.Request, response:express.Response) => {

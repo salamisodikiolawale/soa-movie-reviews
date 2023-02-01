@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv  from 'dotenv';
-import { Db } from './config/db';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
 import { Http_code } from './config/http_code';
@@ -36,8 +35,8 @@ app.use(express.json());
  * Mongo production database connection
  */
 const connectToDBDev = async () => {
-    if(Db.URL) {
-        mongoose.connect(Db.URL)
+    if(mongoDBUrl) {
+        mongoose.connect(mongoDBUrl)
         .then( () => {
             console.log('Connecting to mongoDB Successfully ...');
         }).catch( (error) => {
@@ -70,8 +69,8 @@ const connectToDBTest = async () => {
 }
 
 // Connexion on database dev or test depending environnement
-node_env=="dev" ? connectToDBDev() : connectToDBDev();
 
+if(node_env=="dev") { connectToDBDev(); } else { connectToDBTest();}
 
 
 app.get('/', async (request:express.Request, response:express.Response) => {

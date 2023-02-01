@@ -9,18 +9,18 @@ describe("POST | create user", () => {
 
   const url:string="/user";
   const random = randomInt(50000);
+  
+    beforeAll( done => {
+        done();
+    })
 
-  beforeAll(done => {
-    done()
-  })
-
-  afterAll(async() => {
-    try {
-      await mongoose.connection.close();
-    } catch (error) {
-      console.log(error);
-    }
-  })
+    afterAll(async() => {
+      try {
+        await mongoose.disconnect();
+      } catch (error) {
+        console.log(error);
+      }
+    })
 
   it("returns status code 200 user create", async () => {
 

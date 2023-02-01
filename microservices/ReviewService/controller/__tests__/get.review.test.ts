@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import mongoose from "mongoose";
 import request from "supertest";
 import app from "../../app";
@@ -9,16 +10,18 @@ describe("GET reviews data", () => {
 
     const url:string="/api/v1/reviews";
 
-    beforeAll(done => {
-        done()
+    const random = randomInt(50000);
+  
+    beforeAll( done => {
+        done();
     })
 
     afterAll(async() => {
-        try {
-        await mongoose.connection.close();
-        } catch (error) {
-            console.log(error);
-        }
+      try {
+        await mongoose.disconnect();
+      } catch (error) {
+        console.log(error);
+      }
     })
 
     it("Returns 200 if reviews data of movie exist in database", async () => {

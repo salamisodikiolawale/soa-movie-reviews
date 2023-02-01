@@ -7,6 +7,8 @@ export default {
   
   roots: ["<rootDir>/"],
   
+  globalTeardown: '<rootDir>/test-teardown-globals.js',
+  
   testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",

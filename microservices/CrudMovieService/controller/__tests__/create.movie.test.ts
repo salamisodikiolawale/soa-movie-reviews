@@ -1,23 +1,25 @@
 import app from "../../app";
 import request from "supertest";
-import mongoose from "mongoose";
+import * as mongoose from "mongoose";
 import { randomInt } from "crypto";
 import Movie from "../../interfaces/movie.interface";
 import { Http_code } from "../../config/http_code";
+import dotenv  from 'dotenv';
 
+dotenv.config( {path : './.env'});
 
 describe("POST | create movie", () => {
-
+  
   const url:string="/api/v1/movies";
-  const random = randomInt(10000);
-
-  beforeAll(done => {
-    done()
+  const random = randomInt(50000);
+  
+  beforeAll( done => {
+      done();
   })
 
   afterAll(async() => {
     try {
-      await mongoose.connection.close();
+      await mongoose.disconnect();
     } catch (error) {
       console.log(error);
     }
