@@ -151,8 +151,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      - name: TESTINT APP
-        # run: npm test
+      #- name: TESTINT APP
+      #- run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -237,7 +237,7 @@ jobs:
       - name: BUILDING APP
         run: npm run build --if-present
       #- name: TESTINT APP
-      #  run: npm test
+      #- run: npm test
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
