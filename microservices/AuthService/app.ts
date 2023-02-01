@@ -4,6 +4,7 @@ import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import userRouter from "./router/userRouter";
 import { Http_code } from './config/http_code';
+import { URL, URL_TEST } from './config/db';
 const authMiddleware = require('./middlewares/auth');
 
 //Auto decouvrability
@@ -37,8 +38,8 @@ app.use(express.json()); // json form data
  * Mongo production database connection
  */
 const connectToDBDev = async () => {
-    if(mongoDBUrl) {
-        mongoose.connect(mongoDBUrl)
+    if(URL) {
+        mongoose.connect(URL)
         .then( () => {
             console.log('Connecting to mongoDB Successfully ...');
         }).catch( (error) => {
@@ -56,8 +57,8 @@ const connectToDBDev = async () => {
  * Mongo test database connection
  */
 const connectToDBTest = async () => {
-    if(mongoDBUrlTest) {
-        mongoose.connect(mongoDBUrlTest)
+    if(URL_TEST) {
+        mongoose.connect(URL_TEST)
         .then( () => {
             console.log('Connecting to mongoDB of test Successfully ...');
         })

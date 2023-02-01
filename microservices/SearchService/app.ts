@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv  from 'dotenv';
 import * as mongoose from "mongoose";
 import apiRouter from "./router/apiRouter";
+import { URL, URL_TEST } from './config/db';
 
 //Auto decouvrability
 //const hateoasLinker = require('express-hateoas-links');
@@ -25,8 +26,8 @@ let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 
 // MongoDB connection
 
-if(mongoDBUrl) {
-    mongoose.connect(mongoDBUrl).then( () => {
+if(URL) {
+    mongoose.connect(URL).then( () => {
         console.log('Connecting to mongoDB Successfully ...');
     }).catch( (error) => {
         console.log(error);
