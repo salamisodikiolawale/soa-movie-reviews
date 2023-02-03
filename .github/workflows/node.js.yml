@@ -7,7 +7,7 @@ on:
     branches: [ "develop" ]
 
 jobs:
-
+  
   Frontend:
     runs-on: ubuntu-latest
     defaults:
@@ -31,8 +31,7 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      #- name: TESTINT APP
-      #- run: npm test
+      
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -42,9 +41,6 @@ jobs:
           dockerfile: frontend/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # - name: build container
-      #   run: docker-compose up -d --build
   
   AuthService:
     runs-on: ubuntu-latest
@@ -78,9 +74,7 @@ jobs:
           dockerfile: microservices/AuthService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-    # - name: build container
-    #   run: docker-compose up -d --build
-  
+
   CrudMovieService:
     runs-on: ubuntu-latest
     defaults:
@@ -126,8 +120,7 @@ jobs:
           dockerfile: microservices/CrudMovieService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      # - name: build container
-      #   run: docker-compose up -d --build
+
   EmailService:
     runs-on: ubuntu-latest
     defaults:
@@ -150,8 +143,7 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      #- name: TESTINT APP
-      #- run: npm test
+
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -161,8 +153,6 @@ jobs:
           dockerfile: microservices/EmailService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      # - name: build container
-      #   run: docker-compose up -d --build
   
   ReviewService:
     runs-on: ubuntu-latest
@@ -210,8 +200,6 @@ jobs:
           dockerfile: microservices/ReviewService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      # - name: build container
-      #   run: docker-compose up -d --build
 
   SearchService:
     runs-on: ubuntu-latest
@@ -235,8 +223,7 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      #- name: TESTINT APP
-      #- run: npm test
+
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -246,5 +233,3 @@ jobs:
           dockerfile: microservices/SearchService/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      # - name: build container
-      #   run: docker-compose up -d --build
