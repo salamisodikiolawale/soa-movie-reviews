@@ -5,9 +5,16 @@
 
 Movie review est un projet qui est conçu en architecture microservice.
 
+Ce projet permet aux utilisateurs de publier des Movies et de commenter ces Movies.
+
 Il est composé d'un front-end développé en REACT et de cinq microservices développés en Nodejs. L'architecture de l'application intègre Docker avec Reverse proxy TRAEFIK. Le projet dispose d'un système d'automatisation d'intégration continue et de déploiement continue.
 
-Les images Docker des microservices sont déployées sur DockerHub après l'intégration continue et l'application est déployée dans le Cloud AWS plus précisément EC2 à travers le CD.
+Les images Docker des microservices sont déployées sur DockerHub après l'intégration continue (Voir fichier le dossier.github) et l'application est déployée dans le Cloud AWS plus précisément EC2 à travers le CD (Voir la partie runner de github CD).
+
+N'hésitez pas à nous contacter pour des questions ou autres préoccupations, nous répondrons à vos requête :).
+
+
+Au plaisir de travailler avec vous :)
 
 ## HOME
 
