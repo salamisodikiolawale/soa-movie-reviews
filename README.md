@@ -85,7 +85,7 @@ Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.
 **Première version stable :** 1.0
 
 ## Auteurs
-* **Romain** _alias_ [@StardustRL](https://github.com/StardustRL)
+* **Romain LIU** _alias_ [@StardustRL](https://github.com/StardustRL)
 * **Margot RASAMY** _alias_ [@MargotRasamy ](https://github.com/MargotRasamy)
 * **Sodiki SALAMI** _alias_ [@salamisodikiolawale](https://github.com/salamisodikiolawale)
 
