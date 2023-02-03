@@ -57,8 +57,8 @@ const Header = () => {
             <nav className={ !open ? 'closed' : '' }>
 
                 <p className='username'>{state.userData.userInfos?.username}</p>
-                <Button className='nav-item' variant="primary">Movies</Button>{' '}                
-                
+                <ButtonLink toPath="/" variant="primary" text="Movies" wrapperClass="nav-item" /> 
+                <ButtonLink toPath="/" variant="primary" text="Series" wrapperClass="nav-item" />               
                 {
                     state.userData.isConnected ? 
                     <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" /> :
