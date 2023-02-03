@@ -72,7 +72,7 @@ Option 2 :
 
 ## Contributing
 
-Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.com/salamisodikiolawale/soa-movie-reviews#contributing.md) pour savoir comment le faire.
+Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/contributing.md) pour savoir comment le faire.
 
 ## Versions
 **Première version stable :** 1.0
