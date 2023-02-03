@@ -1,7 +1,7 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 import '../../styles/components/categories-menu.scss'
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, InputGroup, SplitButton } from 'react-bootstrap';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 
 function CategoriesMenu() {
   let navigate = useNavigate(); 
