@@ -4,6 +4,7 @@ import MoviesList from '../card /MoviesList';
 import MovieCarousel from '../movie-carousel/MovieCarousel';
 import CategoriesMenu from '../categories-menu/CategoriesMenu';
 import ButtonLink from '../ButtonLink';
+import { filterOption } from '../../models/filterOption';
 
 const LandingPage = () => {
   return (
@@ -14,7 +15,7 @@ const LandingPage = () => {
       <BannerCardPage />
       <div className='section'>
         <h3 className='section-title'>Review the 10 lastest movies</h3>
-        <MoviesList filter='latest' />
+        <MoviesList filter={filterOption.LATEST} />
         <ButtonLink toPath="/movies" text="See more" wrapperClass="see-more" />
       </div>
     </div>
