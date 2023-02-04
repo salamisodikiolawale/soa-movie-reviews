@@ -43,13 +43,9 @@ services:
      - "traefik.http.routers.crud_service_only_get.rule=Host(`crud_service.localhost`)"
      - "traefik.http.routers.crud_service.entrypoints=web" 
      - "traefik.http.services.crud_service.loadbalancer.server.port=3010"
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
     networks:
       - proxyNetwork
       - serviceNetwork
-      - testNetwork
 
   ###################################
   ####  SERVICE CLIENT           ####
@@ -66,35 +62,6 @@ services:
         target: /src/app
     networks:
       - proxyNetwork
-
-  ###################################
-  ####  SERVICE EMAIL            ####
-  ###################################
-  email_service:
-    build: 
-      context: ./microservices/EmailService
-      dockerfile: Dockerfile_dev
-    ports:
-      - "3004:3004"
-    depends_on: 
-      - crud_service
-      - reverse-proxy
-      - review_service
-    volumes:
-      - type: bind
-        source: ./microservices/EmailService
-        target: /src/app
-    labels:
-     - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
-     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
-     - "traefik.http.routers.email_service.middlewares=validation-auth"
-     - "traefik.http.routers.email_service_only_get.rule=Host(`email_service.localhost`)"
-     - "traefik.http.routers.email_service.entrypoints=web" 
-     - "traefik.http.services.email_service.loadbalancer.server.port=3004"
-    networks:
-      - proxyNetwork
-      - serviceNetwork
-
 
   ###################################
   ####  SERVICE REVIEW           ####
@@ -172,30 +139,40 @@ services:
       - proxyNetwork
       - authService
 
-  
-  mongo:
-    container_name: mongo-test-db
-    image: mongo
+  ###################################
+  ####  SERVICE EMAIL            ####
+  ###################################
+  email_service:
+    build: 
+      context: ./microservices/EmailService
+      dockerfile: Dockerfile_dev
+    ports:
+      - "3004:3004"
+    depends_on: 
+      - reverse-proxy
+      - review_service
+      - auth_service
+      - crud_service
     volumes:
-      - ./data-movie-test-db:/data/db
-    ports:
-      - '27017:27017'
+      - type: bind
+        source: ./microservices/EmailService
+        target: /src/app
+    labels:
+     - "traefik.http.middlewares.validation-auth.forwardauth.address=http://auth_service.localhost/validationAuth"
+     - "traefik.http.routers.email_service.rule=Host(`email_service.localhost`) && Method(`DELETE`, `POST`, `PUT`, `PATCH`)"
+     - "traefik.http.routers.email_service.middlewares=validation-auth"
+     - "traefik.http.routers.email_service_only_get.rule=Host(`email_service.localhost`)"
+     - "traefik.http.routers.email_service.entrypoints=web" 
+     - "traefik.http.services.email_service.loadbalancer.server.port=3004"
     networks:
-      - testNetwork
+      - proxyNetwork
+      - serviceNetwork
 
-  mongo-express:
-    image: mongo-express
-    ports:
-      - 8081:8081
-    networks:
-      - testNetwork
-
+      
 networks:
   authService:
     driver: bridge
   serviceNetwork:
     driver: bridge
   proxyNetwork:
-    driver: bridge
-  testNetwork:
     driver: bridge
