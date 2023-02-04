@@ -59,8 +59,14 @@ const Header = () => {
                 <ButtonLink toPath="/movies" variant="primary" text="Movies" wrapperClass="nav-item" />               
                 {
                     state.userData.isConnected ? 
-                    <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" /> :
-                    <ButtonLink toPath="/authenticate" variant="primary" text="Connect" wrapperClass="nav-item" /> 
+                    <>
+                        <ButtonLink toPath="/authenticate" variant="primary" text="My list" wrapperClass="nav-item" />
+                        <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" />
+                    </>
+                     :
+                    <>
+                        <ButtonLink toPath="/authenticate" variant="primary" text="Connect" wrapperClass="nav-item" />
+                    </>
                 }
             </nav>
         </header> 

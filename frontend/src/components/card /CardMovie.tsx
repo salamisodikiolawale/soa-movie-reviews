@@ -6,12 +6,12 @@ const CardMovie = ({dataParentToChildMovie}:{dataParentToChildMovie:any}) => {
 
     return (
         <div className='card-movie'>
-            <NavLink className='link' to="/single-movie-page">
+            <NavLink className='link' to={'/movie/' + dataParentToChildMovie._id}>
               
               <div className="img-container">
                 <img 
                     src={dataParentToChildMovie.image} 
-                    alt="" />
+                    alt={dataParentToChildMovie.title} />
               </div>
                 
                 <div className='content'>

@@ -72,7 +72,7 @@ const connectToDBTest = async () => {
 }
 
 // Connexion on database dev or test depending environnement
-node_env=="dev" ? connectToDBDev() : connectToDBDev();
+node_env=="dev" ? connectToDBDev() : connectToDBTest();
 
 app.get("/validationAuth", authMiddleware, async (request:express.Request, response:express.Response) => {
     // If the user passed the authMiddleware, they are authorized to continue

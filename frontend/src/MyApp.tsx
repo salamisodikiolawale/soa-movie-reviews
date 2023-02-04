@@ -54,12 +54,12 @@ const MyApp = () => {
         <div className="app-content">
           <Routes>
               <Route path="/" element={<LandingPage/>} />
-              <Route path="/movies" element={<SingleMoviePage/>} />
+              <Route path="/movies" element={<LandingPage />} />
               <Route path="/authenticate" element={authPageComponent()} />
               <Route path="/create-movies" element={<CreateMoviepage/>} />
               <Route path='/404' element={<ErrorPage/>} />
               <Route path="*" element={<Navigate to="/404" replace />}/> 
-              <Route path="/single-movie-page" element={<SingleMoviePage/>} />
+              <Route path="/movie/:movieId" element={<SingleMoviePage />}/>
           </Routes>
         </div>
         <Footer />

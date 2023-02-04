@@ -32,7 +32,14 @@ class Moviesservice {
         return movies;
     }
 
-
+    getMovie = async(movieId: string):Promise<Movie> => {
+        const url:string=`http://localhost:3010/api/v1/movies/movie/${movieId}`;
+        
+        let movie:Movie; 
+        const res = await axios.get(url);
+        movie = res.data.movie;
+        return movie;
+    }
     
 }
 
