@@ -76,6 +76,24 @@ Option 2 :
 
 > NB : Tout ces commandes se lance depuis le repertoire principal du projet.
 
+6 - Accédez à l'application en local via : ***http://localhost:3000***
+
+7 - Accédez à l'application en production via : *** encours .... ***
+
+## Où trouver les images docker de l'application : ***https://hub.docker.com/u/sodiki***
+
+## Les ports utilisés par l'application:
+*Front* : 3000
+
+*CrudService* : 3010
+
+*AuthService* : 3003
+
+*EmailService* : 3004
+
+*ReviewService* : 3001
+
+*SearchService* : 3005
 
 ## Contributing
 
@@ -85,7 +103,7 @@ Si vous souhaitez contribuer, lisez le fichier [CONTRIBUTING.md](https://github.
 **Première version stable :** 1.0
 
 ## Auteurs
-* **Romain LIU** _alias_ [@StardustRL](https://github.com/StardustRL)
+* **Romain** _alias_ [@StardustRL](https://github.com/StardustRL)
 * **Margot RASAMY** _alias_ [@MargotRasamy ](https://github.com/MargotRasamy)
 * **Sodiki SALAMI** _alias_ [@salamisodikiolawale](https://github.com/salamisodikiolawale)
 
