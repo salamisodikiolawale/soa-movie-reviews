@@ -31,7 +31,8 @@ jobs:
         run: npm ci
       - name: BUILDING APP
         run: npm run build --if-present
-      
+
+        #Deploiement DockerHub
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -111,6 +112,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
 
+        #Deploiement DockerHub
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -118,8 +120,8 @@ jobs:
           tags: latest
           registry: docker.io
           dockerfile: microservices/CrudMovieService/Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }} #Auth dockerHub
+          password: ${{ secrets.DOCKER_PASSWORD }} #Auth dockerHub
 
   EmailService:
     runs-on: ubuntu-latest
@@ -144,6 +146,7 @@ jobs:
       - name: BUILDING APP
         run: npm run build --if-present
 
+        #Deploiement DockerHub
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -190,7 +193,8 @@ jobs:
           ./codecov -t ${CODECOV_TOKEN}
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
-   
+
+        #Deploiement DockerHub
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -224,6 +228,7 @@ jobs:
       - name: BUILDING APP
         run: npm run build --if-present
 
+        #Deploiement DockerHub
       - name: Build & push Docker image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
