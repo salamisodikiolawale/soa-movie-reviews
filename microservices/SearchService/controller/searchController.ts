@@ -2,6 +2,7 @@ import express from "express";
 import MovieTable from "../database/schemas/MovieSchema";
 import { FilterForm } from "../database/models/FilterForm";
 import { Http_code } from "../config/http_code";
+import { FilterQuery } from "mongoose";
 
 
 //business logic
@@ -17,6 +18,7 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
     //Exceptions
     try {
         //Get the form from the request
+        console.log("getFilteredListOfMovies start");
         let request_form : FilterForm = {
             title : request.body.title,
             type : request.body.type,
@@ -24,21 +26,36 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
             publicationDate : request.body.publicationDate
         };
 
+        console.log(request_form);
+
         let list_movies = null;
 
-        //for each line of the form, we get the movies from the database
+        //for each line of the form, we get the movies from the database and add it to the list
         if(request_form.title != null){
-            list_movies = await MovieTable.find({title : request_form.title}).exec();
+            console.log("--------------------- Title ------------------------");
+            list_movies = await MovieTable.find({title: request_form.title}).exec();
+            console.log(list_movies);
         }
         if(request_form.type != null){
-            list_movies = await MovieTable.find({type : request_form.type}).exec();
+            console.log("--------------------- Type ------------------------");
+            list_movies = await MovieTable.find({types: request_form.type}).exec();
+            console.log(list_movies);
         }
         if(request_form.ranking != null){
-            list_movies = await MovieTable.find({ranking : request_form.ranking}).exec();
+            console.log("--------------------- Ranking ------------------------");
+            let query = {rating: {$gte: request_form.ranking}};
+            list_movies = await MovieTable.find(query).exec();
+            console.log(list_movies);
+
         }
         if(request_form.publicationDate != null){
-            list_movies = await MovieTable.find({publicationDate : request_form.publicationDate}).exec();
+            console.log("--------------------- Date ------------------------");
+            list_movies = await MovieTable.find({date: request_form.publicationDate}).exec();
+            console.log(list_movies);
+
         }
+
+        //get function to get the list of movie whic
 
         //check if the list is null
         if(list_movies == null){
@@ -47,7 +64,7 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
             });
         }
         //remove the duplicate thanks to their id in the list
-            list_movies = list_movies.filter((movie, index, self) =>
+        list_movies = list_movies.filter((movie, index, self) =>
             index === self.findIndex((m) => (
                 m._id === movie._id
             ))
