@@ -5,8 +5,22 @@
 .landing-page {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    .title, .section-title {
+        font-weight:bold;
+        margin-bottom: 1rem;
+    }
+    .section {
+        margin: 1rem 0;
+        .movies-list {
+            margin: 1rem 0;
+        }
+        .see-more {
+            max-width: 25rem;
+            margin: auto;
+        }
+    }
+
+    
 }
 
 

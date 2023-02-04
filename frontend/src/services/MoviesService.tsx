@@ -6,7 +6,7 @@ class Moviesservice {
     
     createMovie(formData:Movie) {
         
-        const url:string="http://crud_service.localhost:3010/api/v1/movies";
+        const url:string="http://localhost:3010/api/v1/movies";
 
         //Not finish : get valide value into localstorage
         formData.userId='63cbf7b45ca403af0e641598';
@@ -15,15 +15,25 @@ class Moviesservice {
     }
 
     getMovies = async():Promise<Movie[]> => {
-        const url:string="http://crud_service.localhost:3010/api/v1/movies";
+        const url:string="http://localhost:3010/api/v1/movies";
         
         let movies:Movie[] = []; 
-        await axios.get(url).then(res => {
-            movies = res.data.movies;
-        });
+        const res = await axios.get(url);
+        movies = res.data.movies;
         return movies;
     }
 
+    getLatestMovies = async(numberOfMovies: Number):Promise<Movie[]> => {
+        const url:string=`http://localhost:3010/api/v1/movies/${numberOfMovies}`;
+        
+        let movies:Movie[] = []; 
+        const res = await axios.get(url);
+        movies = res.data.movies;
+        return movies;
+    }
+
+
+    
 }
 
 export default new Moviesservice();

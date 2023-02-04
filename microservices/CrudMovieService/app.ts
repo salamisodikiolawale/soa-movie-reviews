@@ -71,7 +71,7 @@ const connectToDBTest = async () => {
 
 // Connexion on database dev or test depending environnement
 
-if(node_env=="dev") { connectToDBDev(); } else { connectToDBTest();}
+if(node_env=="dev") { connectToDBTest(); } else { connectToDBTest();}
 
 
 app.get('/', async (request:express.Request, response:express.Response) => {

@@ -10,6 +10,7 @@ import { Context } from "./context/Context";
 import axios from 'axios';
 import CreateMoviepage from "./components/movies/CreateMoviePage";
 import SingleMoviePage from "./components/single-movie-page/SingleMoviePage";
+import Footer from "./components/footer/Footer";
 
 const MyApp = () => {
 
@@ -53,6 +54,7 @@ const MyApp = () => {
         <div className="app-content">
           <Routes>
               <Route path="/" element={<LandingPage/>} />
+              <Route path="/movies" element={<SingleMoviePage/>} />
               <Route path="/authenticate" element={authPageComponent()} />
               <Route path="/create-movies" element={<CreateMoviepage/>} />
               <Route path='/404' element={<ErrorPage/>} />
@@ -60,6 +62,7 @@ const MyApp = () => {
               <Route path="/single-movie-page" element={<SingleMoviePage/>} />
           </Routes>
         </div>
+        <Footer />
       </div>
     </Router>
   );

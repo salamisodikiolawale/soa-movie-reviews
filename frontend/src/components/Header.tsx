@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import '../styles/components/header.scss';
-// import Button from 'react-bootstrap/Button';
 import BurgerMenu from "./BurgerMenu";
 import { NavLink } from "react-router-dom";
 import ButtonLink from './ButtonLink';
@@ -57,8 +56,7 @@ const Header = () => {
             <nav className={ !open ? 'closed' : '' }>
 
                 <p className='username'>{state.userData.userInfos?.username}</p>
-                <ButtonLink toPath="/" variant="primary" text="Movies" wrapperClass="nav-item" /> 
-                <ButtonLink toPath="/" variant="primary" text="Series" wrapperClass="nav-item" />               
+                <ButtonLink toPath="/movies" variant="primary" text="Movies" wrapperClass="nav-item" />               
                 {
                     state.userData.isConnected ? 
                     <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" /> :
