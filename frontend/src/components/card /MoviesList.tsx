@@ -16,18 +16,18 @@ const MoviesList = (props: PropsWithChildren<Props>) => {
         setMovies(await MoviesService.getMovies());
     }
 
-    // const getLatestMovies = async(numberOfMovies: Number)=>{
-    //     setMovies(await MoviesService.getLatestMovies(numberOfMovies));
-    // }
+    const getLatestMovies = async(numberOfMovies: Number)=>{
+        setMovies(await MoviesService.getLatestMovies(numberOfMovies));
+    }
     
 
-    // useEffect(() => {
-    //     if (props.filter == 'all') {
-    //         fetchMovies();
-    //     } else if (props.filter == 'latest') {
-    //         getLatestMovies(10);
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (props.filter == 'all') {
+            fetchMovies();
+        } else if (props.filter == 'latest') {
+            getLatestMovies(10);
+        }
+    }, []);
 
     return (
         <div className='movies-list'>
