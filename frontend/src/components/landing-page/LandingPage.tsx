@@ -1,18 +1,23 @@
 import '../../styles/components/landing-page.scss';
 import BannerCardPage from '../card /BannerCardPage';
-import CardMoviePage from '../card /CardMoviePage';
+import MoviesList from '../card /MoviesList';
+import MovieCarousel from '../movie-carousel/MovieCarousel';
 import CategoriesMenu from '../categories-menu/CategoriesMenu';
+import ButtonLink from '../ButtonLink';
+import { filterOption } from '../../models/filterOption';
 
 const LandingPage = () => {
   return (
     <div className="landing-page">
-      <h2>AOS Movies reviews</h2>
-        
+      <h2 className='title'>AOS Movies reviews</h2>
       <CategoriesMenu />
-
+      <MovieCarousel/>
       <BannerCardPage />
-
-      <CardMoviePage />
+      <div className='section'>
+        <h3 className='section-title'>Review the 10 lastest movies</h3>
+        <MoviesList filter={filterOption.LATEST} />
+        <ButtonLink toPath="/movies" text="See more" wrapperClass="see-more" />
+      </div>
     </div>
   );
 }

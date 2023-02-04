@@ -93,7 +93,7 @@ const AuthenticationPage = () => {
             e.stopPropagation();
         } else {
             try {
-               const res = await axios.post(`http://127.0.0.1:3003/user/login`, 
+               const res = await axios.post(`http://localhost:3003/user/login`, 
                 {
                     "identifier": formData.identifier,
                     "password": formData.password   
@@ -133,7 +133,7 @@ const AuthenticationPage = () => {
             e.stopPropagation();
         } else {
             try {
-               const res = await axios.post(`http://127.0.0.1:3003/user/`, 
+               const res = await axios.post(`http://localhost:3003/user/`, 
                 {
                     "username": formData.username,
                     "email": formData.email,
