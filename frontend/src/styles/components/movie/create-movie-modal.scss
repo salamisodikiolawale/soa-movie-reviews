@@ -1,0 +1,25 @@
+.create-movie-modal {
+    .movie-form {
+        .submit-button{
+            color: white;
+            background-color: #335baf;
+            &:hover {
+                background-color: #4b76d3;
+            }
+        }
+        .date-picker {
+            input {
+                margin-left: 1rem;
+                border-top-style: hidden;
+                border-right-style: hidden;
+                border-left-style: hidden;
+                border-bottom-style: groove;
+                background-color: none;
+            }
+            .no-outline:focus {
+            outline: none;
+            }
+        }
+    }
+    
+}

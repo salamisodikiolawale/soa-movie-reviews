@@ -1,26 +1,21 @@
 import Dropdown from 'react-bootstrap/Dropdown';
-import '../../styles/components/categories-menu.scss'
-import { useNavigate } from 'react-router-dom';
+import '../../styles/components/categories-menu.scss';
 import { Button, Form, InputGroup } from 'react-bootstrap';
+import CreateMovieModal from '../movies/CreateMovieModal';
+import { useState } from 'react';
 
-function CategoriesMenu() {
-  let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = `/create-movies`; 
-    navigate(path);
+const CategoriesMenu = () => {
+  const openModal = () =>{ 
+    setModalShow(true);
   }
+
+  const [modalShow, setModalShow] = useState(false);
 
   return (
     <div className="categories-menu">
       <InputGroup className="categories-input-group mb-3">
         <Form.Control className="item search-form" aria-label="Text input with dropdown button"
         placeholder="Search for a movie..." />
-        <Button
-          variant="secondary"
-          className="item"
-          id="segmented-button-dropdown-2"
-        >Search
-        </Button>
         <Dropdown className="item">
           <Dropdown.Toggle variant="outline-secondary" id="dropdown-basic">
             Movie category
@@ -40,8 +35,16 @@ function CategoriesMenu() {
             <Dropdown.Item href="#/action-2">Cartoons</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
-        <Button className="item" variant="outline-secondary" onClick={routeChange}>Create movies</Button>
-        
+        <Button
+          variant="secondary"
+          className="item"
+          id="segmented-button-dropdown-2">Search
+        </Button>
+        <Button className="item" variant="outline-secondary" onClick={openModal}>Create movies</Button>
+        <CreateMovieModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
       </InputGroup>
           
 
