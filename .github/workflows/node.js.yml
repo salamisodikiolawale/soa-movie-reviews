@@ -30,7 +30,7 @@ jobs:
       - name: INSTALL DEPENDENCIES
         run: npm ci
       - name: BUILDING APP
-        run: npm run build --if-present
+        #run: npm run build --if-present
 
         #Deploiement DockerHub
       - name: Build & push Docker image

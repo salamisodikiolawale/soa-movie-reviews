@@ -44,6 +44,8 @@ const Header = () => {
             }
         });
     }
+
+    const isAuthorize = () => { return state.userData.isConnected;}
     
 
     return (
@@ -57,15 +59,17 @@ const Header = () => {
 
                 <p className='username'>{state.userData.userInfos?.username}</p>
                 <ButtonLink toPath="/movies" variant="primary" text="Movies" wrapperClass="nav-item" />               
+                <ButtonLink toPath="/" variant="primary" text="Movies" wrapperClass="nav-item" /> 
+                <ButtonLink toPath="/" variant="primary" text="Series" wrapperClass="nav-item" />               
+                { 
+                    isAuthorize() ? 
+                    <ButtonLink toPath="/dashbord" variant="primary" text="Dashboard" wrapperClass="nav-item" /> : 	""
+                }             
                 {
-                    state.userData.isConnected ? 
-                    <>
-                        <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item disconnect-btn" />
-                    </>
-                     :
-                    <>
-                        <ButtonLink toPath="/authenticate" variant="primary" text="Connect" wrapperClass="nav-item" />
-                    </>
+
+                    isAuthorize() ? 
+                    <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" /> :
+                    <ButtonLink toPath="/authenticate" variant="primary" text="Connect" wrapperClass="nav-item" /> 
                 }
             </nav>
         </header> 
