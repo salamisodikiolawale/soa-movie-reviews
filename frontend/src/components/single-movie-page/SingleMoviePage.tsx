@@ -82,20 +82,18 @@ const SingleMoviePage = () => {
         setValidated(true);
     }
 
-    const ratingRegex = '^(0|[1-9]|1[0-9]|20)$';
+    const ratingRegex = '^(0|[1-9]|1[0-9]|20)$';    
 
-    const getMovieData = async (movieId : string) => {
+    useEffect(() => {
+        const getMovieData = async (movieId : string) => {
             setNewComment(false);
             initializeFormData();
-            console.log(movieId)
             const movieData : MovieData = await MoviesService.getMovieData(movieId);
-            console.log(movieData);
             setMovie(movieData.movie);
             setReviews(movieData.reviews_list)
             setIsLoading(false);
-    };
+        };
 
-    useEffect(() => {
         if (movieId) {
             getMovieData(movieId);
         }
