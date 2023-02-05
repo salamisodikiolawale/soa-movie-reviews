@@ -22,7 +22,7 @@ const SingleMoviePage = () => {
     const { movieId } = useParams();
     const [validated, setValidated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const { state, dispatch } = useContext(Context);
+    const { state } = useContext(Context);
 
     const [rating, setRating] = useState('');
 
@@ -66,17 +66,18 @@ const SingleMoviePage = () => {
         if (!form.checkValidity()) {
             event.stopPropagation();
         } else {
-            console.log(state.userData);
-            // let id : string = movieIdExist() ? movieId! : '';
-            // const res = await ReviewsService.createReview({
-            //     movieReviewId : id,
-            //     username : state.userData.userInfos.username ? state.userData.userInfos.username! : 'aosmovie',
-            //     rating : parseInt(rating),
-            //     comment : comment
-            // })
-            // if (res.status === 200) {
-            //     setNewComment(true);
-            // }
+            let id : string = movieIdExist() ? movieId! : '';
+            let userInfos : any = await state.userData.userInfos;
+
+            const res = await ReviewsService.createReview({
+                movieReviewId : id,
+                username : userInfos.username !== undefined ? userInfos.username : 'aosmovie',
+                rating : parseInt(rating),
+                comment : comment
+            })
+            if (res.status === 200) {
+                setNewComment(true);
+            }
         }
         setValidated(true);
     }
