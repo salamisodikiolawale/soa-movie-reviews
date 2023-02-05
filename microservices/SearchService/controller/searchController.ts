@@ -32,30 +32,24 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
 
         //for each line of the form, we get the movies from the database and add it to the list
         if(request_form.title != null){
-            console.log("--------------------- Title ------------------------");
             list_movies = await MovieTable.find({title: request_form.title}).exec();
             console.log(list_movies);
         }
         if(request_form.type != null){
-            console.log("--------------------- Type ------------------------");
             list_movies = await MovieTable.find({types: request_form.type}).exec();
             console.log(list_movies);
         }
         if(request_form.ranking != null){
-            console.log("--------------------- Ranking ------------------------");
-            let query = {rating: {$gte: request_form.ranking}};
+            let query = {rating: {$gte: request_form.ranking}};// get all the movies with a rating greater than the one in the form
             list_movies = await MovieTable.find(query).exec();
             console.log(list_movies);
 
         }
         if(request_form.publicationDate != null){
-            console.log("--------------------- Date ------------------------");
             list_movies = await MovieTable.find({date: request_form.publicationDate}).exec();
             console.log(list_movies);
 
         }
-
-        //get function to get the list of movie whic
 
         //check if the list is null
         if(list_movies == null){
@@ -76,10 +70,9 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
             list_movies,
             datas: {
                 "_links": {
-                    //"review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review._id}` },
-                    //"reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
-                    //"movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
-                    //"movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
                 },
                 "_embedded": {},
             },
