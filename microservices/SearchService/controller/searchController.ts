@@ -2,7 +2,6 @@ import express from "express";
 import MovieTable from "../database/schemas/MovieSchema";
 import { FilterForm } from "../database/models/FilterForm";
 import { Http_code } from "../config/http_code";
-import { FilterQuery } from "mongoose";
 
 
 //business logic
@@ -67,16 +66,7 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
         //build the response
         response.status(Http_code.OK).json({
             msg: 'List of movies which match the filter',
-            list_movies,
-            datas: {
-                "_links": {
-                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
-                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
-                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
-                },
-                "_embedded": {},
-            },
-
+            list_movies
         });
     } catch (error){
         console.log(error);
