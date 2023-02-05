@@ -60,8 +60,7 @@ const Header = () => {
                 {
                     state.userData.isConnected ? 
                     <>
-                        <ButtonLink toPath="/authenticate" variant="primary" text="My list" wrapperClass="nav-item" />
-                        <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item" />
+                        <ButtonAction action={toDisconnect} variant="primary" text="Disconnect" wrapperClass="nav-item disconnect-btn" />
                     </>
                      :
                     <>

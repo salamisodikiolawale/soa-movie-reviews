@@ -11,6 +11,7 @@ import axios from 'axios';
 import CreateMoviepage from "./components/movies/CreateMoviePage";
 import SingleMoviePage from "./components/single-movie-page/SingleMoviePage";
 import Footer from "./components/footer/Footer";
+import MoviesPage from "./components/movies/MoviesPage";
 
 const MyApp = () => {
 
@@ -54,7 +55,7 @@ const MyApp = () => {
         <div className="app-content">
           <Routes>
               <Route path="/" element={<LandingPage/>} />
-              <Route path="/movies" element={<LandingPage />} />
+              <Route path="/movies" element={<MoviesPage />} />
               <Route path="/authenticate" element={authPageComponent()} />
               <Route path="/create-movies" element={<CreateMoviepage/>} />
               <Route path='/404' element={<ErrorPage/>} />

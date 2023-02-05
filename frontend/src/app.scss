@@ -19,6 +19,16 @@
     }
 }
 
+.back-link {
+    .link {
+        margin-bottom: 1rem;
+        color: black;
+        &:hover {
+            color: rgb(91, 111, 148);
+        }
+    }
+}
+
 .text-clip {
     overflow: hidden;
     text-overflow: ellipsis;

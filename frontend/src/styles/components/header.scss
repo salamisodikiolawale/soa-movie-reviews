@@ -39,6 +39,7 @@
         justify-content: space-between;
         
         & > * {
+            font-size: 16px;
             text-decoration: none;
             color: inherit;
             margin-bottom: 0;
@@ -54,16 +55,26 @@
             }
         }
 
+        .disconnect-btn {
+            @include small {
+                color: black;
+                background-color:#efeef1;
+                &:hover {
+                    background-color:#ffffff;
+                }
+            }
+        }
+
         @include small {
             padding: var(--spaceS) var(--spaceS) 0 var(--spaceS);
             position: absolute;
-            z-index:1;
+            z-index:4000;
             top: calc(60px + var(--spaceM));
             left: var(--spaceM);
             right:var(--marginsLayout);
             width:50%;
             flex-direction: column;
-            background-color:#c7c5cc60;
+            background-color:#d5d4d893;
             
         }
 

@@ -9,6 +9,7 @@ import ButtonAction from '../ButtonAction';
 import { FormInputData } from '../../types/FormInputData';
 import { Context } from '../../context/Context';
 import { useNavigate } from "react-router-dom";
+import BackLink from '../BackLink';
 
 enum PageContent {
     LOGIN,
@@ -106,7 +107,9 @@ const AuthenticationPage = () => {
                         payload: {
                             isConnected: !!sessionStorage.getItem('JWT'),
                             userInfos: {
-                                userId: res.data.user.userId
+                                userId: res.data.user.userId,
+                                username: res.data.user.username,
+                                email: res.data.user.email,
                             }
                         }
                     });
@@ -248,6 +251,7 @@ const AuthenticationPage = () => {
 
     return (
         <div className="authentication-page">
+            <BackLink />
             <h1> { pageData.pageTitle } </h1>
 
             <Form noValidate validated={validated} onSubmit={(e) => submitMethod(e)}>

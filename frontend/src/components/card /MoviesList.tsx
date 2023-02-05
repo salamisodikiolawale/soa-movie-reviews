@@ -38,14 +38,14 @@ const MoviesList = ({filter}: PropsWithChildren<Props>) => {
     return (
         <div className='movies-list'>
                
-            {movies !== undefined && movies.length > 0 && (
+            {movies !== undefined && movies.length > 0 ? (
                 movies.map( movie => (
                     <CardMovie 
                     dataParentToChildMovie ={movie}
                     key={movie._id}
                     />
                 ))
-            )}
+            ) : <p>No movies yet.</p>}
         </div>
     )
 }
