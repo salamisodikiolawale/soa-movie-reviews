@@ -1,80 +1,88 @@
 import express from "express";
-import {Movie} from "../database/models/Movie";
 import MovieTable from "../database/schemas/MovieSchema";
+import { FilterForm } from "../database/models/FilterForm";
+import { Http_code } from "../config/http_code";
+import { FilterQuery } from "mongoose";
+
 
 //business logic
 
-export const createMovie = async (request:express.Request, response:express.Response) => {
+/**
+ * GET FILTERED LIST OF MOVIES
+ * @param request filter form
+ * @param response json of movies
+ * @returns 
+ */
+export const getFilteredListOfMovies = async (request:express.Request, response:express.Response) => {
 
     //Exceptions
     try {
-        //Recuperation des données dans la request
-        let movie:Movie = {
+        //Get the form from the request
+        console.log("getFilteredListOfMovies start");
+        let request_form : FilterForm = {
             title : request.body.title,
-            comment : request.body.comment,
-            image : request.body.image,
+            type : request.body.type,
+            ranking : request.body.ranking,
+            publicationDate : request.body.publicationDate
         };
-        //Verify if data already exist in the database
-        let existingMovie:Movie|null = await MovieTable.findOne({ title: movie.title});
-        if(existingMovie){
-            return response.status(401).json({
-                msg: 'Movie is already exist'
-            });
+
+        console.log(request_form);
+
+        let list_movies = null;
+
+        //for each line of the form, we get the movies from the database and add it to the list
+        if(request_form.title != null){
+            list_movies = await MovieTable.find({title: request_form.title}).exec();
+            console.log(list_movies);
+        }
+        if(request_form.type != null){
+            list_movies = await MovieTable.find({types: request_form.type}).exec();
+            console.log(list_movies);
+        }
+        if(request_form.ranking != null){
+            let query = {rating: {$gte: request_form.ranking}};// get all the movies with a rating greater than the one in the form
+            list_movies = await MovieTable.find(query).exec();
+            console.log(list_movies);
+
+        }
+        if(request_form.publicationDate != null){
+            list_movies = await MovieTable.find({date: request_form.publicationDate}).exec();
+            console.log(list_movies);
+
         }
 
-        //Create the movie into database
-        let newMovie = new MovieTable(movie);
-        movie = await newMovie.save();
-        response.status(200).json({
-            msg: 'Movie is created successfully',
-            product:movie
-        });
+        //check if the list is null
+        if(list_movies == null){
+            return response.status(Http_code.NOTFOUND).json({
+                msg: 'There are no movies which match the filter',
+            });
+        }
+        //remove the duplicate thanks to their id in the list
+        list_movies = list_movies.filter((movie, index, self) =>
+            index === self.findIndex((m) => (
+                m._id === movie._id
+            ))
+        )
 
+        //build the response
+        response.status(Http_code.OK).json({
+            msg: 'List of movies which match the filter',
+            list_movies,
+            datas: {
+                "_links": {
+                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${review.movieReviewId}` },
+                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${review.movieReviewId}` },
+                },
+                "_embedded": {},
+            },
+
+        });
     } catch (error){
         console.log(error);
-        response.status(500).json({
+        response.status(Http_code.INTERNALSERVERERROR).json({
             error : error
         });
     };
-}
-
-export const getMovies = async (request:express.Request, response:express.Response) => {
-
-    try {
-        let movies:Movie[]|null = await MovieTable.find();
-
-        const _link = [
-
-            { rel: "self", href: 'http://127.0.0.1' },
-            {
-                rel: "create",
-                method: "POST",
-                title: 'Create movie',
-                href: '/movies',
-                data: {
-                    "title": "text",
-                    "comment": "text",
-                    "image": "text",
-                    "date": "date"
-                }
-            },
-            {
-                rel: "lists",
-                method: "GET",
-                title: 'Get movies  ',
-                href: '/movies',
-            }
-        ]
-        response.status(200).json({
-            movies,
-            _link
-        });
-    } catch (error) {
-        console.log(error);
-        response.status(500).json({
-            error : error
-        })
-    }
-
 }
 
