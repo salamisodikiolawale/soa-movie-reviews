@@ -1,12 +1,12 @@
 import express from 'express';
-import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies} from "../controller/movieController";
+import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies, getMoviesOfUser} from "../controller/movieController";
 import { movieCreateValidation } from '../validations/movieValidations';
 
 const apiRouter:express.Router = express.Router();
 
 /*
     Usage: Create a movie
-    URL : http://crudMovieService:3000/api/v1/movies/create
+    URL : http://crudMovieService:3010/api/v1/movies
     Method : POST
     Fields: {
         title: string, require, 
@@ -56,6 +56,15 @@ apiRouter.get('/movies', getMovies);
  */
 apiRouter.get('/movies/:numberOfMovie', getFiveLasteMovies)
 
+/**
+ *  Usage : Get  movies of user
+ *  URL : http://crudMovieService:3010/api/v1/movies/user/:userId
+ *  Method : GET
+ *  Params : numberOfMovie
+ *  Access : Public
+ */
+apiRouter.get('/movies/user/:userId', getMoviesOfUser);
+
 /*
     Usage: Get a Single product
     URL : http://127.0.0.1:3000/api/v1/movies/:movieId
@@ -65,5 +74,6 @@ apiRouter.get('/movies/:numberOfMovie', getFiveLasteMovies)
  */
 
 apiRouter.get('/movies/movie/:movieId', getMovie);
+
 
 export default apiRouter;

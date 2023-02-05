@@ -179,6 +179,18 @@ export const deleteMovie = async(request:express.Request, response:express.Respo
             });
         }
 
+        // Send request -> review service
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+                "Host": "review_service.localhost"
+            }
+        };
+
+        //Send request to review  service for get reviews movie
+        await axios.delete(`${process.env.REVIEW_SERVICE_CRUD_Serv_Var}many/`+movieId, axiosConfig);
+
         movie= await MovieTable.findByIdAndRemove(movieId);
 
         response.status(Http_code.OK).json({
@@ -228,12 +240,15 @@ export const updateMovie = async(request:express.Request, response:express.Respo
         //update product
         existingMoviewillUpdated = await MovieTable.findByIdAndUpdate(movieId, {
             $set : {
+
+                _id : updatedMovie._id ? updatedMovie._id : existingMoviewillUpdated._id,
                 title : updatedMovie.title ? updatedMovie.title : existingMoviewillUpdated.title,
                 image : updatedMovie.image ? updatedMovie.image : existingMoviewillUpdated.image,
                 date : updatedMovie.date ? updatedMovie.date : existingMoviewillUpdated.date,
                 rating : updatedMovie.rating ? updatedMovie.rating : existingMoviewillUpdated.rating,
                 description : updatedMovie.description ? updatedMovie.description : existingMoviewillUpdated.description,
                 types : updatedMovie.types ? updatedMovie.types : existingMoviewillUpdated.types,
+                userId : updatedMovie.userId ? updatedMovie.userId : existingMoviewillUpdated.userId,
 
             }
         }, { new : true });
@@ -264,6 +279,56 @@ export const updateMovie = async(request:express.Request, response:express.Respo
             error : error
         });
     }
+}
+
+export const getMoviesOfUser = async (request:express.Request, response:express.Response) => {
+
+    try {
+
+        const userId = request.params.userId;
+
+        let movies:Movie|null|any = await MovieTable.find({'userId':userId});
+
+        // Send request -> review service
+        let axiosConfig = {
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                "Access-Control-Allow-Origin": "*",
+                "Host": "review_service.localhost"
+            }
+        };
+
+        let reviews = {}
+        
+    
+        //Send request to review  service for get reviews movie
+        // reviews = await axios.get(`${process.env.REVIEW_SERVICE_CRUD_Serv_Var}`+movieId, axiosConfig).then( (resp) => {
+                
+        //         return resp.data.list_review;
+        // })
+        // .catch(error => console.log(`reviews of movie ${movieId} dont exist`));
+
+        
+        response.status(Http_code.OK).json({
+            movies,
+            datas: {
+                // "_links": {
+                //     "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${movie._id}` },
+                //     "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+                //     "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${movie._id}` },
+                // },
+                "_embedded": {
+                    reviews
+                }
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(Http_code.NOTFOUND).json({
+            error : error
+        })
+    }
+
 }
 
 
