@@ -1,13 +1,14 @@
 export default interface Movie {
 
     _id?: string,
-    userId?: string,
+    userId?: string|undefined|null,
     types?: [],
-    title: string,
-    date?: string,
-    rating: number,
-    description?: string,
-    image: string,
+    title: string|undefined,
+    date?: string|undefined,
+    rating: number|undefined,
+    description?: string|undefined,
+    image: string|undefined,
+    numberOfReview?:number,
     createdAt?: string,
     updatedAt?: string,
 

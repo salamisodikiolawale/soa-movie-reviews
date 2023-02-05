@@ -63,7 +63,7 @@ const Header = () => {
                 <ButtonLink toPath="/" variant="primary" text="Series" wrapperClass="nav-item" />               
                 { 
                     isAuthorize() ? 
-                    <ButtonLink toPath="/dashbord" variant="primary" text="Dashboard" wrapperClass="nav-item" /> : 	""
+                    <ButtonLink toPath="/dashboard" variant="primary" text="Dashboard" wrapperClass="nav-item" /> : 	""
                 }             
                 {
 

@@ -4,30 +4,27 @@ import { MovieData } from "../components/single-movie-page/SingleMoviePage";
 
 class Moviesservice {
     
+    private url:string="http://localhost:3010/api/v1/movies";
+    private userId:string|null = sessionStorage.getItem('userId');
+
     createMovie(formData:Movie) {
-        
-        const url:string="http://localhost:3010/api/v1/movies";
 
-        //Not finish : get valide value into localstorage
-        formData.userId='63cbf7b45ca403af0e641598';
-
-        return axios.post(url, formData);
+        formData.userId = this.userId;
+        return axios.post(this.url, formData);
     }
 
     getMovies = async():Promise<Movie[]> => {
-        const url:string="http://localhost:3010/api/v1/movies";
         
         let movies:Movie[] = []; 
-        const res = await axios.get(url);
+        const res = await axios.get(this.url);
         movies = res.data.movies;
         return movies;
     }
 
     getLatestMovies = async(numberOfMovies: Number):Promise<Movie[]> => {
-        const url:string=`http://localhost:3010/api/v1/movies/${numberOfMovies}`;
         
         let movies:Movie[] = []; 
-        const res = await axios.get(url);
+        const res = await axios.get(this.url+`/${numberOfMovies}`);
         movies = res.data.movies;
         return movies;
     }
@@ -53,6 +50,22 @@ class Moviesservice {
         movieData.movie = movieResult.data.movie;
         movieData.reviews_list = reviewsList;
         return movieData;
+    }
+    
+    getMovieOfUser = async(): Promise<Movie[]> => {
+        let movies:Movie[] = []; 
+        const res = await axios.get(this.url+`/user/${this.userId}`);
+        movies = res.data.movies;
+        return movies;
+    }
+
+    removeMovie = async(idMovie:string|undefined) => {
+        await axios.delete(this.url+`/${idMovie}`)
+    }
+
+    updateMovie(formData:Movie) {
+        formData.userId = this.userId;
+        return axios.put(this.url+`/${formData._id}`, formData);
     }
 
     getMovieReviews = async(link: string):Promise<any> => {
