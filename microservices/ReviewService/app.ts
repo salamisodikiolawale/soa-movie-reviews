@@ -36,6 +36,7 @@ app.use(express.json());
 */
 const connectToDBDev = async () => {
    if(URL) {
+       mongoose.set('strictQuery', false);
        mongoose.connect(URL)
        .then( () => {
            console.log('Connecting to mongoDB Successfully ...');

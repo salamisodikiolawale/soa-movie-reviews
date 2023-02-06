@@ -61,8 +61,8 @@ export const everySecondTemplate = (imgUrl:string, movies:EmailMovie[], numberOf
 
     movies.forEach( movie => {
         movieHtml.push(`
-        <div style="width:500px; padding: 10px;">
-            <p>Un nouveau film vient d'être publié <a href="http://127.0.0.1:4000/"/>\`${movie.title}\` <a/></p>
+        <div style="width:300px; height:150px; margin:5px; padding:15px;">
+            <p><a href="http://127.0.0.1:4000/"/>\`${movie.title}\` <a/></p>
             <img src=\`${movie.image}\` style="width:100%"/>
         </div>
     `)
@@ -82,8 +82,6 @@ export const everySecondTemplate = (imgUrl:string, movies:EmailMovie[], numberOf
             <div 
                 style="
                 backgroung-color:white; 
-                display: flex; 
-                flex-direction: column;
                 align-items: center;">
 
                 <h2 
@@ -91,20 +89,16 @@ export const everySecondTemplate = (imgUrl:string, movies:EmailMovie[], numberOf
                     justify-content:center;">
                     SOA MOVIE APP NEW
                 </h2>
-
-                <img 
-                    style="width: 50em;"
-                    src="https://s3.amazonaws.com/static.rogerebert.com/uploads/review/primary_image/reviews/the-son-movie-review-2022/the-son-movie-review-2022.jpeg" 
-                    alt="#" />
-
-                <h2>Les 5 derniers films publiés</h2>
-                            
-                <div style="padding:5px; display:flex; flex-direction:row; flex-wrap: wrap;">
-                    ${movieHtml} 
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <img 
+                        style="width: 100%;"
+                        src="https://s3.amazonaws.com/static.rogerebert.com/uploads/review/primary_image/reviews/the-son-movie-review-2022/the-son-movie-review-2022.jpeg" 
+                        alt="#" />
                 </div>
-                <div style="border:1px solid black; width:250px; padding:5px;">
-                        <a href="#">Voir les TOP 20</a>
-                    </div>
+                <h2 style="text-align: center;">Les 5 derniers films publiés</h2> <br/><br/><br/>
+                            
+                <div style="padding:5px; width:1000px; display: flex;">
+                    ${movieHtml} 
                 </div>
             </div>
         </body>

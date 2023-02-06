@@ -168,102 +168,140 @@ export const getFiveLasteMovies = async (request:express.Request, response:expre
 }
 
 
-export const deleteMovie = async(request:express.Request, response:express.Response) => {
+// export const deleteMovie = async(request:express.Request, response:express.Response) => {
 
-    let {movieId} = request.params;
-    try {
-        let movie:Movie|null = await MovieTable.findById(movieId);
-        if(!movie){
-            return response.status(Http_code.NOTFOUND).json({
-                msg : 'Movie is not found !'
-            });
-        }
+//     let {movieId} = request.params;
+//     try {
+//         let movie:Movie|null = await MovieTable.findById(movieId);
+//         if(!movie){
+//             return response.status(Http_code.NOTFOUND).json({
+//                 msg : 'Movie is not found !'
+//             });
+//         }
 
-        movie= await MovieTable.findByIdAndRemove(movieId);
+//         // Send request -> review service
+//         let axiosConfig = {
+//             headers: {
+//                 'Content-Type': 'application/json;charset=UTF-8',
+//                 "Access-Control-Allow-Origin": "*",
+//                 "Host": "review_service.localhost"
+//             }
+//         };
 
-        response.status(Http_code.OK).json({
-            msg: `Movie ${movieId} is deleted successfully`,
-            datas: {
-                "_links": {
-                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
-                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
-                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
-                },
-                "_embedded": {},
-            },
-        })
-    } catch (error) {
-        console.log(error);
-        response.status(Http_code.INTERNALSERVERERROR).json({
-            error: error
-        })
-    }
-}
+//         //Send request to review  service for get reviews movie
+//         await axios.delete(`${process.env.REVIEW_SERVICE_CRUD_Serv_Var}many/`+movieId, axiosConfig);
 
-export const updateMovie = async(request:express.Request, response:express.Response) => {
+//         movie= await MovieTable.findByIdAndRemove(movieId);
 
-    //Get id into request params
-    let {movieId} = request.params
+//         response.status(Http_code.OK).json({
+//             msg: `Movie ${movieId} is deleted successfully`,
+//             datas: {
+//                 "_links": {
+//                     "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:movieId` },
+//                     "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+//                     "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/:movieId` },
+//                 },
+//                 "_embedded": {},
+//             },
+//         })
+//     } catch (error) {
+//         console.log(error);
+//         response.status(Http_code.INTERNALSERVERERROR).json({
+//             error: error
+//         })
+//     }
+// }
 
-    //Management Exception
-    try {
-        let updatedMovie:Movie = {
-            userId: request.body.userId,
-            title : request.body.title,
-            image : request.body.image,
-            date : request.body.date,
-            rating : request.body.rating,
-            description : request.body.description,
-            types : request.body.types
-        };
+// export const updateMovie = async(request:express.Request, response:express.Response) => {
 
-        //Check if movie is already exist into database
-        let existingMoviewillUpdated:Movie|null = await MovieTable.findById(movieId);
-        if(!existingMoviewillUpdated){
-            return response.status(Http_code.NOTFOUND).json({
-                msg : 'Movie is not exists'
-            });
-        }
+//     //Get id into request params
+//     let {movieId} = request.params
 
-        //update product
-        existingMoviewillUpdated = await MovieTable.findByIdAndUpdate(movieId, {
-            $set : {
-                title : updatedMovie.title ? updatedMovie.title : existingMoviewillUpdated.title,
-                image : updatedMovie.image ? updatedMovie.image : existingMoviewillUpdated.image,
-                date : updatedMovie.date ? updatedMovie.date : existingMoviewillUpdated.date,
-                rating : updatedMovie.rating ? updatedMovie.rating : existingMoviewillUpdated.rating,
-                description : updatedMovie.description ? updatedMovie.description : existingMoviewillUpdated.description,
-                types : updatedMovie.types ? updatedMovie.types : existingMoviewillUpdated.types,
+//     //Management Exception
+//     try {
+//         let updatedMovie:Movie = {
+//             userId: request.body.userId,
+//             title : request.body.title,
+//             image : request.body.image,
+//             date : request.body.date,
+//             rating : request.body.rating,
+//             description : request.body.description,
+//             types : request.body.types
+//         };
 
-            }
-        }, { new : true });
+//         //Check if movie is already exist into database
+//         let existingMoviewillUpdated:Movie|null = await MovieTable.findById(movieId);
+//         if(!existingMoviewillUpdated){
+//             return response.status(Http_code.NOTFOUND).json({
+//                 msg : 'Movie is not exists'
+//             });
+//         }
+
+//         //update product
+//         existingMoviewillUpdated = await MovieTable.findByIdAndUpdate(movieId, {
+//             $set : {
+
+//                 _id : updatedMovie._id ? updatedMovie._id : existingMoviewillUpdated._id,
+//                 title : updatedMovie.title ? updatedMovie.title : existingMoviewillUpdated.title,
+//                 image : updatedMovie.image ? updatedMovie.image : existingMoviewillUpdated.image,
+//                 date : updatedMovie.date ? updatedMovie.date : existingMoviewillUpdated.date,
+//                 rating : updatedMovie.rating ? updatedMovie.rating : existingMoviewillUpdated.rating,
+//                 description : updatedMovie.description ? updatedMovie.description : existingMoviewillUpdated.description,
+//                 types : updatedMovie.types ? updatedMovie.types : existingMoviewillUpdated.types,
+//                 userId : updatedMovie.userId ? updatedMovie.userId : existingMoviewillUpdated.userId,
+
+//             }
+//         }, { new : true });
 
         
-        response.status(Http_code.OK).json({
-            msg: 'Movie is Updated',
-            movie: existingMoviewillUpdated,
-            datas: {
-                "_links": {
-                    "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${existingMoviewillUpdated?._id}` },
-                    "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
-                    "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${existingMoviewillUpdated?._id}` },
-                },
-                "_embedded": {},
-            },
-        });
+//         response.status(Http_code.OK).json({
+//             msg: 'Movie is Updated',
+//             movie: existingMoviewillUpdated,
+//             datas: {
+//                 "_links": {
+//                     "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${existingMoviewillUpdated?._id}` },
+//                     "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+//                     "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${existingMoviewillUpdated?._id}` },
+//                 },
+//                 "_embedded": {},
+//             },
+//         });
 
-    } catch (error) {
-        console.log(error);
-        // @ts-ignore
-        if(error.kind === 'ObjectId'){
-            return response.status(Http_code.NOTFOUND).json({
-                msg : 'Movie is not exists'
-            });
-        }
-        response.status(Http_code.INTERNALSERVERERROR).json({
-            error : error
-        });
-    }
-}
+//     } catch (error) {
+//         console.log(error);
+//         // @ts-ignore
+//         if(error.kind === 'ObjectId'){
+//             return response.status(Http_code.NOTFOUND).json({
+//                 msg : 'Movie is not exists'
+//             });
+//         }
+//         response.status(Http_code.INTERNALSERVERERROR).json({
+//             error : error
+//         });
+//     }
+// }
+
+// export const getMoviesOfUser = async (request:express.Request, response:express.Response) => {
+
+//     try {
+
+//         const userId = request.params.userId;
+
+//         let movies:Movie|null|any = await MovieTable.find({'userId':userId});
+
+//         response.status(Http_code.OK).json({
+//             movies,
+//             datas: {
+//                 "_embedded": {}
+//             }
+//         });
+//     } catch (error) {
+//         console.log(error);
+//         response.status(Http_code.NOTFOUND).json({
+//             error : error
+//         })
+//     }
+
+// }
 
 

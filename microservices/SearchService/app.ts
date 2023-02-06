@@ -27,6 +27,7 @@ let mongoDBUrl:string|undefined = process.env.MONGODB_URL;
 // MongoDB connection
 
 if(URL) {
+    mongoose.set('strictQuery', false);
     mongoose.connect(URL).then( () => {
         console.log('Connecting to mongoDB Successfully ...');
     }).catch( (error) => {

@@ -1,5 +1,5 @@
 import express from 'express';
-import {createReview, updateReview, deleteReview, getAllReviewsOnMovie, getReview} from "../controller/reviewController";
+import {createReview, updateReview, deleteReview, getAllReviewsOnMovie, getReview, deleteReviewsOfMovie} from "../controller/reviewController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -50,5 +50,23 @@ apiRouter.put('/reviews/:reviewId', updateReview);
     Access: Public
  */
 apiRouter.delete('/reviews/:reviewId', deleteReview);
+
+/*
+    Usage: Delete many review
+    URL : http://review_service.localhost:3001/api/v1/reviews/many/:reviewId
+    Method : DELETE
+    Fields : movieReviewId, username, rating, comment, publicationDate
+    Access: Public
+ */
+    apiRouter.delete('/reviews/many/:reviewId', deleteReviewsOfMovie);
+
+/*
+    Usage: Get number of reviews per movie
+    URL : http://review_service.localhost:3001/api/v1/reviews/per/movie/:MovieId
+    Method : GET
+    Fields:  movieReviewId, username, rating, comment, publicationDate
+    Access: Public
+ */
+// apiRouter.get('/reviews/number/per/movie/:MovieId', getNumberOfReviewsPerMovie);
 
 export default apiRouter;
