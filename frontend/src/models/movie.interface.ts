@@ -2,7 +2,7 @@ export default interface Movie {
 
     _id?: string,
     userId?: string,
-    types?: [],
+    types?: string[],
     title: string,
     date?: string,
     rating: number,
