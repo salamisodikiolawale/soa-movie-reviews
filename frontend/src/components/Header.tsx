@@ -59,8 +59,6 @@ const Header = () => {
 
                 <p className='username'>{state.userData.userInfos?.username}</p>
                 <ButtonLink toPath="/movies" variant="primary" text="Movies" wrapperClass="nav-item" />               
-                <ButtonLink toPath="/" variant="primary" text="Movies" wrapperClass="nav-item" /> 
-                <ButtonLink toPath="/" variant="primary" text="Series" wrapperClass="nav-item" />               
                 { 
                     isAuthorize() ? 
                     <ButtonLink toPath="/dashboard" variant="primary" text="Dashboard" wrapperClass="nav-item" /> : 	""
