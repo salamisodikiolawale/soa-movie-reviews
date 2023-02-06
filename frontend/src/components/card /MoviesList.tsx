@@ -1,39 +1,13 @@
-import React, { useState, useEffect, PropsWithChildren } from 'react';
-import { filterOption } from '../../models/filterOption';
+import React, { PropsWithChildren } from 'react';
 import Movie from '../../models/movie.interface';
-import MoviesService from '../../services/MoviesService';
 import '../../styles/components/card/movies-list.scss';
 import CardMovie from './CardMovie';
 
 export interface Props {
-    filter: filterOption;
+    movies: Movie[];
 }
 
-const MoviesList = ({filter}: PropsWithChildren<Props>) => {    
-
-    const [movies, setMovies] = useState<Movie[]>([]);
-
-    const fetchMovies = async()=>{
-        setMovies(await MoviesService.getMovies());
-    }
-
-    const getLatestMovies = async(numberOfMovies: Number)=>{
-        setMovies(await MoviesService.getLatestMovies(numberOfMovies));
-    }
-    
-
-    useEffect(() => {
-        switch (filter) {
-            case filterOption.ALL:
-                fetchMovies();
-                break;
-            case filterOption.LATEST:
-                getLatestMovies(10);
-                break;
-            default:
-              console.log(`${filter} is not available.`);
-          }
-    }, [filter]);
+const MoviesList = ({movies}: PropsWithChildren<Props>) => {
 
     return (
         <div className='movies-list'>

@@ -10,6 +10,6 @@ const apiRouter:express.Router = express.Router();
     Fields: title, type, ranking , publicationDate
     Access: Public
  */
-apiRouter.get('/search',getFilteredListOfMovies);
+apiRouter.post('/search',getFilteredListOfMovies);
 
 export default apiRouter;

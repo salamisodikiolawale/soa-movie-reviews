@@ -4,8 +4,10 @@ import CreateMovieModal from '../movies/CreateMovieModal';
 import { useContext, useState } from 'react';
 import { Context } from '../../context/Context';
 import { useNavigate } from 'react-router-dom';
+import { FilterForm } from '../../models/searchFilter.interface';
+import SearchService from '../../services/SearchService';
 
-const CategoriesMenu = () => {
+const CategoriesMenu = ({setMovies}: any) => {
   const openModal = () =>{ 
     setModalShow(true);
   }
@@ -27,9 +29,20 @@ const CategoriesMenu = () => {
     setCategorySelected(e.target.value);
   }
 
-  const handleSubmitResearch = () => {
-    console.log(searchInput);
-    console.log(categorySelected);
+  const isCategorySelected = () => {
+    return typeOfMovies.includes(categorySelected);
+  }
+
+  const handleSubmitResearch = async () => {
+    let searchFormData : FilterForm =  {
+      title : searchInput,
+      type : isCategorySelected() ? categorySelected : null,
+      ranking : null,
+      publicationDate : null
+    }
+
+    const res = await SearchService.searchMovie(searchFormData);
+    setMovies(res.data.list_movies);
   }
 
   const { state } = useContext(Context);

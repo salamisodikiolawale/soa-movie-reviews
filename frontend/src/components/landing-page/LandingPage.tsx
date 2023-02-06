@@ -3,9 +3,21 @@ import BannerCardPage from '../card /BannerCardPage';
 import MoviesList from '../card /MoviesList';
 import MovieCarousel from '../movie-carousel/MovieCarousel';
 import ButtonLink from '../ButtonLink';
-import { filterOption } from '../../models/filterOption';
+import { useEffect, useState } from 'react';
+import Movie from '../../models/movie.interface';
+import MoviesService from '../../services/MoviesService';
 
 const LandingPage = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  const getLatestMovies = async(numberOfMovies: Number)=>{
+    setMovies(await MoviesService.getLatestMovies(numberOfMovies));
+  }
+
+  useEffect(() => {
+    getLatestMovies(8);
+  },[])
+
   return (
     <div className="landing-page">
       <h2 className='title'>AOS Movies reviews</h2>
@@ -16,7 +28,7 @@ const LandingPage = () => {
       rating={18} />
       <div className='section'>
         <h3 className='section-title'>Review the lastest movies</h3>
-        <MoviesList filter={filterOption.LATEST} />
+        <MoviesList movies={movies} />
         <ButtonLink toPath="/movies" text="See more" wrapperClass="see-more" />
       </div>
     </div>

@@ -25,8 +25,6 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
             publicationDate : request.body.publicationDate
         };
 
-        console.log(request_form);
-
         let list_movies = null;
 
         //for each line of the form, we get the movies from the database and add it to the list
