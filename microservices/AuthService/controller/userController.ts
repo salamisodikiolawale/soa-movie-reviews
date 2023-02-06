@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config( {path : '../.env'});
 import { ErrorModel } from "../database/models/ErrorModel"
 import { Http_code } from "../config/http_code";
+import axios from "axios";
 
 const { validationResult } = require('express-validator');
 
@@ -42,6 +43,17 @@ export const createUser = async (request:express.Request, response:express.Respo
         let userAdding = new UserTable(newUser)
 
         await userAdding.save();
+
+        // User EmailService to send an email to newly registered user
+        await axios.post('http://localhost:3004/api/v1/emails', {
+            targetEmail: request.body.email,
+            subject: `Welcome ${request.body.username} on AOS Movie Reviews !`,
+            message: `${request.body.username}, your registration for AOS Movie Reviews proceeded successfully ! You are now registered as one of our members.`,
+        }).then((res) => {
+            console.log(res.data.msg);
+        }).catch((e) => {
+            console.log(e);
+        })
 
         return response.status(Http_code.OK).json({
             msg: 'Your account has been successfully created !'
