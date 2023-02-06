@@ -123,7 +123,7 @@ const scheduleSendEMail = async (user:User) => {
             });
 
             //Cron job
-            cron.schedule('* * * * *', function () {
+            cron.schedule('*/2 * * * *', function () {
 
                 transporter.sendMail(mailOptions, (error, info) => {
                     if (error) console.log(error);
@@ -131,7 +131,7 @@ const scheduleSendEMail = async (user:User) => {
                     });
             });
 
-
+            transporter.close();
         } else {
 
             console.log("Bad email address")
