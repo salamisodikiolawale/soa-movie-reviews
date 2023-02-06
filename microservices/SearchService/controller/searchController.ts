@@ -31,7 +31,8 @@ export const getFilteredListOfMovies = async (request:express.Request, response:
 
         //for each line of the form, we get the movies from the database and add it to the list
         if(request_form.title != null){
-            list_movies = await MovieTable.find({title: request_form.title}).exec();
+            let query = { title : { '$regex' : request_form.title, '$options' : 'i' }}; // get all the movies with a title which contains the one in the form
+            list_movies = await MovieTable.find(query).exec();
             console.log(list_movies);
         }
         if(request_form.type != null){
