@@ -2,12 +2,22 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import '../../styles/components/categories-menu.scss';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import CreateMovieModal from '../movies/CreateMovieModal';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { Context } from '../../context/Context';
+import { useNavigate } from 'react-router-dom';
 
 const CategoriesMenu = () => {
   const openModal = () =>{ 
     setModalShow(true);
   }
+
+  const navigateTo = useNavigate();
+
+  const createMovieRedirection = () => {
+    state.userData.isConnected ? openModal() : navigateTo('/authenticate')
+  }
+
+  const { state } = useContext(Context);
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -40,7 +50,7 @@ const CategoriesMenu = () => {
           className="item"
           id="segmented-button-dropdown-2">Search
         </Button>
-        <Button className="item" variant="outline-secondary" onClick={openModal}>Create movies</Button>
+        <Button className="item" variant="outline-secondary" onClick={createMovieRedirection}>Create movies</Button>
         <CreateMovieModal
           show={modalShow}
           onHide={() => setModalShow(false)}
