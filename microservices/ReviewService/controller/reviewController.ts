@@ -268,37 +268,37 @@ export const getReview = async (request:express.Request, response:express.Respon
 
 }
 
-export const getNumberOfReviewsPerMovie = async (request:express.Request, response:express.Response) => {
+// export const getNumberOfReviewsPerMovie = async (request:express.Request, response:express.Response) => {
     
-    try {
-        let MovieId =request.params.MovieId
-        let list_review = null;
-        let movieExist:Movie|null = await MovieTable.findById(MovieId);
-        if(movieExist){
-            list_review = await ReviewTable.find({movieReviewId : MovieId},{}).exec()//Get all reviews for the movie
-            const numberOfReview:number = list_review.length
-            response.status(Http_code.OK).json({
-                numberOfReview,
-                datas: {
-                    "_links": {
-                        "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:reviewId` },
-                        "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${MovieId}` },
-                        "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
-                        "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${MovieId}` },
-                    },
-                    "_embedded": {},
-                },
-            });
-        } else {
-            response.status(Http_code.NOTFOUND).json({error: 'movie not existe'});
-        }
+//     try {
+//         let MovieId =request.params.MovieId
+//         let list_review = null;
+//         let movieExist:Movie|null = await MovieTable.findById(MovieId);
+//         if(movieExist){
+//             list_review = await ReviewTable.find({movieReviewId : MovieId},{}).exec()//Get all reviews for the movie
+//             const numberOfReview:number = list_review.length
+//             response.status(Http_code.OK).json({
+//                 numberOfReview,
+//                 datas: {
+//                     "_links": {
+//                         "review": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/:reviewId` },
+//                         "reviews": { "href": `http://review_service.localhost:${process.env.PORT_Rev_Serv_Var}/api/v1/reviews/${MovieId}` },
+//                         "movies": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies` },
+//                         "movie": { "href": `http://crud_service.localhost:${process.env.PORT_CRUD_Serv_Var}/api/v1/movies/${MovieId}` },
+//                     },
+//                     "_embedded": {},
+//                 },
+//             });
+//         } else {
+//             response.status(Http_code.NOTFOUND).json({error: 'movie not existe'});
+//         }
 
         
-    } catch (error) {
-        console.log(error);
-        response.status(Http_code.INTERNALSERVERERROR).json({
-            error : error
-        })
-    }
+//     } catch (error) {
+//         console.log(error);
+//         response.status(Http_code.INTERNALSERVERERROR).json({
+//             error : error
+//         })
+//     }
 
-}
+// }

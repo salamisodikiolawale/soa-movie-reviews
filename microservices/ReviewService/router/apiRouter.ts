@@ -1,5 +1,5 @@
 import express from 'express';
-import {createReview, updateReview, deleteReview, getAllReviewsOnMovie, getReview, getNumberOfReviewsPerMovie, deleteReviewsOfMovie} from "../controller/reviewController";
+import {createReview, updateReview, deleteReview, getAllReviewsOnMovie, getReview, deleteReviewsOfMovie} from "../controller/reviewController";
 
 const apiRouter:express.Router = express.Router();
 
@@ -67,6 +67,6 @@ apiRouter.delete('/reviews/:reviewId', deleteReview);
     Fields:  movieReviewId, username, rating, comment, publicationDate
     Access: Public
  */
-apiRouter.get('/reviews/number/per/movie/:MovieId', getNumberOfReviewsPerMovie);
+// apiRouter.get('/reviews/number/per/movie/:MovieId', getNumberOfReviewsPerMovie);
 
 export default apiRouter;

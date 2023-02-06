@@ -1,5 +1,5 @@
 import express from 'express';
-import {createMovie, getMovie, getMovies, deleteMovie, updateMovie, getFiveLasteMovies, getMoviesOfUser} from "../controller/movieController";
+import {createMovie, getMovie, getMovies, getFiveLasteMovies} from "../controller/movieController";
 import { movieCreateValidation } from '../validations/movieValidations';
 
 const apiRouter:express.Router = express.Router();
@@ -27,7 +27,7 @@ apiRouter.post('/movies',movieCreateValidation, createMovie);
     Fields: title, date, country, type[string], review:number,  description:string, image
     Access: Public
  */
-apiRouter.put('/movies/:movieId', updateMovie);
+// apiRouter.put('/movies/:movieId', updateMovie);
 
 /*
     Usage: Delete a Movie
@@ -36,7 +36,7 @@ apiRouter.put('/movies/:movieId', updateMovie);
     Fields: name, image, comment
     Access: Public
  */
-apiRouter.delete('/movies/:movieId', deleteMovie);
+// apiRouter.delete('/movies/:movieId', deleteMovie);
 
 /*
     Usage: Get all the movies
@@ -63,7 +63,7 @@ apiRouter.get('/movies/:numberOfMovie', getFiveLasteMovies)
  *  Params : numberOfMovie
  *  Access : Public
  */
-apiRouter.get('/movies/user/:userId', getMoviesOfUser);
+// apiRouter.get('/movies/user/:userId', getMoviesOfUser);
 
 /*
     Usage: Get a Single product
