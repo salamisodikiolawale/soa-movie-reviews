@@ -101,7 +101,7 @@ const SingleMoviePage = () => {
 
     return (
         <div className='single-movie-page'>
-            { isLoading && !movieIdExist() ? 
+            { isLoading ? 
                     <div className='loading-spinner'>
                         <Spinner animation="border" role="status" />
                     </div>

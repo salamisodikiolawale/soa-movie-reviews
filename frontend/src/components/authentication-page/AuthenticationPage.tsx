@@ -273,7 +273,7 @@ const AuthenticationPage = () => {
                 <Button variant="primary" type="submit">
                     { pageData.pageTitle }
                 </Button>
-                <ButtonAction text={ pageData.ctaButtonText } wrapperClass="link" action={() => changePageContent()} variant=""></ButtonAction>
+                <ButtonAction type="button" text={ pageData.ctaButtonText } wrapperClass="link" action={() => changePageContent()} variant=""></ButtonAction>
             </Form>
         </div>
     );
