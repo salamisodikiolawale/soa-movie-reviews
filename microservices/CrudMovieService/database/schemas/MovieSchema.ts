@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {Movie} from "../models/Movie";
 
-const TypeOfMovies = ['SF','POLICIER','DRAMA','AVENTURE','THRILLER','HORREUR','AMOUR'];
+const TypeOfMovies = ['SF','CRIME','DRAMA','ADVENTURE','THRILLER','HORROR','ROMANCE', 'FANTASY', 'ANIME', 'COMEDY', 'ACTION', 'DOCUMENTARY'];
 
 const movieSchema = new mongoose.Schema<Movie>({
 

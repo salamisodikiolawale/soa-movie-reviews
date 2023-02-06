@@ -15,7 +15,7 @@ const LandingPage = () => {
       image="https://s3.amazonaws.com/static.rogerebert.com/uploads/review/primary_image/reviews/the-son-movie-review-2022/the-son-movie-review-2022.jpeg"
       rating={18} />
       <div className='section'>
-        <h3 className='section-title'>Review the 10 lastest movies</h3>
+        <h3 className='section-title'>Review the lastest movies</h3>
         <MoviesList filter={filterOption.LATEST} />
         <ButtonLink toPath="/movies" text="See more" wrapperClass="see-more" />
       </div>

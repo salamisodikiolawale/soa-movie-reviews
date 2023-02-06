@@ -14,9 +14,16 @@ const MovieForm = ({closeModal}: any) => {
     const [image, setImage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [error, setError] = useState(false);
+    const [categorySelected, setCategorySelected] = useState('');
 
     const [success, setSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+
+    const typeOfMovies = ['SF','CRIME','DRAMA','ADVENTURE','THRILLER','HORROR','ROMANCE', 'FANTASY', 'ANIME', 'COMEDY', 'ACTION', 'DOCUMENTARY'];
+
+    const handleCategoryChange = (e: any) => {
+        setCategorySelected(e.target.value);
+    }
 
     const handleSubmit = async(event:any) => {
         event.preventDefault();
@@ -31,6 +38,7 @@ const MovieForm = ({closeModal}: any) => {
               'rating': Number(rating),
               'description': description,
               'image': image,
+              'types': [categorySelected]
             };
     
             const response = await moviesService.createMovie(formData);
@@ -50,7 +58,6 @@ const MovieForm = ({closeModal}: any) => {
     }
 
     const initFormData = () => {
-        console.log('hello');
         setTitle('');
         setDate('');
         setDescription('');
@@ -86,6 +93,12 @@ const MovieForm = ({closeModal}: any) => {
                     Please enter a title
                 </Form.Control.Feedback>       
             </Form.Group>
+            <Form.Select className="my-3" aria-label="Default select" onChange={(e) => handleCategoryChange(e)}>
+                <option>Movie category</option>
+                { typeOfMovies.map((type,index) => {
+                    return <option key={index} value={type}>{type}</option>
+                })}
+            </Form.Select>
             <Form.Group className="mb-3" controlId="descriptionForm">
                 <Form.Label className='label'>Description</Form.Label>
                 <Form.Control 
