@@ -26,6 +26,7 @@ let mongoDBUrlTest:string|undefined = process.env.MONGODB_URL_TEST;
  */
 const connectToDBDev = async () => {
     if(URL) {
+        mongoose.set('strictQuery', false);
         mongoose.connect(URL)
         .then( () => {
             console.log('Connecting to mongoDB Successfully ...');
