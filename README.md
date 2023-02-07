@@ -18,15 +18,14 @@ Au plaisir de travailler avec vous :)
 
 ## HOME
 
-![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/interface.png?raw=true)
 
+![image](https://user-images.githubusercontent.com/47738956/217234175-194beb44-1353-4a0d-896e-7d1a0d69c351.png)
 
 ## COMPOSANTS APPLICATIFS
 
 ![alt text](https://github.com/salamisodikiolawale/soa-movie-reviews/blob/develop/Architecture_composants.png?raw=true)
 
 ## Pour commencer
-
 
 ### Pré-requis
 Pour travailler correctement vous devez disposez des ces outils ci-dessous :
